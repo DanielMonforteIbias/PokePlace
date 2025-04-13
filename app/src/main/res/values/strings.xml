@@ -14,7 +14,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
 
-    <string name="menu_home">Home</string>
+    <string name="pokedex">Pokédex</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
@@ -30,4 +30,8 @@
     <string name="error_registro">Registro fallido</string>
     <string name="error_login_credenciales">Login fallido. Credenciales incorrectas</string>
     <string name="exito_registro">Registro exitoso. Ya puede iniciar sesión</string>
+
+    <!--Manejo respuesta PokeApi-->
+    <string name="error_solicitud_api">Error en la solicitud a la API</string>
+    <string name="error_respuesta_api">Error en la respuesta de la API</string>
 </resources>

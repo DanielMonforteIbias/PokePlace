@@ -48,6 +48,7 @@ dependencies {
     implementation (libs.gbutton)
     implementation (libs.play.services.auth)
     implementation (libs.glide)
+    implementation(libs.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
