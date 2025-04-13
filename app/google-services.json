@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "399819984290",
+    "project_id": "pokeplace-a7bbe",
+    "storage_bucket": "pokeplace-a7bbe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399819984290:android:00fd816ee1bee67675b6fb",
+        "android_client_info": {
+          "package_name": "dam.tfg.pokeplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr7y-rDTDlSgOmBMOrFHtVQ7XKZgkPm-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
