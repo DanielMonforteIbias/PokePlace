@@ -2,6 +2,7 @@ package dam.tfg.pokeplace;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -51,8 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             iniciarSesion();
         }
         //Sincronizar con Firebase
-        signInRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder().setSupported(true)
+        signInRequest = BeginSignInRequest.builder().setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder().setSupported(true)
                         // Your server's client ID, not your Android client ID.
                         .setServerClientId(getString(R.string.default_web_client_id))
                         // Only show accounts previously used to sign in.
@@ -96,6 +98,83 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email=binding.editTextEmail.getText().toString();
+                String password=binding.editTextPassword.getText().toString();
+                boolean registroValido=true;
+                if(email.equals("")){
+                    registroValido=false;
+                    showToast(getString(R.string.error_email_vacio));
+                }
+                else if (!correoValido(email)){
+                    registroValido=false;
+                    showToast(getString(R.string.error_email));
+                }
+                if(password.equals("")){
+                    registroValido=false;
+                    showToast(getString(R.string.error_contrasena_vacia));
+                }
+                else if(password.length()<6){
+                    registroValido=false;
+                    showToast(getString(R.string.error_longitud_contrasena));
+                }
+                if(registroValido){
+                    auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                showToast(getString(R.string.exito_registro));
+                            }
+                            else{
+                                System.out.println(task.getException());
+                                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_registro_correo));
+                                else if(task.getException() instanceof FirebaseAuthUserCollisionException) showToast(getString(R.string.error_registro_ya_existe));
+                                else showToast(getString(R.string.error_registro));
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //Login
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email=binding.editTextEmail.getText().toString();
+                String password=binding.editTextPassword.getText().toString();
+                boolean loginValido=true;
+                if(email.equals("")){
+                    loginValido=false;
+                    showToast(getString(R.string.error_email_vacio));
+                }
+                else if (!correoValido(email)){
+                    loginValido=false;
+                    showToast(getString(R.string.error_email));
+                }
+                if(password.equals("")){
+                    loginValido=false;
+                    showToast(getString(R.string.error_contrasena_vacia));
+                }
+                if(loginValido){
+                    auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                iniciarSesion();
+                            }
+                            else{
+                                System.out.println(task.getException());
+                                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_login_credenciales));
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private boolean checkLoginStatus() {
@@ -108,5 +187,12 @@ public class LoginActivity extends AppCompatActivity {
         finish();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+    }
+    public boolean correoValido(String correo){
+        return Patterns.EMAIL_ADDRESS.matcher(correo).matches(); //Devolvemos el resultado de si el correo concuerda con el patrón o no
+    }
+
+    private void showToast(String s){
+        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
     }
 }

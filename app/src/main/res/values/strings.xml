@@ -5,14 +5,29 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">User</string>
     <string name="nav_header_subtitle">user@gmail.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_desc">User photo</string>
     <string name="action_settings">Settings</string>
+
+    <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="logout">Logout</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
+    <!--Inicio sesión y registro-->
+    <string name="error_email_vacio">El correo no puede estar vacío</string>
+    <string name="error_contrasena_vacia">La contraseña no puede estar vacía</string>
+    <string name="error_email">El correo no es valido</string>
+    <string name="error_longitud_contrasena">La contraseña debe medir mínimo 6 caracteres</string>
     <string name="error_inicio_sesion">Error en el inicio de sesión</string>
     <string name="error_inicio_sesion_api">Error de la API al iniciar sesion</string>
+    <string name="error_registro_correo">Registro fallido, el correo no es valido</string>
+    <string name="error_registro_ya_existe">Registro fallido, ya existe un usuario con ese correo</string>
+    <string name="error_registro">Registro fallido</string>
+    <string name="error_login_credenciales">Login fallido. Credenciales incorrectas</string>
+    <string name="exito_registro">Registro exitoso. Ya puede iniciar sesión</string>
 </resources>
