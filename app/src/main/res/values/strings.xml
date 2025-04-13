@@ -1,4 +1,5 @@
 <resources>
+    <string name="default_web_client_id">399819984290-4irerqtpbo635s7nlsf88o8h4jkih45e.apps.googleusercontent.com</string>
     <string name="app_name">PokePlace</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,4 +11,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="error_inicio_sesion">Error en el inicio de sesión</string>
+    <string name="error_inicio_sesion_api">Error de la API al iniciar sesion</string>
 </resources>
