@@ -1,18 +1,54 @@
 package dam.tfg.pokeplace.models;
 
-public class Pokemon {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+public class Pokemon implements Parcelable {
     private String pokedexNumber;
     private String name;
-    private String sprite;
+    private ArrayList<String>sprites;
+    private String sound;
+    private ArrayList<String> abilities;
+    private Map<String, Integer> stats;
+    private Type types[]=new Type[2];
+    private float height, weight;
 
     public Pokemon(){
 
     }
-    public Pokemon(String pokedexNumber, String name, String sprite) {
+    public Pokemon(String pokedexNumber, String name, ArrayList<String> sprites) {
         this.pokedexNumber = pokedexNumber;
         this.name = name;
-        this.sprite = sprite;
+        this.sprites = sprites;
     }
+
+    protected Pokemon(Parcel in) {
+        pokedexNumber = in.readString();
+        name = in.readString();
+        sprites = in.createStringArrayList();
+        sound = in.readString();
+        abilities = in.createStringArrayList();
+        types = in.createTypedArray(Type.CREATOR);
+        height = in.readFloat();
+        weight = in.readFloat();
+    }
+
+    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
+        @Override
+        public Pokemon createFromParcel(Parcel in) {
+            return new Pokemon(in);
+        }
+
+        @Override
+        public Pokemon[] newArray(int size) {
+            return new Pokemon[size];
+        }
+    };
 
     public String getPokedexNumber() {
         return pokedexNumber;
@@ -30,11 +66,73 @@ public class Pokemon {
         this.name = name;
     }
 
-    public String getSprite() {
-        return sprite;
+    public ArrayList<String> getSprites() {
+        return sprites;
+    }
+    public void setSprites(ArrayList<String> sprites) {
+        this.sprites = sprites;
     }
 
-    public void setSprite(String sprite) {
-        this.sprite = sprite;
+    public String getSound() {
+        return sound;
+    }
+
+    public void setSound(String sound) {
+        this.sound = sound;
+    }
+
+    public ArrayList<String> getAbilities() {
+        return abilities;
+    }
+
+    public void setAbilities(ArrayList<String> abilities) {
+        this.abilities = abilities;
+    }
+
+    public Map<String, Integer> getStats() {
+        return stats;
+    }
+
+    public void setStats(Map<String, Integer> stats) {
+        this.stats = stats;
+    }
+
+    public Type[] getTypes() {
+        return types;
+    }
+
+    public void setTypes(Type[] types) {
+        this.types = types;
+    }
+    public float getHeight() {
+        return height;
+    }
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(pokedexNumber);
+        dest.writeString(name);
+        dest.writeStringList(sprites);
+        dest.writeString(sound);
+        dest.writeStringList(abilities);
+        dest.writeTypedArray(types, flags);
+        dest.writeFloat(height);
+        dest.writeFloat(weight);
     }
 }

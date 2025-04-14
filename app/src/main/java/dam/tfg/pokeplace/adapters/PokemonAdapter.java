@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.models.Pokemon;
 
@@ -50,8 +51,16 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
     public void onBindViewHolder(@NonNull PokemonAdapter.ViewHolder holder, int position) {
         Pokemon pokemon=pokemonList.get(position);
         Context context=holder.itemView.getContext();
-        Glide.with(context).load(pokemon.getSprite()).into(holder.sprite);
+        Glide.with(context).load(pokemon.getSprites().get(0)).into(holder.sprite);
         holder.pokedexNumber.setText(pokemon.getPokedexNumber());
+        holder.sprite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,PokemonDetailsActivity.class);
+                intent.putExtra("Pokemon",pokemon);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

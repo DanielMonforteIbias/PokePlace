@@ -7,16 +7,19 @@
     <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">User photo</string>
     <string name="action_settings">Settings</string>
+    <!--Menus-->
+    <string name="pokedex">Pokédex</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 
+    <!--Acciones-->
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="logout">Logout</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="volver">Volver</string>
 
-    <string name="pokedex">Pokédex</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
 
     <!--Inicio sesión y registro-->
     <string name="error_email_vacio">El correo no puede estar vacío</string>
@@ -34,4 +37,8 @@
     <!--Manejo respuesta PokeApi-->
     <string name="error_solicitud_api">Error en la solicitud a la API</string>
     <string name="error_respuesta_api">Error en la respuesta de la API</string>
+
+    <!--Detalles-->
+    <string name="altura">Altura: </string>
+    <string name="peso">Peso: </string>
 </resources>
