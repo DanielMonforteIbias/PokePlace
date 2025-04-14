@@ -11,6 +11,10 @@
     <string name="pokedex">Pokédex</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_pokemon_details">Detalles Pokémon</string>
+    <string name="title_info">Info</string>
+    <string name="title_stats">Stats</string>
+    <string name="title_moves">Movimientos</string>
 
     <!--Acciones-->
     <string name="login">Login</string>
@@ -41,4 +45,13 @@
     <!--Detalles-->
     <string name="altura">Altura: </string>
     <string name="peso">Peso: </string>
+    <!--Stats-->
+    <string name="stat">Stat</string>
+    <string name="hp">HP</string>
+    <string name="attack">Ataque</string>
+    <string name="defense">Defensa</string>
+    <string name="special_attack">Ataque especial</string>
+    <string name="special_defense">Defensa especial</string>
+    <string name="speed">Velocidad</string>
+
 </resources>

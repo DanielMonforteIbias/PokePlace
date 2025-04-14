@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Pokemon implements Parcelable {
@@ -36,6 +38,14 @@ public class Pokemon implements Parcelable {
         types = in.createTypedArray(Type.CREATOR);
         height = in.readFloat();
         weight = in.readFloat();
+        //Leemos el map de stats, primero el tamaño y luego cada entrada
+        int size = in.readInt();
+        stats = new LinkedHashMap<>(); //Debe ser Linked para mantener el orden de las stats
+        for (int i = 0; i < size; i++) {
+            String key = in.readString();
+            int value = in.readInt();
+            stats.put(key, value);
+        }
     }
 
     public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
@@ -134,5 +144,11 @@ public class Pokemon implements Parcelable {
         dest.writeTypedArray(types, flags);
         dest.writeFloat(height);
         dest.writeFloat(weight);
+        //Ponemos en el parcel el map, primero el tamaño y luego cada par
+        dest.writeInt(stats.size());
+        for (Map.Entry<String, Integer> entry : stats.entrySet()) {
+            dest.writeString(entry.getKey());
+            dest.writeInt(entry.getValue());
+        }
     }
 }

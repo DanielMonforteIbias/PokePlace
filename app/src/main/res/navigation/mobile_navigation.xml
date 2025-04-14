@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="dam.tfg.pokeplace.ui.pokedex.PokedexFragment"
+        android:name="dam.tfg.pokeplace.ui.mainActivityFragments.PokedexFragment"
         android:label="@string/pokedex"
         tools:layout="@layout/fragment_pokedex" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="dam.tfg.pokeplace.ui.gallery.GalleryFragment"
+        android:name="dam.tfg.pokeplace.ui.mainActivityFragments.TeamsFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_teams" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="dam.tfg.pokeplace.ui.slideshow.SlideshowFragment"
+        android:name="dam.tfg.pokeplace.ui.mainActivityFragments.TypeCalculatorFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_type_calculator" />
 </navigation>

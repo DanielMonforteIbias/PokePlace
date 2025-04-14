@@ -1,4 +1,4 @@
-package dam.tfg.pokeplace.ui.pokedex;
+package dam.tfg.pokeplace.ui.mainActivityFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

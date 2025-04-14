@@ -4,8 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.models.Pokemon;
@@ -48,6 +51,11 @@ public class JSONExtractor {
             for(int i=0;i<typesArray.length();i++){
                 types[i]= Data.getInstance().getTypeByName(typesArray.getJSONObject(i).getJSONObject("type").getString("name"));
             }
+            Map<String, Integer> stats=new LinkedHashMap<>(); //Debe ser Linked para mantener el orden de las stats
+            JSONArray statsArray=jsonObject.getJSONArray("stats");
+            for(int i=0;i<statsArray.length();i++){
+                stats.put(statsArray.getJSONObject(i).getJSONObject("stat").getString("name"),statsArray.getJSONObject(i).getInt("base_stat"));
+            }
             pokemon.setPokedexNumber(pokedexNumber);
             pokemon.setName(name);
             pokemon.setSprites(sprites);
@@ -55,6 +63,7 @@ public class JSONExtractor {
             pokemon.setHeight(height);
             pokemon.setWeight(weight);
             pokemon.setTypes(types);
+            pokemon.setStats(stats);
         } catch (Exception e) {
             e.printStackTrace();
         }
