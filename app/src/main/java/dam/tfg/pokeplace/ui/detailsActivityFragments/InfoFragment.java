@@ -29,6 +29,7 @@ import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.databinding.FragmentInfoBinding;
 import dam.tfg.pokeplace.models.Pokemon;
+import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class InfoFragment extends Fragment {
     private FragmentInfoBinding binding;
@@ -47,31 +48,10 @@ public class InfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         PokemonViewModel viewModel = new ViewModelProvider(requireActivity()).get(PokemonViewModel.class);
         viewModel.getPokemon().observe(getViewLifecycleOwner(), pokemon -> { //Obtenemos el Pokemon del viewmodel
-            binding.txtNameDetails.setText(pokemon.getName());
+            binding.txtNameDetails.setText(StringFormatter.formatName(pokemon.getName()));
             binding.txtNumberDetails.setText(pokemon.getPokedexNumber());
             binding.txtHeightDetails.setText(getString(R.string.altura)+" "+pokemon.getHeight()+" m");
             binding.txtWeightDetails.setText(getString(R.string.peso)+" "+pokemon.getWeight()+ "kg");
-            //Cargar stats
-            binding.statsDetailsLayout.removeAllViews(); //Las vistas que tiene son solo para visualizarlo en el XML, las quitamos
-            for (Map.Entry<String,Integer>stat:pokemon.getStats().entrySet()) {
-                View statItem = getLayoutInflater().inflate(R.layout.item_stat, binding.statsDetailsLayout, false);
-                TextView txtStatName = statItem.findViewById(R.id.txtStatDetails);
-                String resourceKey =stat.getKey().replace("-", "_"); //Los nombres de la stat estan en strings y la clave es el nombre que viene de la api y esta en el map. No se aceptan guiones en el fichero strings, se reemplazan por _
-                int resId = getContext().getResources().getIdentifier(resourceKey, "string", getContext().getPackageName());
-                txtStatName.setText(getString(resId));
-                TextView txtStatValue = statItem.findViewById(R.id.txtStatValueDetails);
-                txtStatValue.setText(String.valueOf(stat.getValue()));
-                View statBar = statItem.findViewById(R.id.statBar);
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) statBar.getLayoutParams();
-                int statValue = stat.getValue();
-                float scale = getContext().getResources().getDisplayMetrics().density;
-                int color = getStatBarColor(statValue);
-                GradientDrawable drawable = (GradientDrawable) statBar.getBackground(); //Para no perder el borde redondeado al aplicar fondo
-                drawable.setColor(color);
-                layoutParams.width = (int) (statValue * scale + 0.5f);
-                statBar.setLayoutParams(layoutParams);
-                binding.statsDetailsLayout.addView(statItem);
-            }
             Glide.with(this).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
             if(pokemon.getTypes()[0]!=null) Glide.with(this).load(pokemon.getTypes()[0].getSprite()).into(binding.imgType1);
             else binding.imgType1.setVisibility(GONE);
@@ -81,7 +61,7 @@ public class InfoFragment extends Fragment {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
                 mediaPlayer.setDataSource(pokemon.getSound());
-                mediaPlayer.prepare();
+                mediaPlayer.prepareAsync(); //prepareAsync hace que no bloquee el hilo principal. Por ejemplo, si accedes sin wifi se quedaria mucho tiempo esperando y pareceria bloqueada la app con prepare, con prepareAsync no pasa
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -130,21 +110,7 @@ public class InfoFragment extends Fragment {
             }
         });
     }
-    public int getStatBarColor(int statValue){
-        int color;
-        if (statValue <= 25) {
-            color = Color.RED;
-        } else if (statValue <= 50) {
-            color = Color.parseColor("#FFA500");
-        } else if (statValue <= 90) {
-            color = Color.YELLOW;
-        } else if (statValue <= 120) {
-            color = Color.parseColor("#99FF2F");
-        } else {
-            color = Color.GREEN;
-        }
-        return color;
-    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

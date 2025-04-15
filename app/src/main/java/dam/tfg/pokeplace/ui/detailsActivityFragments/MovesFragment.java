@@ -9,16 +9,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
+import dam.tfg.pokeplace.adapters.MovesAdapter;
+import dam.tfg.pokeplace.adapters.PokemonAdapter;
+import dam.tfg.pokeplace.api.DetailsCallback;
+import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
+import dam.tfg.pokeplace.api.PokeApiTypeResponse;
+import dam.tfg.pokeplace.api.TypeCallback;
+import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.databinding.FragmentMovesBinding;
+import dam.tfg.pokeplace.models.Move;
+import dam.tfg.pokeplace.models.Pokemon;
+import dam.tfg.pokeplace.models.Type;
 
 public class MovesFragment extends Fragment {
 
     private FragmentMovesBinding binding;
+    private MovesAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMovesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        binding.movesList.setLayoutManager(new GridLayoutManager(getContext(),1));
         return root;
     }
 
@@ -27,7 +43,26 @@ public class MovesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         PokemonViewModel viewModel = new ViewModelProvider(requireActivity()).get(PokemonViewModel.class);
         viewModel.getPokemon().observe(getViewLifecycleOwner(), pokemon -> { //Obtenemos el Pokemon del viewmodel
-
+            binding.txtMovesTitle.setText("MOVIMIENTOS DE "+pokemon.getName().toUpperCase());
+            adapter=new MovesAdapter(pokemon.getMoves());
+            binding.movesList.setAdapter(adapter);
+            for (int i = 0; i <pokemon.getMoves().size(); i++) {
+                Move m = pokemon.getMoves().get(i);
+                if (m.getName() == null && m.getUrl()!=null) { //Cuando no hay nombre y si URL, es que el movimiento no esta relleno
+                    final int index = i;
+                    PokeApiDetailsResponse.getMove(m.getUrl(),new DetailsCallback() {
+                        @Override
+                        public void onMoveReceived(Move move) {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> {
+                                    pokemon.getMoves().set(index, move);
+                                    adapter.notifyItemChanged(index);
+                                });
+                            }
+                        }
+                    }, getContext());
+                }
+            }
         });
     }
 

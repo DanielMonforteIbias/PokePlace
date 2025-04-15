@@ -16,6 +16,7 @@ public class Pokemon implements Parcelable {
     private ArrayList<String>sprites;
     private String sound;
     private ArrayList<String> abilities;
+    private ArrayList<Move> moves;
     private Map<String, Integer> stats;
     private Type types[]=new Type[2];
     private float height, weight;
@@ -35,6 +36,7 @@ public class Pokemon implements Parcelable {
         sprites = in.createStringArrayList();
         sound = in.readString();
         abilities = in.createStringArrayList();
+        moves = in.createTypedArrayList(Move.CREATOR);
         types = in.createTypedArray(Type.CREATOR);
         height = in.readFloat();
         weight = in.readFloat();
@@ -46,6 +48,30 @@ public class Pokemon implements Parcelable {
             int value = in.readInt();
             stats.put(key, value);
         }
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(pokedexNumber);
+        dest.writeString(name);
+        dest.writeStringList(sprites);
+        dest.writeString(sound);
+        dest.writeStringList(abilities);
+        dest.writeTypedList(moves);
+        dest.writeTypedArray(types, flags);
+        dest.writeFloat(height);
+        dest.writeFloat(weight);
+        //Ponemos en el parcel el map, primero el tamaño y luego cada par
+        dest.writeInt(stats.size());
+        for (Map.Entry<String, Integer> entry : stats.entrySet()) {
+            dest.writeString(entry.getKey());
+            dest.writeInt(entry.getValue());
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
@@ -129,26 +155,12 @@ public class Pokemon implements Parcelable {
         this.weight = weight;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public ArrayList<Move> getMoves() {
+        return moves;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(pokedexNumber);
-        dest.writeString(name);
-        dest.writeStringList(sprites);
-        dest.writeString(sound);
-        dest.writeStringList(abilities);
-        dest.writeTypedArray(types, flags);
-        dest.writeFloat(height);
-        dest.writeFloat(weight);
-        //Ponemos en el parcel el map, primero el tamaño y luego cada par
-        dest.writeInt(stats.size());
-        for (Map.Entry<String, Integer> entry : stats.entrySet()) {
-            dest.writeString(entry.getKey());
-            dest.writeInt(entry.getValue());
-        }
+    public void setMoves(ArrayList<Move> moves) {
+        this.moves = moves;
     }
+
 }

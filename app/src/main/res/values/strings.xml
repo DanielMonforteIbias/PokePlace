@@ -7,6 +7,7 @@
     <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">User photo</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add_to_team">Añadir al equipo</string>
     <!--Menus-->
     <string name="pokedex">Pokédex</string>
     <string name="menu_gallery">Gallery</string>
@@ -43,8 +44,10 @@
     <string name="error_respuesta_api">Error en la respuesta de la API</string>
 
     <!--Detalles-->
-    <string name="altura">Altura: </string>
-    <string name="peso">Peso: </string>
+    <string name="altura">Altura</string>
+    <string name="peso">Peso</string>
+    <string name="nombre">Nombre</string>
+    <string name="descripcion">Descripcion</string>
     <!--Stats-->
     <string name="stat">Stat</string>
     <string name="hp">HP</string>
@@ -53,5 +56,14 @@
     <string name="special_attack">Ataque especial</string>
     <string name="special_defense">Defensa especial</string>
     <string name="speed">Velocidad</string>
-
+    <string name="total">Total</string>
+    <!--Movimientos-->
+    <string name="poder">Poder</string>
+    <string name="precision">Precision</string>
+    <string name="categoria">Categoria</string>
+    <string name="pp">PP</string>
+    <string name="movimientos">Movimientos</string>
+    <string name="status">Estado</string>
+    <string name="physical">Fisico</string>
+    <string name="special">Especial</string>
 </resources>

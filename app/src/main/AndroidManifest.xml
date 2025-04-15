@@ -17,9 +17,11 @@
         <activity
             android:name=".PokemonDetailsActivity"
             android:exported="false"
+            android:theme="@style/Theme.PokePlace.NoActionBar"
             android:label="@string/title_activity_pokemon_details" />
         <activity
             android:name=".LoginActivity"
+            android:theme="@style/Theme.PokePlace.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

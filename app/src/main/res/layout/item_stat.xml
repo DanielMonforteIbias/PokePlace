@@ -10,14 +10,14 @@
         android:id="@+id/txtStatDetails"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
+        android:layout_margin="5dp"
         android:text="Stat" />
 
     <View
         android:id="@+id/statBar"
         android:layout_width="0dp"
         android:layout_height="8dp"
-        android:layout_marginEnd="5dp"
+        android:layout_margin="5dp"
         android:layout_weight="1"
         android:background="@drawable/rounded_bar" />
 
@@ -25,6 +25,6 @@
         android:id="@+id/txtStatValueDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
+        android:layout_margin="5dp"
         android:text="0" />
 </LinearLayout>

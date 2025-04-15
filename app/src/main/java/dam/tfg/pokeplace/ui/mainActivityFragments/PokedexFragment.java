@@ -43,6 +43,7 @@ public class PokedexFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        System.out.println("HOLA");
         loadTypes();
     }
 
@@ -61,30 +62,28 @@ public class PokedexFragment extends Fragment {
 
                 }
             }, getContext());
-
         }
+        else loadPokemon();
     }
     public void loadPokemon(){
-        if (data.getPokemonList().isEmpty()) { //Buscamos los Pokemon solo si la lista está vacía
-            PokeApiPokemonResponse.getAllPokemons(new PokemonCallback() {
-                @Override
-                public void onPokemonListReceived(List<Pokemon> list) {
-                    data.getPokemonList().clear();
-                    data.getPokemonList().addAll(list);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
+        PokeApiPokemonResponse.getAllPokemons(new PokemonCallback() {
+            @Override
+            public void onPokemonListReceived(List<Pokemon> list) {
+                data.getPokemonList().addAll(list);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
 
-                @Override
-                public void onPokemonReceived(Pokemon pokemon) {
+            @Override
+            public void onPokemonReceived(Pokemon pokemon) {
 
-                }
-            }, getContext());
-        }
+            }
+        }, getContext(),data.getPokemonList().size()); //Le pasamos el numero de Pokemon actual por si la carga se quedo a medias, para retomar donde estaba
+        System.out.println("Actual: "+data.getPokemonList().size());
     }
     @Override
     public void onDestroyView() {
