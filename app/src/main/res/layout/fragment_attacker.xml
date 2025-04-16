@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center|top"
     android:orientation="vertical"
     tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
@@ -14,12 +15,110 @@
         android:text="@string/atacante"
         android:textAlignment="center"
         android:textSize="50sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
 
     <Spinner
         android:id="@+id/spinnerAttackerTypes"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:dropDownHeight="50dp"
         android:spinnerMode="dropdown" />
+    <LinearLayout
+        android:id="@+id/attackerEffectivenessLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|top"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+
+        <LinearLayout
+            android:id="@+id/attackerEffectiveLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+            <TextView
+                android:id="@+id/attackerEffective"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/attacker_x2" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/attackerEffectiveTypesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:justifyContent="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/attackerNormalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+            <TextView
+                android:id="@+id/attackerNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/attacker_x1" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/attackerNormalTypesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:justifyContent="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/attackerNotEffectiveLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+            <TextView
+                android:id="@+id/attackerNotEffective"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/attacker_x0.5" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/attackerNotEffectiveTypesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:justifyContent="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/attackerNoEffectLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+            <TextView
+                android:id="@+id/attackerNoEffect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/attacker_x0" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/attackerNoEffectTypesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:justifyContent="center" />
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

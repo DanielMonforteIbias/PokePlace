@@ -53,6 +53,7 @@ public class PokeApiTypeResponse {
                                 }
                                 if (restantes.decrementAndGet() == 0) {
                                     if(callback != null){
+                                        Collections.sort(typeList,(t1, t2) -> t1.getName().compareTo(t2.getName()));
                                         callback.onTypeListReceived(typeList);
                                     }
                                 }

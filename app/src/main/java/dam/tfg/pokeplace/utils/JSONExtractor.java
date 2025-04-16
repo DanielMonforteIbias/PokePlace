@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -96,6 +97,7 @@ public class JSONExtractor {
                 String key = keys.next();
                 JSONArray types = damageRelations.getJSONArray(key);
                 ArrayList<String> typeNames = getTypeNames(types);
+                Collections.sort(typeNames,(t1, t2) -> t1.compareTo(t2));
                 switch (key) {
                     case "double_damage_to":
                         type.setDoubleDamageTo(typeNames);
