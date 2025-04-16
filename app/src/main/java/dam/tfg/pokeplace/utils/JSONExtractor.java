@@ -1,10 +1,12 @@
 package dam.tfg.pokeplace.utils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,10 +41,14 @@ public class JSONExtractor {
             String pokedexNumber=String.format(Locale.US,"%03d",id);
             String name=jsonObject.getString("name");
             ArrayList<String> sprites=new ArrayList<>();
-            sprites.add(jsonObject.getJSONObject("sprites").getString("front_default"));
-            sprites.add(jsonObject.getJSONObject("sprites").getString("front_shiny"));
-            sprites.add(jsonObject.getJSONObject("sprites").getString("back_default"));
-            sprites.add(jsonObject.getJSONObject("sprites").getString("back_shiny"));
+            JSONObject spritesObject=jsonObject.getJSONObject("sprites");
+            String[] keys = {"front_default", "front_shiny", "back_default", "back_shiny"};//Los sprites que queremos
+            for(String s:keys){
+                String sprite = spritesObject.getString(s);
+                if (sprite!=null && !sprite.isEmpty() && !sprite.equals("null")) { //No todos los pokemon tienen los 4 sprites, algunos son nulos, en ese caso no lo añadimos
+                    sprites.add(sprite);
+                }
+            }
             String sound=jsonObject.getJSONObject("cries").getString("latest");
             float height= (float) jsonObject.getDouble("height")/10; //Viene en decimetros, se pasa a metros
             float weight= (float) jsonObject.getDouble("weight")/10; //Viene en hectogramos, se pasa a kilogramos
@@ -84,6 +90,35 @@ public class JSONExtractor {
             int id = jsonObject.getInt("id");
             String name=jsonObject.getString("name");
             String sprite=jsonObject.getJSONObject("sprites").getJSONObject("generation-vi").getJSONObject("x-y").getString("name_icon"); //Se cogen los de gen6 porque estan todos menos stellar y unknown
+            JSONObject damageRelations=jsonObject.getJSONObject("damage_relations");
+            Iterator<String> keys = damageRelations.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                JSONArray types = damageRelations.getJSONArray(key);
+                ArrayList<String> typeNames = getTypeNames(types);
+                switch (key) {
+                    case "double_damage_to":
+                        type.setDoubleDamageTo(typeNames);
+                        break;
+                    case "double_damage_from":
+                        type.setDoubleDamageFrom(typeNames);
+                        break;
+                    case "half_damage_to":
+                        type.setHalfDamageTo(typeNames);
+                        break;
+                    case "half_damage_from":
+                        type.setHalfDamageFrom(typeNames);
+                        break;
+                    case "no_damage_to":
+                        type.setNoDamageTo(typeNames);
+                        break;
+                    case "no_damage_from":
+                        type.setNoDamageFrom(typeNames);
+                        break;
+                    default:
+                        break;
+                }
+            }
             type.setId(id);
             type.setName(name);
             type.setSprite(sprite);
@@ -92,6 +127,16 @@ public class JSONExtractor {
         }
         return type;
     }
+    private static ArrayList<String> getTypeNames(JSONArray jsonArray) throws JSONException {
+        ArrayList<String> typeNames = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject typeObject = jsonArray.getJSONObject(i);
+            typeNames.add(typeObject.getString("name"));
+        }
+        return typeNames;
+    }
+
+
     public static Move extractMove(String jsonResponse){
         Move move=new Move();
         try {

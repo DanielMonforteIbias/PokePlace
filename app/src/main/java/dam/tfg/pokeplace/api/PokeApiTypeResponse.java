@@ -22,9 +22,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class PokeApiTypeResponse {
+    private static int limit=18; //Aunque haya 20 tipos en la pokeapi, el unknown y el estelar no los contamos
     public static void getAllTypes(TypeCallback callback, Context context){
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url("https://pokeapi.co/api/v2/type").get().build();
+        Request request = new Request.Builder().url("https://pokeapi.co/api/v2/type?limit="+limit).get().build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

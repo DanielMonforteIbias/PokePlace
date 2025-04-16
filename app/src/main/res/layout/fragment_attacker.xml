@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+
+    <TextView
+        android:id="@+id/txtAttackerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/atacante"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinnerAttackerTypes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:dropDownHeight="50dp"
+        android:spinnerMode="dropdown" />
+</LinearLayout>
