@@ -78,12 +78,16 @@
     <string name="no_efectivo">No muy efectivo</string>
     <string name="normal">Normal</string>
     <string name="sin_efecto">Sin efecto</string>
+    <string name="attacker_x4">hace x4 de daño a</string>
     <string name="attacker_x2">hace x2 de daño a</string>
     <string name="attacker_x0.5">hace x0.5 de daño a</string>
+    <string name="attacker_x0.25">hace x0.25 de daño a</string>
     <string name="attacker_x0">hace x0 de daño a</string>
     <string name="attacker_x1">hace x1 de daño a</string>
+    <string name="defender_x4">sufre x4 de daño de</string>
     <string name="defender_x2">sufre x2 de daño de</string>
     <string name="defender_x0.5">sufre x0.5 de daño de</string>
+    <string name="defender_x0.25">sufre x0.25 de daño de</string>
     <string name="defender_x0">sufre x0 de daño de</string>
     <string name="defender_x1">sufre x1 de daño de</string>
 </resources>

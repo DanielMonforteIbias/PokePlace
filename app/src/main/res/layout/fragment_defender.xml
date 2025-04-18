@@ -21,101 +21,188 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:spinnerMode="dropdown" />
-    <LinearLayout
-        android:id="@+id/defenderEffectivenessLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center|top"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/defenderEffectivenessLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+            <LinearLayout
+                android:id="@+id/defenderVeryEffectiveLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center|top"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
 
-        <LinearLayout
-            android:id="@+id/defenderEffectiveLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|top"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical"
-            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
-            <TextView
-                android:id="@+id/defenderEffective"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/defender_x2" />
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/defenderEffectiveTypesLayout"
+                <TextView
+                    android:id="@+id/defenderVeryEffective"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/defender_x4"
+                    android:textSize="22sp" />
+                <LinearLayout
+                    android:id="@+id/defenderVeryEffectiveTypesAdvancedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/defenderEffectiveLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:justifyContent="center" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/defenderNormalLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|top"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical"
-            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
-            <TextView
-                android:id="@+id/defenderNormal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/defender_x1" />
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/defenderNormalTypesLayout"
+                android:gravity="center|top"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+                <TextView
+                    android:id="@+id/defenderEffective"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="22sp"
+                    android:text="@string/defender_x2" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/defenderEffectiveTypesLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center" />
+                <LinearLayout
+                    android:id="@+id/defenderEffectiveTypesAdvancedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/defenderNormalLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:justifyContent="center" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/defenderNotEffectiveLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|top"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical"
-            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
-            <TextView
-                android:id="@+id/defenderNotEffective"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/defender_x0.5" />
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/defenderNotEffectiveTypesLayout"
+                android:gravity="center|top"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+                <TextView
+                    android:id="@+id/defenderNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="22sp"
+                    android:text="@string/defender_x1" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/defenderNormalTypesLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center" />
+                <LinearLayout
+                    android:id="@+id/defenderNormalTypesAdvancedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/defenderNotEffectiveLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:justifyContent="center" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/defenderNoEffectLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|top"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical"
-            tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
-            <TextView
-                android:id="@+id/defenderNoEffect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/defender_x0" />
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/defenderNoEffectTypesLayout"
+                android:gravity="center|top"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+                <TextView
+                    android:id="@+id/defenderNotEffective"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="22sp"
+                    android:text="@string/defender_x0.5" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/defenderNotEffectiveTypesLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center" />
+                <LinearLayout
+                    android:id="@+id/defenderNotEffectiveTypesAdvancedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/defenderNotVeryEffectiveLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:justifyContent="center" />
+                android:layout_marginBottom="20dp"
+                android:gravity="center|top"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+                <TextView
+                    android:id="@+id/defenderNotVeryEffective"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/defender_x0.25"
+                    android:textSize="22sp" />
+                <LinearLayout
+                    android:id="@+id/defenderNotVeryEffectiveTypesAdvancedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/defenderNoEffectLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|top"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment">
+                <TextView
+                    android:id="@+id/defenderNoEffect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="22sp"
+                    android:text="@string/defender_x0" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/defenderNoEffectTypesLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center" />
+                <LinearLayout
+                    android:id="@+id/defenderNoEffectTypesAdvancedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.DefenderFragment" />
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchAdvancedMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/simple"/>
 </LinearLayout>
