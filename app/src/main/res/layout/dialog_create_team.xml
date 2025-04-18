@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:gravity="center|top"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtCreateTeamTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nombre_equipo"
+        android:textSize="30sp"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextTeamName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:maxLength="20"
+        android:textSize="22sp"
+        android:inputType="text"
+        android:hint="@string/nombre_equipo_placeholder" />
+
+    <LinearLayout
+        android:id="@+id/buttonsDialogTeams"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnCancelTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/cancel" />
+        <Button
+            android:id="@+id/btnAcceptTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accept" />
+    </LinearLayout>
+</LinearLayout>

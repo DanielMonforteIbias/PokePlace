@@ -184,9 +184,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void iniciarSesion(){
         user = auth.getCurrentUser();
-        finish();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
     public boolean correoValido(String correo){
         return Patterns.EMAIL_ADDRESS.matcher(correo).matches(); //Devolvemos el resultado de si el correo concuerda con el patrón o no
@@ -194,5 +194,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showToast(String s){
         Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
 }

@@ -99,21 +99,15 @@ public class InfoFragment extends Fragment {
             });
         });
 
-        binding.btnVolverDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mediaPlayer != null) {
-                    mediaPlayer.release();
-                    mediaPlayer = null;
-                }
-                getActivity().finish();
-            }
-        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         binding = null;
     }
 }

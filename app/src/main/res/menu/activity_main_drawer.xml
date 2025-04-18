@@ -9,9 +9,9 @@
             android:icon="@drawable/pokedex"
             android:title="@string/menu_pokedex"/>
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_teams"
+            android:icon="@drawable/teams"
+            android:title="@string/menu_teams" />
         <item
             android:id="@+id/nav_type_calculator"
             android:icon="@drawable/fire"
