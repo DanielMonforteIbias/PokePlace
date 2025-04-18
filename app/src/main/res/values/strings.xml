@@ -9,9 +9,9 @@
     <string name="action_settings">Settings</string>
     <string name="action_add_to_team">Añadir al equipo</string>
     <!--Menus-->
-    <string name="pokedex">Pokédex</string>
+    <string name="menu_pokedex">Pokédex</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_type_calculator">Calculadora de tipos</string>
     <string name="title_activity_pokemon_details">Detalles Pokémon</string>
     <string name="title_info">Info</string>
     <string name="title_stats">Stats</string>
@@ -66,4 +66,28 @@
     <string name="status">Estado</string>
     <string name="physical">Fisico</string>
     <string name="special">Especial</string>
+    <!--Calculadora tipos-->
+    <string name="calculadora">Calculadora de tipos</string>
+    <string name="tabla_tipos">Tabla de tipos</string>
+    <string name="tipo">Tipo</string>
+    <string name="atacante">Atacante</string>
+    <string name="defensor">Defensor</string>
+    <string name="simple">Simple</string>
+    <string name="avanzado">Avanzado</string>
+    <string name="efectivo">Super efectivo</string>
+    <string name="no_efectivo">No muy efectivo</string>
+    <string name="normal">Normal</string>
+    <string name="sin_efecto">Sin efecto</string>
+    <string name="attacker_x4">hace x4 de daño a</string>
+    <string name="attacker_x2">hace x2 de daño a</string>
+    <string name="attacker_x0.5">hace x0.5 de daño a</string>
+    <string name="attacker_x0.25">hace x0.25 de daño a</string>
+    <string name="attacker_x0">hace x0 de daño a</string>
+    <string name="attacker_x1">hace x1 de daño a</string>
+    <string name="defender_x4">sufre x4 de daño de</string>
+    <string name="defender_x2">sufre x2 de daño de</string>
+    <string name="defender_x0.5">sufre x0.5 de daño de</string>
+    <string name="defender_x0.25">sufre x0.25 de daño de</string>
+    <string name="defender_x0">sufre x0 de daño de</string>
+    <string name="defender_x1">sufre x1 de daño de</string>
 </resources>

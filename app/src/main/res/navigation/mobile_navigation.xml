@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_pokedex">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_pokedex"
         android:name="dam.tfg.pokeplace.ui.mainActivityFragments.PokedexFragment"
-        android:label="@string/pokedex"
+        android:label="@string/menu_pokedex"
         tools:layout="@layout/fragment_pokedex" />
 
     <fragment
@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_teams" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="dam.tfg.pokeplace.ui.mainActivityFragments.TypeCalculatorFragment"
-        android:label="@string/menu_slideshow"
+        android:id="@+id/nav_type_calculator"
+        android:name="dam.tfg.pokeplace.ui.mainActivityFragments.typeCalculator.TypeCalculatorFragment"
+        android:label="@string/menu_type_calculator"
         tools:layout="@layout/fragment_type_calculator" />
 </navigation>

@@ -23,7 +23,7 @@ import okhttp3.Response;
 
 public class PokeApiPokemonResponse {
     private static int offset=0;
-    private static int limit=60; //Cargaremos de 60 en 60 para tener todos pero no esperar a todos para que el usuario no espere mucho
+    private static int limit=10; //Cargaremos de 60 en 60 para tener todos pero no esperar a todos para que el usuario no espere mucho
     private static int totalPokemon=1025; //Aunque haya 1304 resultados en la API, hay 1025 Pokemon
     public static void getAllPokemons(PokemonCallback callback, Context context, int currentPokemonNumber){
         if(currentPokemonNumber>=totalPokemon) return; //Si ya  estan todos, no hacemos nada
@@ -62,8 +62,9 @@ public class PokeApiPokemonResponse {
                                             System.out.println("Añadidos "+limit+" pokemon");
                                             Collections.sort(pokemonList, (p1, p2) -> {return Integer.compare(Integer.parseInt(p1.getPokedexNumber()),Integer.parseInt(p2.getPokedexNumber()));});//Ordenamos la lista por numero de Pokedex, porque viene desordenada al ser asincrono
                                             callback.onPokemonListReceived(pokemonList);
-                                            offset+=60;
-                                            if(offset<totalPokemon)getAllPokemons(callback,context,offset); //Llamamos al metodo de nuevo para cargar los 60 siguientes solo si aun quedan
+                                            //TODO: REMOVE COMMENTS WHEN DONE (RIGHT NOW COMMENTED NOT TO PERFORM TOO MANY REQUESTS)
+                                            //offset+=limit;
+                                            //if(offset<totalPokemon)getAllPokemons(callback,context,offset); //Llamamos al metodo de nuevo para cargar los 60 siguientes solo si aun quedan
                                         }catch(NullPointerException e){ //Si se cierra la actividad durante la carga da este error
                                             System.out.println("Error. Fragment nulo");
                                         }
