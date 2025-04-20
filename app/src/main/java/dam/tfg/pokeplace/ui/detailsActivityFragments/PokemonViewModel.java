@@ -16,4 +16,13 @@ public class PokemonViewModel extends ViewModel {
     public LiveData<Pokemon> getPokemon() {
         return pokemon;
     }
+
+    private MutableLiveData<Integer> currentSpriteIndex = new MutableLiveData<>();
+    public void setCurrentSpriteIndex(int index) {
+        currentSpriteIndex.setValue(index);
+    }
+
+    public LiveData<Integer> getCurrentSpriteIndex() {
+        return currentSpriteIndex;
+    }
 }

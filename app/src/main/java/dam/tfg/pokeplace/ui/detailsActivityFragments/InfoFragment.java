@@ -33,7 +33,6 @@ import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class InfoFragment extends Fragment {
     private FragmentInfoBinding binding;
-    private Pokemon pokemon;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private int currentSpriteIndex = 0; // 0 = normal, 1 = shiny
 
@@ -53,6 +52,7 @@ public class InfoFragment extends Fragment {
             binding.txtHeightDetails.setText(getString(R.string.altura)+" "+pokemon.getHeight()+" m");
             binding.txtWeightDetails.setText(getString(R.string.peso)+" "+pokemon.getWeight()+ "kg");
             Glide.with(this).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
+            viewModel.setCurrentSpriteIndex(currentSpriteIndex);
             if(pokemon.getTypes()[0]!=null) Glide.with(this).load(pokemon.getTypes()[0].getSprite()).into(binding.imgType1);
             else binding.imgType1.setVisibility(GONE);
             if(pokemon.getTypes()[1]!=null)Glide.with(this).load(pokemon.getTypes()[1].getSprite()).into(binding.imgType2);
@@ -87,6 +87,7 @@ public class InfoFragment extends Fragment {
                                 currentSpriteIndex = (currentSpriteIndex + 1 ) % pokemon.getSprites().size();
                             }
                             Glide.with(getContext()).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
+                            viewModel.setCurrentSpriteIndex(currentSpriteIndex);
                             return true;
                         }
                     }
@@ -99,21 +100,15 @@ public class InfoFragment extends Fragment {
             });
         });
 
-        binding.btnVolverDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mediaPlayer != null) {
-                    mediaPlayer.release();
-                    mediaPlayer = null;
-                }
-                getActivity().finish();
-            }
-        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         binding = null;
     }
 }

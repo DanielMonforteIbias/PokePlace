@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="load_limit">60</integer>
+    <integer name="total_pokemon">1025</integer>
+    <integer name="teams_limit">10</integer>
+    <integer name="team_size_limit">6</integer>
+</resources>

@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.PokemonAdapter;
-import dam.tfg.pokeplace.api.PokeApiPokemonResponse;
+import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
 import dam.tfg.pokeplace.api.PokeApiTypeResponse;
-import dam.tfg.pokeplace.api.PokemonCallback;
+import dam.tfg.pokeplace.api.BasePokemonCallback;
 import dam.tfg.pokeplace.api.TypeCallback;
 import dam.tfg.pokeplace.data.Data;
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.databinding.FragmentPokedexBinding;
-import dam.tfg.pokeplace.models.Pokemon;
+import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Type;
 
 public class PokedexFragment extends Fragment {
@@ -28,10 +30,15 @@ public class PokedexFragment extends Fragment {
     private FragmentPokedexBinding binding;
     private PokemonAdapter adapter;
     private Data data;
+    private BasePokemonDAO basePokemonDAO;
+
+    private int loadLimit;
+    private int totalPokemon;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPokedexBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        basePokemonDAO=new BasePokemonDAO(getContext());
         data=Data.getInstance();
         RecyclerView recyclerView = binding.pokemonList;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),4));
@@ -43,7 +50,8 @@ public class PokedexFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        System.out.println("HOLA");
+        loadLimit = getResources().getInteger(R.integer.load_limit);
+        totalPokemon=getResources().getInteger(R.integer.total_pokemon);
         loadTypes();
     }
 
@@ -66,24 +74,37 @@ public class PokedexFragment extends Fragment {
         else loadPokemon();
     }
     public void loadPokemon(){
-        PokeApiPokemonResponse.getAllPokemons(new PokemonCallback() {
-            @Override
-            public void onPokemonListReceived(List<Pokemon> list) {
-                data.getPokemonList().addAll(list);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
+        int current = data.getPokemonList().size();
+        System.out.println("current: "+current);
+        List<BasePokemon> localBlock = basePokemonDAO.getBasePokemonList(loadLimit,current);
+        if (!localBlock.isEmpty()) {
+            data.getPokemonList().addAll(localBlock);
+            getActivity().runOnUiThread(() -> {
+                adapter.notifyDataSetChanged();
+                loadPokemon();//Se llama a si mismo para seguir cargando de 60 en 60
+            });
+        }
+        else if(current<totalPokemon){
+            PokeApiBasePokemonResponse.getAllPokemons(new BasePokemonCallback() {
+                @Override
+                public void onBasePokemonListReceived(List<BasePokemon> pokemonList) {
+                    data.getPokemonList().addAll(pokemonList);
+                    pokemonList.forEach(basePokemonDAO::addBasePokemon); //Añadimos todos los pokemon recibidos a la BD. No se añade uno por uno durante la carga para evitar saltarse Pokemon al interrumpirla a mitades
+                    System.out.println("AÑADIDOS NUEVOS POKEMON A LA BD");
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
 
-            @Override
-            public void onPokemonReceived(Pokemon pokemon) {
+                @Override
+                public void onBasePokemonReceived(BasePokemon pokemon) {
 
-            }
-        }, getContext(),data.getPokemonList().size()); //Le pasamos el numero de Pokemon actual por si la carga se quedo a medias, para retomar donde estaba
-        System.out.println("Actual: "+data.getPokemonList().size());
+                }
+            }, getContext(),data.getPokemonList().size()); //Le pasamos el numero de Pokemon actual por si la carga se quedo a medias, para retomar donde estaba
+        }
     }
     @Override
     public void onDestroyView() {

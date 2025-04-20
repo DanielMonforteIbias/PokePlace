@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import dam.tfg.pokeplace.data.Data;
+import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Type;
@@ -33,6 +34,30 @@ public class JSONExtractor {
             e.printStackTrace();
         }
         return urlList;
+    }
+
+    public static BasePokemon extractBasePokemon(String jsonResponse){
+        BasePokemon pokemon = new BasePokemon();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            int id = jsonObject.getInt("id");
+            String pokedexNumber=String.format(Locale.US,"%03d",id);
+            String name=jsonObject.getString("name");
+            ArrayList<String> sprites=new ArrayList<>();
+            String sprite=jsonObject.getJSONObject("sprites").getString("front_default");
+            JSONArray typesArray=jsonObject.getJSONArray("types");
+            String type1=typesArray.getJSONObject(0).getJSONObject("type").getString("name");
+            String type2=null;
+            if(typesArray.length()>1)type2=typesArray.getJSONObject(1).getJSONObject("type").getString("name");
+            pokemon.setPokedexNumber(pokedexNumber);
+            pokemon.setName(name);
+            pokemon.setSprite(sprite);
+            pokemon.setType1(type1);
+            pokemon.setType2(type2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pokemon;
     }
     public static Pokemon extractPokemon(String jsonResponse){
         Pokemon pokemon = new Pokemon();

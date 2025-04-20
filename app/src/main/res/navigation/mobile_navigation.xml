@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_pokedex" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_teams"
         android:name="dam.tfg.pokeplace.ui.mainActivityFragments.TeamsFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/menu_teams"
         tools:layout="@layout/fragment_teams" />
 
     <fragment

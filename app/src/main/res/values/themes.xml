@@ -1,9 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.PokePlace" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+    </style>
+    <style name="PokePlacePopupMenu" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:background">?attr/colorSurfaceContainer</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+    <style name="Theme.PokePlace.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/red_500</item>
+        <item name="colorPrimaryVariant">@color/red_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -16,12 +25,5 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="Theme.PokePlace.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.PokePlace.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.PokePlace.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.PokePlace.AppBarOverlay" parent="Theme.PokePlace.NoActionBar" />
 </resources>

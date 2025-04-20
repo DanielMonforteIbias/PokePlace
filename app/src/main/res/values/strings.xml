@@ -6,16 +6,20 @@
     <string name="nav_header_title">User</string>
     <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">User photo</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_add_to_team">Añadir al equipo</string>
+
     <!--Menus-->
     <string name="menu_pokedex">Pokédex</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_teams">Equipos</string>
     <string name="menu_type_calculator">Calculadora de tipos</string>
     <string name="title_activity_pokemon_details">Detalles Pokémon</string>
     <string name="title_info">Info</string>
     <string name="title_stats">Stats</string>
     <string name="title_moves">Movimientos</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add_to_team">Añadir al equipo</string>
+    <string name="action_credits">Créditos</string>
+    <string name="action_remove_team">Eliminar equipo</string>
+    <string name="action_change_name">Cambiar nombre</string>
 
     <!--Acciones-->
     <string name="login">Login</string>
@@ -23,8 +27,12 @@
     <string name="logout">Logout</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="volver">Volver</string>
-
+    <string name="go_back">Volver</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="close">Cerrar</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 
     <!--Inicio sesión y registro-->
     <string name="error_email_vacio">El correo no puede estar vacío</string>
@@ -38,6 +46,7 @@
     <string name="error_registro">Registro fallido</string>
     <string name="error_login_credenciales">Login fallido. Credenciales incorrectas</string>
     <string name="exito_registro">Registro exitoso. Ya puede iniciar sesión</string>
+    <string name="error_logout">Error al cerrar sesión</string>
 
     <!--Manejo respuesta PokeApi-->
     <string name="error_solicitud_api">Error en la solicitud a la API</string>
@@ -66,6 +75,19 @@
     <string name="status">Estado</string>
     <string name="physical">Fisico</string>
     <string name="special">Especial</string>
+    <!--Equipos-->
+    <string name="nombre_equipo">Introduce el nombre de tu equipo</string>
+    <string name="nombre_equipo_placeholder">Nombre</string>
+    <string name="nombre_vacio">El nombre no puede estar vacío</string>
+    <string name="limite_equipos">Límite de 10 equipos alcanzado</string>
+    <string name="limite_miembros_equipo">Equipo lleno</string>
+    <string name="no_equipos">No tienes equipos</string>
+    <string name="no_equipos_error">No tienes equipos. Puedes crear uno en el fragmento "Equipos"</string>
+    <string name="pokemon_anadido_a_equipo">añadido a</string>
+    <string name="remove_team_warning">Seguro que quieres eliminar</string>
+    <string name="team_removed">eliminado</string>
+    <string name="error_anadir_a_equipo">Error al añadir Pokémon al equipo</string>
+
     <!--Calculadora tipos-->
     <string name="calculadora">Calculadora de tipos</string>
     <string name="tabla_tipos">Tabla de tipos</string>
@@ -90,4 +112,7 @@
     <string name="defender_x0.25">sufre x0.25 de daño de</string>
     <string name="defender_x0">sufre x0 de daño de</string>
     <string name="defender_x1">sufre x1 de daño de</string>
+    <!--Credits-->
+    <string name="author">Hecho por Daniel Monforte Ibias</string>
+    <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
 </resources>

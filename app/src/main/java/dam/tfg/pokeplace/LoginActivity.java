@@ -33,7 +33,10 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
+import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -44,11 +47,19 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient gClient;
     private ActivityLoginBinding binding;
     private ActivityResultLauncher<Intent> activityResultLauncher;
+
+    private UserDAO userDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        userDAO=new UserDAO(this);
         auth = FirebaseAuth.getInstance();
         if(checkLoginStatus()){
             iniciarSesion();
@@ -184,15 +195,24 @@ public class LoginActivity extends AppCompatActivity {
 
     private void iniciarSesion(){
         user = auth.getCurrentUser();
-        finish();
+        if(!userDAO.userExists(user.getUid())) { //Si el usuario no existe en la base de datos
+            String image= (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
+            userDAO.addUser(new User(user.getUid(),user.getEmail(),user.getDisplayName(),image));
+        }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
     public boolean correoValido(String correo){
         return Patterns.EMAIL_ADDRESS.matcher(correo).matches(); //Devolvemos el resultado de si el correo concuerda con el patrón o no
     }
 
     private void showToast(String s){
-        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+        ToastUtil.showToast(getApplicationContext(),s);
+    }
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
 }
