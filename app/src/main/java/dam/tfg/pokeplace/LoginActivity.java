@@ -36,6 +36,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -53,6 +54,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         userDAO=new UserDAO(this);
         auth = FirebaseAuth.getInstance();
         if(checkLoginStatus()){
@@ -202,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showToast(String s){
-        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_SHORT).show();
+        ToastUtil.showToast(getApplicationContext(),s);
     }
     @Override
     public void startActivity(Intent intent) {

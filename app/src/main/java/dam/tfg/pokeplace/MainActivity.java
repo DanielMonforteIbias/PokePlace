@@ -45,6 +45,7 @@ import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityMainBinding;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     case "password":
                         break;
                     default:
-                        Toast.makeText(getApplicationContext(), "Error en el ID del proveedor al cerrar sesion", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToast(getApplicationContext(),getString(R.string.error_logout));
                         break;
                 }
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));

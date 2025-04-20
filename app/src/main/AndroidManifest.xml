@@ -15,14 +15,18 @@
         android:theme="@style/Theme.PokePlace"
         tools:targetApi="31">
         <activity
+            android:name=".TeamDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PokePlace.NoActionBar"/>
+        <activity
             android:name=".PokemonDetailsActivity"
             android:exported="false"
-            android:theme="@style/Theme.PokePlace.NoActionBar"
-            android:label="@string/title_activity_pokemon_details" />
+            android:label="@string/title_activity_pokemon_details"
+            android:theme="@style/Theme.PokePlace.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.PokePlace.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.PokePlace.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

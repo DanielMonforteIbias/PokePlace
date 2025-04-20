@@ -28,6 +28,17 @@ public class TeamDAO {
         values.put(DatabaseHelper.TEAM_NAME_COLUMN, team.getName());
         db.insert(DatabaseHelper.TEAMS_TABLE_NAME, null, values);
     }
+    public void changeTeamName(Team team){
+        values=new ContentValues();
+        values.put(DatabaseHelper.TEAM_NAME_COLUMN,team.getName());
+        String where=DatabaseHelper.TEAM_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?";
+        db.update(DatabaseHelper.TEAMS_TABLE_NAME,values,where,new String[]{team.getUserId(),String.valueOf(team.getTeamId())});
+    }
+    public void removeTeam(String userId, int teamId){
+        String condition = DatabaseHelper.TEAM_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?"; //Condicion para el borrado
+        String conditionArgs[] = { userId, String.valueOf(teamId) }; //Ponemos los parámetros recibidos en los ? de la condicion anterior
+        db.delete(DatabaseHelper.TEAMS_TABLE_NAME, condition,conditionArgs);
+    }
 
     public Team getTeam(String userId, int teamId){
         Team team=new Team();

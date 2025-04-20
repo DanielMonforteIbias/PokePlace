@@ -5,8 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="20dp"
     tools:context=".ui.mainActivityFragments.TeamsFragment">
+
+    <TextView
+        android:id="@+id/txtNoTeams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:visibility="gone"
+        android:text="@string/no_equipos" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/teamsList"

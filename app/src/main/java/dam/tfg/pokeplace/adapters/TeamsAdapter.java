@@ -3,7 +3,6 @@ package dam.tfg.pokeplace.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,16 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.models.Pokemon;
+import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Team;
 
 public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
     private List<Team> teamsList;
+    private OnTeamClickListener onClickListener;
 
-    public TeamsAdapter(List<Team>teamsList){
+    public TeamsAdapter(List<Team>teamsList, OnTeamClickListener listener){
         this.teamsList=teamsList;
+        this.onClickListener = listener;
     }
-
+    public void updateTeams(List<Team> newTeams) {
+        this.teamsList = newTeams;
+        this.notifyDataSetChanged();
+    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtName;
         public ViewHolder(View itemView) {
@@ -42,6 +46,11 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Team team= teamsList.get(position);
         holder.txtName.setText(team.getName());
+        holder.itemView.setOnClickListener(v -> {
+            if (onClickListener != null) {
+                onClickListener.onTeamClick(team);
+            }
+        });
     }
 
     @Override
