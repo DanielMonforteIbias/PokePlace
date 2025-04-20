@@ -22,6 +22,7 @@ public class DatabaseManager {
     public SQLiteDatabase openDatabase() {
         if (database == null || !database.isOpen()) {
             database = dbHelper.getWritableDatabase();
+            database.execSQL("PRAGMA foreign_keys=ON;"); //Activar FKs
         }
         return database;
     }

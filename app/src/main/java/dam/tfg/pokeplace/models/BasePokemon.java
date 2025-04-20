@@ -105,5 +105,4 @@ public class BasePokemon implements Parcelable {
     public void setType2(String type2) {
         this.type2 = type2;
     }
-
 }

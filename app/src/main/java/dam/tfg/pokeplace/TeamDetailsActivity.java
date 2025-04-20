@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -16,11 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import dam.tfg.pokeplace.adapters.TeamPokemonAdapter;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
@@ -28,12 +32,14 @@ import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class TeamDetailsActivity extends AppCompatActivity {
     private Team team;
     private ActivityTeamDetailsBinding binding;
+    private TeamPokemonAdapter adapter;
 
     private UserDAO userDAO;
     public static User user;
@@ -57,6 +63,9 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         team=intent.getParcelableExtra("Team");
+        adapter=new TeamPokemonAdapter(team.getTeamMembers());
+        binding.teamPokemonList.setLayoutManager(new GridLayoutManager(getApplicationContext(),1));
+        binding.teamPokemonList.setAdapter(adapter);
         updateUI();
     }
     @Override
@@ -142,6 +151,13 @@ public class TeamDetailsActivity extends AppCompatActivity {
         binding.toolbarTeamDetails.setTitle(team.getName());
         binding.txtTeamNameDetails.setText(team.getName());
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

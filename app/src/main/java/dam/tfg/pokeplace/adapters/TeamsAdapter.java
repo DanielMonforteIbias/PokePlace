@@ -27,24 +27,33 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> 
     private List<Team> teamsList;
     private OnTeamClickListener onClickListener;
 
-    public TeamsAdapter(List<Team>teamsList, OnTeamClickListener listener){
-        this.teamsList=teamsList;
+    public TeamsAdapter(List<Team> teamsList, OnTeamClickListener listener) {
+        this.teamsList = teamsList;
         this.onClickListener = listener;
     }
+
     public void updateTeams(List<Team> newTeams) {
         this.teamsList = newTeams;
         this.notifyDataSetChanged();
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtName;
         private GridLayout teamMembersLayout;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            txtName=itemView.findViewById(R.id.txtTeamName);
-            teamMembersLayout=itemView.findViewById(R.id.teamMembersLayout);
+            txtName = itemView.findViewById(R.id.txtTeamName);
+            teamMembersLayout = itemView.findViewById(R.id.teamMembersLayout);
         }
-        public TextView getTxtName() {return txtName;}
-        public GridLayout getTeamMembersLayout(){return teamMembersLayout;}
+
+        public TextView getTxtName() {
+            return txtName;
+        }
+
+        public GridLayout getTeamMembersLayout() {
+            return teamMembersLayout;
+        }
     }
 
     @NonNull
@@ -56,32 +65,27 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Team team= teamsList.get(position);
-        Context context=holder.itemView.getContext();
+        Team team = teamsList.get(position);
+        Context context = holder.itemView.getContext();
         holder.txtName.setText(team.getName());
         holder.teamMembersLayout.removeAllViews(); //Limpiamos para evitar duplicados
-        holder.teamMembersLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                holder.teamMembersLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int totalWidth = holder.teamMembersLayout.getWidth();
-                int totalHeight = holder.teamMembersLayout.getHeight();
-                int totalImagesPerRow=3;
-                int totalRows=2;
-                int width=totalWidth/totalImagesPerRow;
-                int height=totalHeight/totalRows;
-                for (TeamPokemon member : team.getTeamMembers()) {
-                    ImageView imageView = new ImageView(holder.itemView.getContext());
-                    GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                    params.width = width;
-                    params.height = height;
-                    imageView.setLayoutParams(params);
-                    Glide.with(context).load(member.getCustomSprite()).into(imageView);
-                    holder.teamMembersLayout.addView(imageView);
-                }
+        holder.itemView.post(() -> { //post hace que se ejecute lo definido cuando la vista ya ha sido medida, necesario para que getWidth y getHeight no sean 0
+            int totalWidth = holder.teamMembersLayout.getWidth();
+            int totalHeight = holder.teamMembersLayout.getHeight();
+            int totalImagesPerRow = 3;
+            int totalRows = 2;
+            int width = totalWidth / totalImagesPerRow;
+            int height = totalHeight / totalRows;
+            for (TeamPokemon member : team.getTeamMembers()) {
+                ImageView imageView = new ImageView(holder.itemView.getContext());
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.width = width;
+                params.height = height;
+                imageView.setLayoutParams(params);
+                Glide.with(context).load(member.getCustomSprite()).into(imageView);
+                holder.teamMembersLayout.addView(imageView);
             }
         });
-
         holder.itemView.setOnClickListener(v -> {
             if (onClickListener != null) {
                 onClickListener.onTeamClick(team);

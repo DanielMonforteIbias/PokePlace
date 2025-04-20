@@ -97,6 +97,7 @@ public class TeamPokemon extends BasePokemon implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeInt(id);
         dest.writeString(userId);
         dest.writeInt(teamId);

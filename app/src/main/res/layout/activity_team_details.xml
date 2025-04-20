@@ -14,8 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        android:layout_marginBottom="20dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.PokePlace.PopupOverlay"
+        app:popupTheme="@style/PokePlacePopupMenu"
         app:title="@string/nombre_equipo_placeholder"
         app:titleTextColor="@android:color/white"
         tools:layout_editor_absoluteX="0dp" />
@@ -23,7 +24,13 @@
         android:id="@+id/txtTeamNameDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:textSize="50sp"
         android:textStyle="bold"
         android:text="@string/nombre" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/teamPokemonList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
