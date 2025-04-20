@@ -33,7 +33,9 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
+import dam.tfg.pokeplace.models.User;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -44,11 +46,14 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient gClient;
     private ActivityLoginBinding binding;
     private ActivityResultLauncher<Intent> activityResultLauncher;
+
+    private UserDAO userDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        userDAO=new UserDAO(this);
         auth = FirebaseAuth.getInstance();
         if(checkLoginStatus()){
             iniciarSesion();
@@ -184,6 +189,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void iniciarSesion(){
         user = auth.getCurrentUser();
+        if(!userDAO.userExists(user.getUid())) { //Si el usuario no existe en la base de datos
+            String image= (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
+            userDAO.addUser(new User(user.getUid(),user.getEmail(),user.getDisplayName(),image));
+        }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

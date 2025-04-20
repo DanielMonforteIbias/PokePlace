@@ -18,20 +18,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import dam.tfg.pokeplace.MainActivity;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
+import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.models.Team;
 
 public class TeamsFragment extends Fragment {
     private FragmentTeamsBinding binding;
     private TeamsAdapter adapter;
-    private List<Team> teams=new ArrayList<>();
+    private List<Team> teams;
     private int teamSizeLimit;
 
+    private TeamDAO teamDAO;
+    private String userId;
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTeamsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        teamDAO=new TeamDAO(getContext());
+        userId=MainActivity.user.getUserId();
+        teams=teamDAO.getAllTeams(userId);
         adapter=new TeamsAdapter(teams);
         return root;
     }
@@ -70,7 +77,9 @@ public class TeamsFragment extends Fragment {
             public void onClick(View v) {
                 String teamName = input.getText().toString().trim();
                 if (!teamName.isEmpty()) {
-                    teams.add(new Team(teamName));
+                    Team newTeam=new Team(userId,teamDAO.getNewTeamId(userId),teamName);
+                    teamDAO.addTeam(newTeam);
+                    teams.add(newTeam);
                     adapter.notifyDataSetChanged();
                     dialog.dismiss();
                 } else {

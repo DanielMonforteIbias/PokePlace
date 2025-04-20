@@ -41,8 +41,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityMainBinding;
 import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
 
     private String providerId="";
-    private FirebaseUser firebaseUser;
     private GoogleSignInClient gClient;
     private GoogleSignInOptions gOptions;
 
+    private UserDAO userDAO;
+    public static User user;
+    private FirebaseUser firebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +84,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        userDAO=new UserDAO(this);
+
         txtNombre = headerView.findViewById(R.id.txtUser);
         txtEmail = headerView.findViewById(R.id.txtEmailUser);
         btnLogout = headerView.findViewById(R.id.btnLogout);
         imgFoto = headerView.findViewById(R.id.imgUser);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        user=userDAO.getUser(firebaseUser.getUid());
+
         providerId = firebaseUser.getProviderData().get(1).getProviderId();
         if (providerId.equals("google.com")) { //Si el proveedor es Google
             gOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -117,9 +126,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void updateUserUI(){
-        txtNombre.setText(firebaseUser.getDisplayName());
-        txtEmail.setText(firebaseUser.getEmail());
-        Glide.with(this).load(firebaseUser.getPhotoUrl()).placeholder(R.drawable.icon1).into(imgFoto);
+        txtNombre.setText(user.getName());
+        txtEmail.setText(user.getEmail());
+        Glide.with(this).load(user.getImage()).placeholder(R.drawable.icon1).into(imgFoto);
     }
 
     @Override
