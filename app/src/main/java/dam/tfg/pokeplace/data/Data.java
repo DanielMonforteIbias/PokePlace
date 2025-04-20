@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Type;
 
 public class Data {
     private static Data instance;
 
-    private List<Pokemon> pokemonList = new ArrayList<>();
+    private List<BasePokemon> pokemonList = new ArrayList<>();
     private List<Type> typeList = new ArrayList<>();
 
     private Data() {}
@@ -25,11 +26,11 @@ public class Data {
         return instance;
     }
 
-    public void setPokemonList(List<Pokemon> list) {
+    public void setPokemonList(List<BasePokemon> list) {
         this.pokemonList = list;
     }
 
-    public List<Pokemon> getPokemonList() {
+    public List<BasePokemon> getPokemonList() {
         return pokemonList;
     }
 

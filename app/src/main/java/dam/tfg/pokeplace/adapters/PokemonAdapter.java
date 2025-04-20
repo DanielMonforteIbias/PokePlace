@@ -1,6 +1,5 @@
 package dam.tfg.pokeplace.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,12 +17,16 @@ import java.util.List;
 
 import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
+import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
+import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
+import dam.tfg.pokeplace.api.PokemonCallback;
+import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Pokemon;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder>{
-    private List<Pokemon> pokemonList;
+    private List<BasePokemon> pokemonList;
 
-    public PokemonAdapter(List<Pokemon>pokemonList){
+    public PokemonAdapter(List<BasePokemon>pokemonList){
         this.pokemonList=pokemonList;
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,16 +53,21 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull PokemonAdapter.ViewHolder holder, int position) {
-        Pokemon pokemon=pokemonList.get(position);
+        BasePokemon pokemon=pokemonList.get(position);
         Context context=holder.itemView.getContext();
-        Glide.with(context).load(pokemon.getSprites().get(0)).into(holder.sprite);
+        Glide.with(context).load(pokemon.getSprite()).into(holder.sprite);
         holder.pokedexNumber.setText(pokemon.getPokedexNumber());
         holder.sprite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, PokemonDetailsActivity.class);
-                intent.putExtra("Pokemon",pokemon);
-                context.startActivity(intent);
+                PokeApiDetailsResponse.getPokemon(pokemon.getUrl(), new PokemonCallback() {
+                    @Override
+                    public void onPokemonReceived(Pokemon pokemon) {
+                        Intent intent=new Intent(context, PokemonDetailsActivity.class);
+                        intent.putExtra("Pokemon",pokemon);
+                        context.startActivity(intent);
+                    }
+                },context);
             }
         });
     }
