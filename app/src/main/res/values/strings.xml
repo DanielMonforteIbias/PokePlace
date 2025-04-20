@@ -80,11 +80,13 @@
     <string name="nombre_equipo_placeholder">Nombre</string>
     <string name="nombre_vacio">El nombre no puede estar vacío</string>
     <string name="limite_equipos">Límite de 10 equipos alcanzado</string>
+    <string name="limite_miembros_equipo">Equipo lleno</string>
     <string name="no_equipos">No tienes equipos</string>
     <string name="no_equipos_error">No tienes equipos. Puedes crear uno en el fragmento "Equipos"</string>
     <string name="pokemon_anadido_a_equipo">añadido a</string>
     <string name="remove_team_warning">Seguro que quieres eliminar</string>
     <string name="team_removed">eliminado</string>
+    <string name="error_anadir_a_equipo">Error al añadir Pokémon al equipo</string>
 
     <!--Calculadora tipos-->
     <string name="calculadora">Calculadora de tipos</string>

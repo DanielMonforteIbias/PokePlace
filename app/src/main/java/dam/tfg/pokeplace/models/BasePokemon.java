@@ -1,6 +1,11 @@
 package dam.tfg.pokeplace.models;
 
-public class BasePokemon {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class BasePokemon implements Parcelable {
     private String pokedexNumber;
     private String name;
     private String sprite;
@@ -16,6 +21,42 @@ public class BasePokemon {
         this.type1=type1;
         this.type2=type2;
     }
+
+    protected BasePokemon(Parcel in) {
+        pokedexNumber = in.readString();
+        name = in.readString();
+        sprite = in.readString();
+        url = in.readString();
+        type1 = in.readString();
+        type2 = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(pokedexNumber);
+        dest.writeString(name);
+        dest.writeString(sprite);
+        dest.writeString(url);
+        dest.writeString(type1);
+        dest.writeString(type2);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<BasePokemon> CREATOR = new Creator<BasePokemon>() {
+        @Override
+        public BasePokemon createFromParcel(Parcel in) {
+            return new BasePokemon(in);
+        }
+
+        @Override
+        public BasePokemon[] newArray(int size) {
+            return new BasePokemon[size];
+        }
+    };
 
     public String getPokedexNumber() {
         return pokedexNumber;
@@ -64,4 +105,5 @@ public class BasePokemon {
     public void setType2(String type2) {
         this.type2 = type2;
     }
+
 }

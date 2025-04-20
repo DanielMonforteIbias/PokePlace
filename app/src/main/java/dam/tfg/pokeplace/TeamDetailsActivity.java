@@ -22,7 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.List;
 
 import dam.tfg.pokeplace.data.dao.TeamDAO;
+import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.models.Team;
@@ -35,7 +37,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     private UserDAO userDAO;
     public static User user;
-    private TeamDAO teamDAO;
+    private TeamService teamService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbarTeamDetails);
 
         userDAO=new UserDAO(this);
-        teamDAO=new TeamDAO(this);
+        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()));
         user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         Intent intent=getIntent();
@@ -96,7 +98,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
                 String teamName = input.getText().toString().trim();
                 if (!teamName.isEmpty()) {
                     Team newTeam=new Team(team.getUserId(),team.getTeamId(),teamName);
-                    teamDAO.changeTeamName(newTeam);
+                    teamService.changeTeamName(newTeam);
                     team.setName(teamName); //Cambiamos el nombre del team actual de la actividad
                     updateUI();
                     dialog.dismiss();
@@ -125,7 +127,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                teamDAO.removeTeam(user.getUserId(),team.getTeamId());
+                teamService.removeTeam(user.getUserId(),team.getTeamId());
                 ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
                 dialog.dismiss();
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);

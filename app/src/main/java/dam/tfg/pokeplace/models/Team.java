@@ -11,19 +11,22 @@ public class Team implements Parcelable {
     private String userId;
     private int teamId;
     private String name;
-    private ArrayList<Pokemon> pokemons;
+    private ArrayList<TeamPokemon> teamMembers;
+
     public Team(){}
+
     public Team(String userId, int teamId, String name){
         this.userId=userId;
         this.teamId=teamId;
         this.name=name;
+        teamMembers=new ArrayList<>();
     }
 
     protected Team(Parcel in) {
         userId = in.readString();
         teamId = in.readInt();
         name = in.readString();
-        pokemons = in.createTypedArrayList(Pokemon.CREATOR);
+        teamMembers = in.createTypedArrayList(TeamPokemon.CREATOR);
     }
 
     public static final Creator<Team> CREATOR = new Creator<Team>() {
@@ -62,12 +65,12 @@ public class Team implements Parcelable {
         this.name = name;
     }
 
-    public ArrayList<Pokemon> getPokemons() {
-        return pokemons;
+    public ArrayList<TeamPokemon> getTeamMembers() {
+        return teamMembers;
     }
 
-    public void setPokemons(ArrayList<Pokemon> pokemons) {
-        this.pokemons = pokemons;
+    public void setTeamMembers(ArrayList<TeamPokemon> teamMembers) {
+        this.teamMembers = teamMembers;
     }
 
     @Override
@@ -80,6 +83,6 @@ public class Team implements Parcelable {
         dest.writeString(userId);
         dest.writeInt(teamId);
         dest.writeString(name);
-        dest.writeTypedList(pokemons);
+        dest.writeTypedList(teamMembers);
     }
 }

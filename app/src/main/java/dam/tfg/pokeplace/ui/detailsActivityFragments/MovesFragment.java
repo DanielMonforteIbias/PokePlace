@@ -10,21 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
 
 import dam.tfg.pokeplace.adapters.MovesAdapter;
-import dam.tfg.pokeplace.adapters.PokemonAdapter;
-import dam.tfg.pokeplace.api.DetailsCallback;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
-import dam.tfg.pokeplace.api.PokeApiTypeResponse;
-import dam.tfg.pokeplace.api.TypeCallback;
-import dam.tfg.pokeplace.data.Data;
+import dam.tfg.pokeplace.api.PokemonCallback;
 import dam.tfg.pokeplace.databinding.FragmentMovesBinding;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
-import dam.tfg.pokeplace.models.Type;
 
 public class MovesFragment extends Fragment {
 
@@ -50,7 +42,12 @@ public class MovesFragment extends Fragment {
                 Move m = pokemon.getMoves().get(i);
                 if (m.getName() == null && m.getUrl()!=null) { //Cuando no hay nombre y si URL, es que el movimiento no esta relleno
                     final int index = i;
-                    PokeApiDetailsResponse.getMove(m.getUrl(),new DetailsCallback() {
+                    PokeApiDetailsResponse.getMove(m.getUrl(),new PokemonCallback() {
+                        @Override
+                        public void onPokemonReceived(Pokemon pokemon) {
+
+                        }
+
                         @Override
                         public void onMoveReceived(Move move) {
                             if (getActivity() != null) {

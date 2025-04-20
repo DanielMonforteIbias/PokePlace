@@ -29,11 +29,14 @@ import java.util.List;
 
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
+import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityPokemonDetailsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
 import dam.tfg.pokeplace.utils.StringFormatter;
@@ -41,11 +44,14 @@ import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class PokemonDetailsActivity extends AppCompatActivity {
     private ActivityPokemonDetailsBinding binding;
+    private PokemonViewModel viewModel;
     private Pokemon pokemon=new Pokemon();
+
+    private int teamSizeLimit;
 
     private UserDAO userDAO;
     public static User user;
-    private TeamDAO teamDAO;
+    private TeamService teamService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +73,14 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         userDAO=new UserDAO(this);
-        teamDAO=new TeamDAO(this);
+        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()));
         user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
 
         Intent intent=getIntent();
         pokemon=intent.getParcelableExtra("Pokemon");
-        PokemonViewModel viewModel = new ViewModelProvider(this).get(PokemonViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PokemonViewModel.class);
         viewModel.setPokemon(pokemon);
-
     }
 
     private void displayAddPokemonToTeamDialog(List<Team>userTeams){
@@ -96,12 +102,32 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         recyclerView.setAdapter(new TeamsAdapter(userTeams, new OnTeamClickListener() {
             @Override
             public void onTeamClick(Team team) {
-                ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.pokemon_anadido_a_equipo)+" "+team.getName());
-                dialog.dismiss();
+                if(teamService.getTeamSize(user.getUserId(),team.getTeamId())<teamSizeLimit){
+                    if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.pokemon_anadido_a_equipo)+" "+team.getName());
+                    else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_anadir_a_equipo));
+                    dialog.dismiss();
+                }
+                else ToastUtil.showToast(getApplicationContext(),getString(R.string.limite_miembros_equipo));
             }
         }));
         dialog.setCancelable(false);
         dialog.show();
+    }
+
+    private boolean addPokemonToTeam(Team team){
+        Integer currentSpriteIndex = viewModel.getCurrentSpriteIndex().getValue();
+        if (currentSpriteIndex != null) {
+            TeamPokemon teamPokemon=new TeamPokemon();
+            teamPokemon.setUserId(user.getUserId());
+            teamPokemon.setTeamId(team.getTeamId());
+            teamPokemon.setPokedexNumber(pokemon.getPokedexNumber());
+            teamPokemon.setCustomName(pokemon.getName()); //El nombre por defecto es el mismo nombre del Pokemon
+            teamPokemon.setCustomSprite(pokemon.getSprites().get(currentSpriteIndex)); //El sprite por defecto es el que esté viendo el usuario
+            teamService.addTeamPokemon(teamPokemon);
+            return true;
+        } else {
+            return false;
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,7 +139,7 @@ public class PokemonDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_to_team){
-            List<Team> userTeams=teamDAO.getAllTeams(user.getUserId());
+            List<Team> userTeams=teamService.getAllTeams(user.getUserId());
             if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
             else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.no_equipos_error));
         }

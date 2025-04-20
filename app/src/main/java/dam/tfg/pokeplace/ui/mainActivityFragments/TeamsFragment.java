@@ -31,9 +31,12 @@ import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.TeamDetailsActivity;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
+import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class TeamsFragment extends Fragment {
@@ -42,16 +45,16 @@ public class TeamsFragment extends Fragment {
     private List<Team> teams;
     private int teamSizeLimit;
 
-    private TeamDAO teamDAO;
+    private TeamService teamService;
     private String userId;
 
     private ActivityResultLauncher<Intent>teamDetailsActivityLauncher;
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTeamsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        teamDAO=new TeamDAO(getContext());
+        teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()));
         userId=MainActivity.user.getUserId();
-        teams=teamDAO.getAllTeams(userId);
+        teams=teamService.getAllTeams(userId);
         adapter=new TeamsAdapter(teams, new OnTeamClickListener() {
             @Override
             public void onTeamClick(Team team) {
@@ -107,8 +110,8 @@ public class TeamsFragment extends Fragment {
             public void onClick(View v) {
                 String teamName = input.getText().toString().trim();
                 if (!teamName.isEmpty()) {
-                    Team newTeam=new Team(userId,teamDAO.getNewTeamId(userId),teamName);
-                    teamDAO.addTeam(newTeam);
+                    Team newTeam=new Team(userId,teamService.getNewTeamId(userId),teamName);
+                    teamService.addTeam(newTeam);
                     teams.add(newTeam);
                     updateUI();
                     adapter.notifyDataSetChanged();
@@ -122,11 +125,11 @@ public class TeamsFragment extends Fragment {
         dialog.show();
     }
     private void updateUI(){
-        if(teamDAO.getAllTeams(userId).isEmpty())binding.txtNoTeams.setVisibility(View.VISIBLE);
+        if(teamService.getAllTeams(userId).isEmpty())binding.txtNoTeams.setVisibility(View.VISIBLE);
         else binding.txtNoTeams.setVisibility(View.GONE);
     }
     private void updateData(){
-        teams=teamDAO.getAllTeams(userId);
+        teams=teamService.getAllTeams(userId);
         adapter.updateTeams(teams); //Notificamos al adaptador para tener la nueva lista
     }
     @Override

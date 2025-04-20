@@ -21,6 +21,7 @@ import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;
 import dam.tfg.pokeplace.models.BasePokemon;
+import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder>{
@@ -66,6 +67,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
                         Intent intent=new Intent(context, PokemonDetailsActivity.class);
                         intent.putExtra("Pokemon",pokemon);
                         context.startActivity(intent);
+                    }
+
+                    @Override
+                    public void onMoveReceived(Move move) {
+
                     }
                 },context);
             }

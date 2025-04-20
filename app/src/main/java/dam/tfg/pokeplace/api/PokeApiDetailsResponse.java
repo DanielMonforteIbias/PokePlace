@@ -43,7 +43,7 @@ public class PokeApiDetailsResponse {
             }
         });
     }
-    public static void getMove(String moveUrl, DetailsCallback callback, Context context){
+    public static void getMove(String moveUrl, PokemonCallback callback, Context context){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(moveUrl).get().build();
         client.newCall(request).enqueue(new Callback() {

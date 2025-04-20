@@ -76,7 +76,7 @@ public class PokedexFragment extends Fragment {
     public void loadPokemon(){
         int current = data.getPokemonList().size();
         System.out.println("current: "+current);
-        List<BasePokemon> localBlock = basePokemonDAO.getBasePokemon(loadLimit,current);
+        List<BasePokemon> localBlock = basePokemonDAO.getBasePokemonList(loadLimit,current);
         if (!localBlock.isEmpty()) {
             data.getPokemonList().addAll(localBlock);
             getActivity().runOnUiThread(() -> {
