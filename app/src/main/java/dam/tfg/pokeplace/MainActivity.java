@@ -2,6 +2,7 @@ package dam.tfg.pokeplace;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +31,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -43,11 +48,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityMainBinding;
+import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -64,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private UserDAO userDAO;
     public static User user;
     private FirebaseUser firebaseUser;
+
+    private ActivityResultLauncher<Intent> editUserActivityLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,8 +134,18 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        editUserActivityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            updateUserUI(); //Actualizamos los datos del usuario en la interfaz
+                        }
+                    }
+                });
     }
     public void updateUserUI(){
+        user=userDAO.getUser(firebaseUser.getUid()); //Cogemos el user con los datos nuevos
         txtNombre.setText(user.getName());
         txtEmail.setText(user.getEmail());
         Glide.with(this).load(user.getImage()).placeholder(R.drawable.icon1).into(imgFoto);
@@ -141,7 +160,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_credits) {
+        if (id == R.id.action_edit_user){
+            Intent intent = new Intent(getApplicationContext(), EditUserActivity.class);
+            intent.putExtra("User", user);
+            editUserActivityLauncher.launch(intent);
+        }
+        else if (id ==R.id.action_settings){
+
+        }
+        else if (id == R.id.action_credits) {
             displayCredits();
         }
         return super.onOptionsItemSelected(item);
@@ -153,24 +180,18 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-    }
     private void displayCredits(){
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_credits, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        Button btnClose = dialogView.findViewById(R.id.btnCloseCredits);
-        btnClose.setOnClickListener(new View.OnClickListener() {
+        showCustomDialog(R.layout.dialog_credits, true, new DialogConfigurator() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void configure(AlertDialog dialog, View dialogView) {
+                Button btnClose = dialogView.findViewById(R.id.btnCloseCredits);
+                btnClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
-        dialog.show();
     }
 }

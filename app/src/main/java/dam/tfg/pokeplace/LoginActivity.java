@@ -36,9 +36,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
 
@@ -209,10 +210,5 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showToast(String s){
         ToastUtil.showToast(getApplicationContext(),s);
-    }
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
 }
