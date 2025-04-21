@@ -127,7 +127,11 @@
     <string name="choose_icon">Elegir icono predeterminado</string>
     <string name="picture">imagen</string>
     <string name="choose_your_icon">Elige tu icono</string>
+    <string name="type_url">Introduce una URL</string>
+    <string name="url_not_valid">URL no válida o no es una imagen</string>
+    <string name="not_supported">Formato no soportado</string>
+    <string name="gif_gallery">Los GIF son solo compatibles con URL</string>
     <!--Credits-->
-    <string name="author">Hecho por Daniel Monforte Ibias</string>
+    <string name="author">Autor: Daniel Monforte Ibias</string>
     <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
 </resources>

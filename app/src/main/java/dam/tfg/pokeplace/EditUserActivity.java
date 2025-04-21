@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import dam.tfg.pokeplace.adapters.IconAdapter;
 import dam.tfg.pokeplace.data.dao.UserDAO;
@@ -39,6 +40,8 @@ import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.BaseActivity;
+import dam.tfg.pokeplace.utils.DownloadUrlImage;
+import dam.tfg.pokeplace.utils.FilesUtils;
 import dam.tfg.pokeplace.utils.PermissionManager;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
@@ -111,7 +114,16 @@ public class EditUserActivity extends BaseActivity {
                             if (data != null) {
                                 Uri imageUri = data.getData();
                                 if (imageUri != null) {
-                                    user.setImage(imageUri.toString());
+                                    String mimeType = getContentResolver().getType(imageUri); //Obtenemos el tipo de imagen
+                                    System.out.println(mimeType);
+                                    if("image/svg+xml".equalsIgnoreCase(mimeType)) ToastUtil.showToast(EditUserActivity.this,getString(R.string.not_supported)); //Los svg no se aceptan
+                                    /*Los gif de galeria funcionan la primera vez, pero al reabrir la app la Uri pierde permisos y no se muestra, por lo que se ha decidido no permitirlos de galeria,
+                                    pero sí de URL
+                                    Para que funcionen de galeria habria que usar action open document en vez de action pick y permitir la persistencia de permisos, pero eso hace que se abra
+                                    el explorador de archivos en vez de galería, y se ha tomado la decisión de que queda más claro abrir la galería y no merece la pena cambiarlo por un formato
+                                    Los gif pueden ser tanto gif como webp animados, ambos darian error. Los webp normales funcionan*/
+                                    else if("image/gif".equalsIgnoreCase(mimeType) || ("image/webp".equalsIgnoreCase(mimeType) && FilesUtils.isAnimatedWebp(EditUserActivity.this,imageUri))) ToastUtil.showToast(EditUserActivity.this,getString(R.string.gif_gallery));
+                                    else user.setImage(imageUri.toString());
                                 }else{
                                     user.setImage(cameraImageUri.toString());
                                 }
@@ -207,6 +219,7 @@ public class EditUserActivity extends BaseActivity {
                 btnUrl.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        displayChangeImageUrlDialog();
                         dialog.dismiss();
                     }
                 });
@@ -256,6 +269,37 @@ public class EditUserActivity extends BaseActivity {
             }
         });
     }
+    private void displayChangeImageUrlDialog(){
+        showCustomDialog(R.layout.dialog_url_image, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                EditText input = dialogView.findViewById(R.id.editTextChangeImageURl);
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeImageURl);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeImageURl);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = input.getText().toString().trim();
+                        new DownloadUrlImage(EditUserActivity.this, new Consumer<String>() {
+                            @Override
+                            public void accept(String s) {
+                                user.setImage(s);
+                                updateUserUI();
+                                dialog.dismiss();
+                            }
+                        }).execute(url);
+                    }
+                });
+            }
+        });
+    }
+
     private void updateUserUI(){
         binding.txtNameEdit.setText(user.getName());
         binding.txtEmailEdit.setText(user.getEmail());
