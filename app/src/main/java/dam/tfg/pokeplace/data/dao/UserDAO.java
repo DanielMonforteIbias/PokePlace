@@ -25,6 +25,13 @@ public class UserDAO {
         values.put(DatabaseHelper.USER_IMAGE_COLUMN, user.getImage());
         db.insert(DatabaseHelper.USERS_TABLE_NAME, null, values);
     }
+    public void updateUser(User user){
+        values = new ContentValues();
+        values.put(DatabaseHelper.USER_NAME_COLUMN, user.getName());
+        values.put(DatabaseHelper.USER_IMAGE_COLUMN,user.getImage());
+        String where="userId=?";
+        db.update(DatabaseHelper.USERS_TABLE_NAME,values,where,new String[]{user.getUserId()});
+    }
     public boolean userExists(String userId){
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.USERS_TABLE_NAME + " WHERE "+DatabaseHelper.USER_ID_COLUMN+" = ?", new String[]{userId});
         boolean exists = false;

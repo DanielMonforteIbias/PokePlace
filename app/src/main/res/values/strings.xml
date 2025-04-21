@@ -114,6 +114,8 @@
     <string name="defender_x0">sufre x0 de daño de</string>
     <string name="defender_x1">sufre x1 de daño de</string>
     <!--Edit User-->
+    <string name="default_name">User</string>
+    <string name="default_image">icon1</string>
     <string name="change_name">Cambiar nombre</string>
     <string name="change_image">Cambiar imagen</string>
     <string name="save_changes">Guardar cambios</string>
@@ -123,6 +125,7 @@
     <string name="gallery">Elegir de galería</string>
     <string name="url">Introducir URL</string>
     <string name="choose_icon">Elegir icono predeterminado</string>
+    <string name="picture">imagen</string>
     <!--Credits-->
     <string name="author">Hecho por Daniel Monforte Ibias</string>
     <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
