@@ -34,7 +34,10 @@ import dam.tfg.pokeplace.utils.StringFormatter;
 public class InfoFragment extends Fragment {
     private FragmentInfoBinding binding;
     private MediaPlayer mediaPlayer = new MediaPlayer();
-    private int currentSpriteIndex = 0; // 0 = normal, 1 = shiny
+    private int currentSpriteIndex = 0;
+
+    private Pokemon pokemon;
+    private PokemonViewModel viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInfoBinding.inflate(inflater, container, false);
@@ -45,8 +48,9 @@ public class InfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        PokemonViewModel viewModel = new ViewModelProvider(requireActivity()).get(PokemonViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(PokemonViewModel.class);
         viewModel.getPokemon().observe(getViewLifecycleOwner(), pokemon -> { //Obtenemos el Pokemon del viewmodel
+            this.pokemon=pokemon;
             binding.txtNameDetails.setText(StringFormatter.formatName(pokemon.getName()));
             binding.txtNumberDetails.setText(pokemon.getPokedexNumber());
             binding.txtHeightDetails.setText(getString(R.string.altura)+" "+pokemon.getHeight()+" m");
@@ -71,6 +75,20 @@ public class InfoFragment extends Fragment {
                     mediaPlayer.start();
                 }
             });
+            //Controles de botones para cambiar el sprite
+            binding.spriteLeftArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changePokemonSprite(-1);
+                }
+            });
+            binding.spriteRightArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changePokemonSprite(1);
+                }
+            });
+            //Controles de deslizamiento para cambiar el sprite
             GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
                 private static final int SWIPE_THRESHOLD = 100;
                 private static final int SWIPE_VELOCITY_THRESHOLD = 50;
@@ -81,13 +99,8 @@ public class InfoFragment extends Fragment {
                     float diffY = e2.getY() - e1.getY();
                     if (Math.abs(diffX) > Math.abs(diffY)) {
                         if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                            if (diffX > 0) {
-                                currentSpriteIndex = (currentSpriteIndex - 1 + pokemon.getSprites().size()) % pokemon.getSprites().size();
-                            } else {
-                                currentSpriteIndex = (currentSpriteIndex + 1 ) % pokemon.getSprites().size();
-                            }
-                            Glide.with(getContext()).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
-                            viewModel.setCurrentSpriteIndex(currentSpriteIndex);
+                            if (diffX > 0) changePokemonSprite(-1); //Cambiamos el sprite hacia la izquierda
+                            else changePokemonSprite(1); //Cambiamos el sprite hacia la derecha
                             return true;
                         }
                     }
@@ -99,9 +112,14 @@ public class InfoFragment extends Fragment {
                 return true;
             });
         });
-
     }
 
+    private void changePokemonSprite(int direction){
+        if(direction==-1)currentSpriteIndex = (currentSpriteIndex - 1 + pokemon.getSprites().size()) % pokemon.getSprites().size();
+        else if (direction==1)currentSpriteIndex = (currentSpriteIndex + 1 ) % pokemon.getSprites().size();
+        Glide.with(getContext()).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
+        viewModel.setCurrentSpriteIndex(currentSpriteIndex);
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

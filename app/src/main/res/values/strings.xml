@@ -6,7 +6,9 @@
     <string name="nav_header_title">User</string>
     <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">User photo</string>
-
+    <!--Config-->
+    <string name="default_name">User</string>
+    <string name="default_image">icon1</string>
     <!--Menus-->
     <string name="menu_pokedex">Pokédex</string>
     <string name="menu_teams">Equipos</string>
@@ -16,6 +18,7 @@
     <string name="title_stats">Stats</string>
     <string name="title_moves">Movimientos</string>
     <string name="action_settings">Settings</string>
+    <string name="edit_user">Editar perfil</string>
     <string name="action_add_to_team">Añadir al equipo</string>
     <string name="action_credits">Créditos</string>
     <string name="action_remove_team">Eliminar equipo</string>
@@ -112,7 +115,23 @@
     <string name="defender_x0.25">sufre x0.25 de daño de</string>
     <string name="defender_x0">sufre x0 de daño de</string>
     <string name="defender_x1">sufre x1 de daño de</string>
+    <!--Edit User-->
+    <string name="change_name">Cambiar nombre</string>
+    <string name="change_image">Cambiar imagen</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="new_user_name">Introduce tu nombre de usuario</string>
+    <string name="choose_option">Elige una opción</string>
+    <string name="camera">Sacar foto</string>
+    <string name="gallery">Elegir de galería</string>
+    <string name="url">Introducir URL</string>
+    <string name="choose_icon">Elegir icono predeterminado</string>
+    <string name="picture">imagen</string>
+    <string name="choose_your_icon">Elige tu icono</string>
+    <string name="type_url">Introduce una URL</string>
+    <string name="url_not_valid">URL no válida o no es una imagen</string>
+    <string name="not_supported">Formato no soportado</string>
+    <string name="gif_gallery">Los GIF son solo compatibles con URL</string>
     <!--Credits-->
-    <string name="author">Hecho por Daniel Monforte Ibias</string>
+    <string name="author">Autor: Daniel Monforte Ibias</string>
     <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
 </resources>

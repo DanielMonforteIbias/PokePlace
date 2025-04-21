@@ -33,16 +33,18 @@ import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityPokemonDetailsBinding;
+import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
+import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.StringFormatter;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
-public class PokemonDetailsActivity extends AppCompatActivity {
+public class PokemonDetailsActivity extends BaseActivity {
     private ActivityPokemonDetailsBinding binding;
     private PokemonViewModel viewModel;
     private Pokemon pokemon=new Pokemon();
@@ -84,34 +86,31 @@ public class PokemonDetailsActivity extends AppCompatActivity {
     }
 
     private void displayAddPokemonToTeamDialog(List<Team>userTeams){
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_add_pokemon_to_team, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(PokemonDetailsActivity.this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
-        Button btnCancel = dialogView.findViewById(R.id.btnCancelAddToTeam);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        showCustomDialog(R.layout.dialog_add_pokemon_to_team, false, new DialogConfigurator() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void configure(AlertDialog dialog, View dialogView) {
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelAddToTeam);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                RecyclerView recyclerView = dialogView.findViewById(R.id.availableTeamsList);
+                recyclerView.setLayoutManager(new LinearLayoutManager(PokemonDetailsActivity.this));
+                recyclerView.setAdapter(new TeamsAdapter(userTeams, new OnTeamClickListener() {
+                    @Override
+                    public void onTeamClick(Team team) {
+                        if(teamService.getTeamSize(user.getUserId(),team.getTeamId())<teamSizeLimit){
+                            if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.pokemon_anadido_a_equipo)+" "+team.getName());
+                            else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_anadir_a_equipo));
+                            dialog.dismiss();
+                        }
+                        else ToastUtil.showToast(getApplicationContext(),getString(R.string.limite_miembros_equipo));
+                    }
+                }));
             }
         });
-        RecyclerView recyclerView = dialogView.findViewById(R.id.availableTeamsList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(PokemonDetailsActivity.this));
-        recyclerView.setAdapter(new TeamsAdapter(userTeams, new OnTeamClickListener() {
-            @Override
-            public void onTeamClick(Team team) {
-                if(teamService.getTeamSize(user.getUserId(),team.getTeamId())<teamSizeLimit){
-                    if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.pokemon_anadido_a_equipo)+" "+team.getName());
-                    else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_anadir_a_equipo));
-                    dialog.dismiss();
-                }
-                else ToastUtil.showToast(getApplicationContext(),getString(R.string.limite_miembros_equipo));
-            }
-        }));
-        dialog.setCancelable(false);
-        dialog.show();
     }
 
     private boolean addPokemonToTeam(Team team){
@@ -145,15 +144,4 @@ public class PokemonDetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-    }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-    }
-
 }

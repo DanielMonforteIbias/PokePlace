@@ -31,12 +31,14 @@ import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
+import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
-public class TeamDetailsActivity extends AppCompatActivity {
+public class TeamDetailsActivity extends BaseActivity {
     private Team team;
     private ActivityTeamDetailsBinding binding;
     private TeamPokemonAdapter adapter;
@@ -86,81 +88,65 @@ public class TeamDetailsActivity extends AppCompatActivity {
     }
 
     private void displayModifyTeamDialog(){
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_create_team, null); //Reusamos el dialogo de añadir
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        EditText input = dialogView.findViewById(R.id.editTextTeamName);
-        input.setText(team.getName());
-        Button btnCancel = dialogView.findViewById(R.id.btnCancelTeam);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        showCustomDialog(R.layout.dialog_create_team, false, new DialogConfigurator() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void configure(AlertDialog dialog, View dialogView) {
+                EditText input = dialogView.findViewById(R.id.editTextTeamName);
+                input.setText(team.getName());
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelTeam);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptTeam);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String teamName = input.getText().toString().trim();
+                        if (!teamName.isEmpty()) {
+                            Team newTeam=new Team(team.getUserId(),team.getTeamId(),teamName);
+                            teamService.changeTeamName(newTeam);
+                            team.setName(teamName); //Cambiamos el nombre del team actual de la actividad
+                            updateUI();
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.nombre_vacio).toString());
+                        }
+                    }
+                });
             }
         });
-        Button btnAccept=dialogView.findViewById(R.id.btnAcceptTeam);
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String teamName = input.getText().toString().trim();
-                if (!teamName.isEmpty()) {
-                    Team newTeam=new Team(team.getUserId(),team.getTeamId(),teamName);
-                    teamService.changeTeamName(newTeam);
-                    team.setName(teamName); //Cambiamos el nombre del team actual de la actividad
-                    updateUI();
-                    dialog.dismiss();
-                } else {
-                    ToastUtil.showToast(getApplicationContext(), getText(R.string.nombre_vacio).toString());
-                }
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
     }
     private void displayRemoveTeamDialog(){
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_remove_team, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        Button btnCancel = dialogView.findViewById(R.id.btnCancelRemoveTeam);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        showCustomDialog(R.layout.dialog_remove_team, false, new DialogConfigurator() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void configure(AlertDialog dialog, View dialogView) {
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelRemoveTeam);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptRemoveTeam);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        teamService.removeTeam(user.getUserId(),team.getTeamId());
+                        ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
+                        dialog.dismiss();
+                        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                        finish();
+                    }
+                });
             }
         });
-        Button btnAccept=dialogView.findViewById(R.id.btnAcceptRemoveTeam);
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                teamService.removeTeam(user.getUserId(),team.getTeamId());
-                ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
-                dialog.dismiss();
-                overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                finish();
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
     }
 
     private void updateUI(){
         binding.toolbarTeamDetails.setTitle(team.getName());
         binding.txtTeamNameDetails.setText(team.getName());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
 }
