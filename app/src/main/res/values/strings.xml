@@ -6,7 +6,9 @@
     <string name="nav_header_title">User</string>
     <string name="nav_header_subtitle">user@gmail.com</string>
     <string name="nav_header_desc">User photo</string>
-
+    <!--Config-->
+    <string name="default_name">User</string>
+    <string name="default_image">icon1</string>
     <!--Menus-->
     <string name="menu_pokedex">Pokédex</string>
     <string name="menu_teams">Equipos</string>
@@ -114,8 +116,6 @@
     <string name="defender_x0">sufre x0 de daño de</string>
     <string name="defender_x1">sufre x1 de daño de</string>
     <!--Edit User-->
-    <string name="default_name">User</string>
-    <string name="default_image">icon1</string>
     <string name="change_name">Cambiar nombre</string>
     <string name="change_image">Cambiar imagen</string>
     <string name="save_changes">Guardar cambios</string>
@@ -126,6 +126,7 @@
     <string name="url">Introducir URL</string>
     <string name="choose_icon">Elegir icono predeterminado</string>
     <string name="picture">imagen</string>
+    <string name="choose_your_icon">Elige tu icono</string>
     <!--Credits-->
     <string name="author">Hecho por Daniel Monforte Ibias</string>
     <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>

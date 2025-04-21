@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -28,6 +29,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dam.tfg.pokeplace.adapters.IconAdapter;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
@@ -42,8 +47,11 @@ public class EditUserActivity extends BaseActivity {
     private User user;
     private UserDAO userDAO;
     private Uri cameraImageUri;
-    private ActivityResultLauncher<Uri> takePictureLauncher;
 
+    private List<String> icons;
+    private IconAdapter adapter;
+
+    private ActivityResultLauncher<Uri> takePictureLauncher;
     private ActivityResultLauncher<Intent> selectImageActivityLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,8 @@ public class EditUserActivity extends BaseActivity {
         userDAO=new UserDAO(this);
         Intent intent=getIntent();
         user=intent.getParcelableExtra("User");
+        loadIcons();
+        adapter=new IconAdapter(icons,this);
         updateUserUI();
         binding.txtNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,6 +214,7 @@ public class EditUserActivity extends BaseActivity {
                 btnChooseIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        displayChangeIconDialog();
                         dialog.dismiss();
                     }
                 });
@@ -217,21 +228,59 @@ public class EditUserActivity extends BaseActivity {
             }
         });
     }
-
+    private void displayChangeIconDialog(){
+        showCustomDialog(R.layout.dialog_select_icon, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                Spinner iconSpinner=dialogView.findViewById(R.id.spinnerIcons);
+                iconSpinner.setAdapter(adapter);
+                int iconIndex = icons.indexOf(user.getImage()); //Obtememos el index de la foto actual
+                if (iconIndex!=-1) iconSpinner.setSelection(iconIndex); //Si la foto actual esta en la lista, la seleccionamos. Si no, quiere decir que la foto no es un icono
+                Button btnCancel=dialogView.findViewById(R.id.btnCancelChangeIcon);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeIcon);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String icon=adapter.getItem(iconSpinner.getSelectedItemPosition()).toString();
+                        user.setImage(icon);
+                        updateUserUI();
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
     private void updateUserUI(){
         binding.txtNameEdit.setText(user.getName());
         binding.txtEmailEdit.setText(user.getEmail());
         String image=user.getImage();
         if(image!=null){
             if (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("content://") || image.startsWith("file://")){ //Si la imagen es de una URL o una URI, usamos Glide
-                Glide.with(this).load(image).placeholder(R.drawable.icon1).into(binding.imgUserEdit);
+                Glide.with(this).load(image).into(binding.imgUserEdit);
             }
-            else {//Si no, es un String en Base64 (viene de la camara), asi que haremos un bitmap y despues usaremos Glide
-                byte[] decodedString = Base64.decode(user.getImage(), Base64.DEFAULT);
-                Bitmap bitmap= BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                Glide.with(this).load(bitmap).placeholder(R.drawable.icon1).into(binding.imgUserEdit);
+            else { //Si no, es un recurso de la app, un icono
+                int resId=getResources().getIdentifier(image, "drawable", getPackageName());
+                if (resId != 0) {
+                    binding.imgUserEdit.setImageResource(resId);
+                } else {
+                    binding.imgUserEdit.setImageResource(R.drawable.icon1); //fallback si no existe
+                }
             }
         }
         else Glide.with(this).load(R.drawable.icon1).into(binding.imgUserEdit);
+    }
+
+    private void loadIcons(){
+        int totalIcons=getResources().getInteger(R.integer.total_icons);
+        icons = new ArrayList<>();
+        for (int i = 1; i <= totalIcons; i++) {
+            icons.add("icon"+i); //Todos se llaman icon+numero
+        }
     }
 }

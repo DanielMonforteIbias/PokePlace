@@ -198,7 +198,7 @@ public class LoginActivity extends BaseActivity {
         user = auth.getCurrentUser();
         if(!userDAO.userExists(user.getUid())) { //Si el usuario no existe en la base de datos
             String name= (user.getDisplayName()!=null)?user.getDisplayName():getString(R.string.default_name);
-            String image= (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
+            String image= (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : getString(R.string.default_image);
             userDAO.addUser(new User(user.getUid(),user.getEmail(),name,image));
         }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

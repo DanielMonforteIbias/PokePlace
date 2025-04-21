@@ -148,7 +148,19 @@ public class MainActivity extends BaseActivity {
         user=userDAO.getUser(firebaseUser.getUid()); //Cogemos el user con los datos nuevos
         txtNombre.setText(user.getName());
         txtEmail.setText(user.getEmail());
-        Glide.with(this).load(user.getImage()).placeholder(R.drawable.icon1).into(imgFoto);
+        String image=user.getImage();
+        if(image!=null){
+            if(image.startsWith("http://") || image.startsWith("https://") || image.startsWith("content://") || image.startsWith("file://")) Glide.with(this).load(image).into(imgFoto); //Es una url o foto de la camara o galeria
+            else { //Si no, es un recurso de la app, un icono
+                int resId=getResources().getIdentifier(image, "drawable", getPackageName());
+                if (resId != 0) {
+                    imgFoto.setImageResource(resId);
+                } else {
+                    imgFoto.setImageResource(R.drawable.icon1); //fallback si no existe
+                }
+            }
+        }
+        else imgFoto.setImageResource(R.drawable.icon1);
     }
 
     @Override
