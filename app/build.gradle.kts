@@ -55,4 +55,6 @@ dependencies {
     implementation (libs.material.v1100)
     implementation (libs.viewpager2)
     implementation (libs.flexbox)
+    implementation (libs.palette)
+    implementation (libs.material.v1110)
 }

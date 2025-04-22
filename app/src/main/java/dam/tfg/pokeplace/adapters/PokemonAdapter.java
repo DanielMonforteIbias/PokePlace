@@ -27,6 +27,14 @@ import dam.tfg.pokeplace.models.Pokemon;
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder>{
     private List<BasePokemon> pokemonList;
 
+    public List<BasePokemon> getPokemonList() {
+        return pokemonList;
+    }
+
+    public void setPokemonList(List<BasePokemon> pokemonList) {
+        this.pokemonList = pokemonList;
+    }
+
     public PokemonAdapter(List<BasePokemon>pokemonList){
         this.pokemonList=pokemonList;
     }

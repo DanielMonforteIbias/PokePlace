@@ -7,7 +7,7 @@
         <item name="android:background">?attr/colorSurfaceContainer</item>
         <item name="android:textColor">?android:textColorPrimary</item>
     </style>
-    <style name="Theme.PokePlace.NoActionBar">
+    <style name="Theme.PokePlace.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <!-- Primary brand color. -->

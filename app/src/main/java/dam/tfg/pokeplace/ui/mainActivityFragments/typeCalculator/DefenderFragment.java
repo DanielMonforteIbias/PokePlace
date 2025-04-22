@@ -19,26 +19,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.adapters.TypeAdapter;
-import dam.tfg.pokeplace.adapters.TypeCalculatorAdapter;
+import dam.tfg.pokeplace.adapters.TypeSpinnerAdapter;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.databinding.FragmentDefenderBinding;
-import dam.tfg.pokeplace.databinding.FragmentTypeCalculatorBinding;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class DefenderFragment extends Fragment {
     private FragmentDefenderBinding binding;
     private Data data;
-    private TypeAdapter adapter;
+    private TypeSpinnerAdapter adapter;
     private boolean advancedEnabled=false;
     private Type currentType=null;
     private String mode="defender";
@@ -49,13 +45,14 @@ public class DefenderFragment extends Fragment {
         binding = FragmentDefenderBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         data=Data.getInstance();
-        adapter=new TypeAdapter(data.getTypeList(),getContext());
+        adapter=new TypeSpinnerAdapter(data.getTypeList(),getContext());
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(savedInstanceState!=null) currentType=savedInstanceState.getParcelable("currentType");
         binding.spinnerDefenderTypes.setAdapter(adapter);
         binding.spinnerDefenderTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -84,6 +81,13 @@ public class DefenderFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("currentType",currentType);
+    }
+
     private void updateTypeLayouts(Type type){
         resetViews();//Reseteamos todas las vistas
         if(!advancedEnabled){
