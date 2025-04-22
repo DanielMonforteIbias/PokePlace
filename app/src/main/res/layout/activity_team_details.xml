@@ -27,7 +27,7 @@
         android:layout_marginBottom="20dp"
         android:textSize="50sp"
         android:textStyle="bold"
-        android:text="@string/nombre" />
+        android:text="@string/name" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/teamPokemonList"
         android:layout_width="match_parent"

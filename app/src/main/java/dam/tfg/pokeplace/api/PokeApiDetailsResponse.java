@@ -3,9 +3,11 @@ package dam.tfg.pokeplace.api;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Pair;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.models.Move;
@@ -62,6 +64,29 @@ public class PokeApiDetailsResponse {
                     if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_respuesta_api))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
                     System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
                     callback.onMoveReceived(null);
+                }
+            }
+        });
+    }
+    public static void getDescriptions(String speciesUrl,PokemonSpeciesCallback callback, Context context){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(speciesUrl).get().build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_solicitud_api)));
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String datos = response.body().string();
+                    List<Pair<String,String>> descriptions= JSONExtractor.extractDescriptions(datos);
+                    callback.onDescriptionsReceived(descriptions);
+                }
+                else {
+                    if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_respuesta_api))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
+                    System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
+                    callback.onDescriptionsReceived(null);
                 }
             }
         });

@@ -2,8 +2,6 @@ package dam.tfg.pokeplace.ui.detailsActivityFragments;
 
 import static android.view.View.GONE;
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -12,21 +10,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
-import java.util.Map;
 
-import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
+import dam.tfg.pokeplace.adapters.DescriptionAdapter;
 import dam.tfg.pokeplace.databinding.FragmentInfoBinding;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.utils.StringFormatter;
@@ -38,6 +34,7 @@ public class InfoFragment extends Fragment {
 
     private Pokemon pokemon;
     private PokemonViewModel viewModel;
+    private DescriptionAdapter descriptionAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInfoBinding.inflate(inflater, container, false);
@@ -53,8 +50,8 @@ public class InfoFragment extends Fragment {
             this.pokemon=pokemon;
             binding.txtNameDetails.setText(StringFormatter.formatName(pokemon.getName()));
             binding.txtNumberDetails.setText(pokemon.getPokedexNumber());
-            binding.txtHeightDetails.setText(getString(R.string.altura)+" "+pokemon.getHeight()+" m");
-            binding.txtWeightDetails.setText(getString(R.string.peso)+" "+pokemon.getWeight()+ "kg");
+            binding.txtHeightDetails.setText(getString(R.string.height)+" "+pokemon.getHeight()+" m");
+            binding.txtWeightDetails.setText(getString(R.string.weight)+" "+pokemon.getWeight()+ "kg");
             Glide.with(this).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
             viewModel.setCurrentSpriteIndex(currentSpriteIndex);
             if(pokemon.getTypes()[0]!=null) Glide.with(this).load(pokemon.getTypes()[0].getSprite()).into(binding.imgType1);
@@ -69,6 +66,12 @@ public class InfoFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(pokemon.getDescriptions()!=null){
+                descriptionAdapter=new DescriptionAdapter(pokemon.getDescriptions());
+                binding.viewPagerDescriptions.setAdapter(descriptionAdapter);
+                binding.descriptionsIndicator.setViewPager(binding.viewPagerDescriptions);
+            }
+
             binding.btnSoundDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

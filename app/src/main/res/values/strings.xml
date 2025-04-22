@@ -59,10 +59,11 @@
     <string name="search_type">Buscar por tipo</string>
     <string name="all_types">Todos los tipos</string>
     <!--Detalles-->
-    <string name="altura">Altura</string>
-    <string name="peso">Peso</string>
-    <string name="nombre">Nombre</string>
-    <string name="descripcion">Descripcion</string>
+    <string name="height">Altura</string>
+    <string name="weight">Peso</string>
+    <string name="name">Nombre</string>
+    <string name="description">Descripcion</string>
+    <string name="version">Version</string>
     <!--Stats-->
     <string name="stat">Stat</string>
     <string name="hp">HP</string>

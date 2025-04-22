@@ -13,9 +13,10 @@
     <LinearLayout
         android:id="@+id/pokemonDetailsLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center|top"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/pokemonDetailsSpriteLayout"
             android:layout_width="match_parent"
@@ -28,13 +29,14 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:srcCompat="@drawable/leftarrow" />
+
             <ImageView
                 android:id="@+id/spriteDetails"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/dialog_background"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
+                android:background="@drawable/dialog_background"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
@@ -43,10 +45,11 @@
                 android:layout_height="30dp"
                 app:srcCompat="@drawable/rightarrow" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/nameNumberDetailsLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -71,8 +74,7 @@
         <LinearLayout
             android:id="@+id/typesDetailsLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -95,15 +97,14 @@
             android:id="@+id/btnSoundDetails"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             app:srcCompat="@drawable/sound" />
 
         <LinearLayout
             android:id="@+id/infoDetailsLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="1"
             android:gravity="start"
             android:orientation="vertical">
 
@@ -111,16 +112,37 @@
                 android:id="@+id/txtHeightDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/altura" />
+                android:text="@string/height" />
 
             <TextView
                 android:id="@+id/txtWeightDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/peso" />
+                android:text="@string/weight" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/descriptionsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerDescriptions"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/descriptionsIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                app:ci_height="5dp"
+                app:ci_margin="3dp"
+                app:ci_width="5dp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

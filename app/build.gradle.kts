@@ -57,4 +57,6 @@ dependencies {
     implementation (libs.flexbox)
     implementation (libs.palette)
     implementation (libs.material.v1110)
+    implementation (libs.circleindicator)
+    implementation (libs.dotsindicator)
 }

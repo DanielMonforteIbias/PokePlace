@@ -74,10 +74,10 @@ public class PokedexFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(savedInstanceState!=null){
+        /*if(savedInstanceState!=null){
             currentNameFilter=savedInstanceState.getString("currentNameFilter");
             currentTypeFilter=savedInstanceState.getString("currentTypeFilter");
-        }
+        }*/
         loadLimit = getResources().getInteger(R.integer.load_limit);
         totalPokemon=getResources().getInteger(R.integer.total_pokemon);
         requireActivity().addMenuProvider(new MenuProvider() { //Añadimos el menu con la SearchView solo a este fragment
