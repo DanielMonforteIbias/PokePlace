@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_drawer_open">Abrir cajón</string>
+    <string name="navigation_drawer_close">Cerrar cajón</string>
+    <string name="nav_header_title">Usuario</string>
+    <string name="nav_header_subtitle">usuario@gmail.com</string>
+    <string name="nav_header_desc">Foto usuario</string>
+    <!--Config-->
+    <string name="default_name">Usuario</string>
+    <!--Menus-->
+    <string name="menu_pokedex">Pokédex</string>
+    <string name="menu_teams">Equipos</string>
+    <string name="menu_type_calculator">Calculadora de tipos</string>
+    <string name="title_activity_pokemon_details">Detalles Pokémon</string>
+    <string name="title_info">Info</string>
+    <string name="title_stats">Stats</string>
+    <string name="title_moves">Movimientos</string>
+    <string name="action_settings">Opciones</string>
+    <string name="edit_user">Editar perfil</string>
+    <string name="action_add_to_team">Añadir al equipo</string>
+    <string name="action_credits">Créditos</string>
+    <string name="action_remove_team">Eliminar equipo</string>
+    <string name="action_change_name">Cambiar nombre</string>
+
+    <!--Acciones-->
+    <string name="login">Iniciar sesión</string>
+    <string name="register">Registrar</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="sign_in_with_google">Iniciar sesión con Google</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="go_back">Volver</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="close">Cerrar</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+
+    <!--Inicio sesión y registro-->
+    <string name="error_empty_email">El correo no puede estar vacío</string>
+    <string name="error_empty_password">La contraseña no puede estar vacía</string>
+    <string name="error_email">El correo no es valido</string>
+    <string name="error_password_length">La contraseña debe medir mínimo 6 caracteres</string>
+    <string name="error_login">Error en el inicio de sesión</string>
+    <string name="error_login_api">Error de la API al iniciar sesion</string>
+    <string name="error_register_email">Registro fallido, el correo no es valido</string>
+    <string name="error_register_exists">Registro fallido, ya existe un usuario con ese correo</string>
+    <string name="error_register">Registro fallido</string>
+    <string name="error_login_credentials">Login fallido. Credenciales incorrectas</string>
+    <string name="successful_register">Registro exitoso. Ya puede iniciar sesión</string>
+    <string name="error_logout">Error al cerrar sesión</string>
+
+    <!--Manejo respuesta PokeApi-->
+    <string name="error_api_request">Error en la solicitud a la API</string>
+    <string name="error_api_response">Error en la respuesta de la API</string>
+    <!--Pokedex-->
+    <string name="search_name">Buscar por nombre</string>
+    <string name="search_type">Buscar por tipo</string>
+    <string name="all_types">Todos los tipos</string>
+    <!--Detalles-->
+    <string name="height">Altura</string>
+    <string name="weight">Peso</string>
+    <string name="name">Nombre</string>
+    <string name="description">Descripcion</string>
+    <string name="version">Versión</string>
+    <!--Stats-->
+    <string name="stats_title">STATS DE %1$s</string>
+    <string name="stat">Stat</string>
+    <string name="hp">HP</string>
+    <string name="attack">Ataque</string>
+    <string name="defense">Defensa</string>
+    <string name="special_attack">Ataque especial</string>
+    <string name="special_defense">Defensa especial</string>
+    <string name="speed">Velocidad</string>
+    <string name="total">Total: %1$d</string>
+    <!--Moves-->
+    <string name="moves_title">MOVIMIENTOS DE %1$s</string>
+    <string name="power">Poder</string>
+    <string name="accuracy">Precision</string>
+    <string name="category">Categoría</string>
+    <string name="pp">PP</string>
+    <string name="moves">Movimientos</string>
+    <string name="status">Estado</string>
+    <string name="physical">Físico</string>
+    <string name="special">Especial</string>
+    <!--Equipos-->
+    <string name="team_name">Introduce el nombre de tu equipo</string>
+    <string name="team_name_placeholder">Nombre</string>
+    <string name="error_empty_name">El nombre no puede estar vacío</string>
+    <string name="teams_limit">Límite de 10 equipos alcanzado</string>
+    <string name="team_size_limit">Equipo lleno</string>
+    <string name="no_teams">No tienes equipos</string>
+    <string name="error_no_teams">No tienes equipos. Puedes crear uno en "Equipos"</string>
+    <string name="added_to">añadido a</string>
+    <string name="remove_team_warning">Seguro que quieres eliminar</string>
+    <string name="team_removed">eliminado</string>
+    <string name="error_add_to_team">Error al añadir Pokémon al equipo</string>
+
+    <!--Calculadora tipos-->
+    <string name="type_calculator">Calculadora de tipos</string>
+    <string name="type_chart">Tabla de tipos</string>
+    <string name="type">Tipo</string>
+    <string name="attacker">Atacante</string>
+    <string name="defender">Defensor</string>
+    <string name="simple">Simple</string>
+    <string name="advanced">Avanzado</string>
+    <string name="effective">Super efectivo</string>
+    <string name="not_effective">No muy efectivo</string>
+    <string name="normal">Normal</string>
+    <string name="no_effect">Sin efecto</string>
+    <string name="attacker_x4">hace x4 de daño a</string>
+    <string name="attacker_x2">hace x2 de daño a</string>
+    <string name="attacker_x0.5">hace x0.5 de daño a</string>
+    <string name="attacker_x0.25">hace x0.25 de daño a</string>
+    <string name="attacker_x0">hace x0 de daño a</string>
+    <string name="attacker_x1">hace x1 de daño a</string>
+    <string name="defender_x4">sufre x4 de daño de</string>
+    <string name="defender_x2">sufre x2 de daño de</string>
+    <string name="defender_x0.5">sufre x0.5 de daño de</string>
+    <string name="defender_x0.25">sufre x0.25 de daño de</string>
+    <string name="defender_x0">sufre x0 de daño de</string>
+    <string name="defender_x1">sufre x1 de daño de</string>
+    <!--Edit User-->
+    <string name="change_name">Cambiar nombre</string>
+    <string name="change_image">Cambiar imagen</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="new_user_name">Introduce tu nombre de usuario</string>
+    <string name="choose_option">Elige una opción</string>
+    <string name="camera">Sacar foto</string>
+    <string name="gallery">Elegir de galería</string>
+    <string name="url">Introducir URL</string>
+    <string name="choose_icon">Elegir icono predeterminado</string>
+    <string name="picture">imagen</string>
+    <string name="choose_your_icon">Elige tu icono</string>
+    <string name="type_url">Introduce una URL</string>
+    <string name="url_not_valid">URL no válida o no es una imagen</string>
+    <string name="not_supported">Formato no soportado</string>
+    <string name="gif_gallery">Los GIF son solo compatibles con URL</string>
+
+    <!--Permissions-->
+    <string name="storage_permission_denied">Permisos de almacenamiento denegado</string>
+    <string name="camera_permission_denied">Permisos de cámara denegado</string>
+    <!--Credits-->
+    <string name="author">Autor: Daniel Monforte Ibias</string>
+    <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
+</resources>

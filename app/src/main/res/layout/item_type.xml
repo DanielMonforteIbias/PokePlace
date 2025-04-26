@@ -15,5 +15,5 @@
         android:textAlignment="center"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:text="@string/tipo" />
+        android:text="@string/type" />
 </LinearLayout>

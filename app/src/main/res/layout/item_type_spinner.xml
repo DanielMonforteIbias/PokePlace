@@ -20,5 +20,5 @@
         android:id="@+id/txtTypeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tipo" />
+        android:text="@string/type" />
 </LinearLayout>

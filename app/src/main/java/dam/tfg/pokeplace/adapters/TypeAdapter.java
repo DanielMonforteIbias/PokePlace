@@ -22,13 +22,16 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import dam.tfg.pokeplace.R;
+import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.Type;
+import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder> {
     private List<Type> types;
@@ -36,7 +39,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder
     private OnTypeSelectedListener listener;
 
     public TypeAdapter(List<Type> types, Context context, OnTypeSelectedListener listener) {
-        this.types = types;
+        this.types =(types!=null) ? types : new ArrayList<>(); //Si la lista no es nula la guardamos, si es nula la inicialiamos para evitar NullPointers
         this.context=context;
         this.listener = listener;
     }
@@ -69,7 +72,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder
         background.setColor(color);
         background.setCornerRadius(50f);
         holder.itemView.setBackground(background);
-        holder.typeName.setText(type.getName());
+        holder.typeName.setText(StringFormatter.formatName(type.getName()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,9 +84,5 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder
     @Override
     public int getItemCount() {
         return types.size();
-    }
-
-    public interface OnTypeSelectedListener {
-        void onTypeSelected(Type type);
     }
 }

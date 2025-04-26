@@ -57,19 +57,19 @@
                 android:id="@+id/txtCategoryName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/categoria"
+                android:text="@string/category"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtPowerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/poder"
+                android:text="@string/power"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtAccuracyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/precision"
+                android:text="@string/accuracy"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtPPName"
@@ -86,7 +86,7 @@
                 android:id="@+id/txtCategoryValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/categoria"
+                android:text="@string/category"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtPowerValue"

@@ -23,7 +23,7 @@
         android:maxLength="20"
         android:textSize="22sp"
         android:inputType="text"
-        android:hint="@string/nombre_equipo_placeholder" />
+        android:hint="@string/team_name_placeholder" />
 
     <LinearLayout
         android:id="@+id/buttonsDialogChangeName"

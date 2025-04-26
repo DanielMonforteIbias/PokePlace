@@ -6,13 +6,11 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -103,9 +101,9 @@ public class LoginActivity extends BaseActivity {
                                         }
                                     });
                         } else
-                            Toast.makeText(getApplicationContext(), R.string.error_inicio_sesion, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
                     } catch (ApiException e) {
-                        Toast.makeText(getApplicationContext(), R.string.error_inicio_sesion_api, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.error_login_api, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -119,7 +117,7 @@ public class LoginActivity extends BaseActivity {
                 boolean registroValido=true;
                 if(email.equals("")){
                     registroValido=false;
-                    showToast(getString(R.string.error_email_vacio));
+                    showToast(getString(R.string.error_empty_email));
                 }
                 else if (!correoValido(email)){
                     registroValido=false;
@@ -127,24 +125,24 @@ public class LoginActivity extends BaseActivity {
                 }
                 if(password.equals("")){
                     registroValido=false;
-                    showToast(getString(R.string.error_contrasena_vacia));
+                    showToast(getString(R.string.error_empty_password));
                 }
                 else if(password.length()<6){
                     registroValido=false;
-                    showToast(getString(R.string.error_longitud_contrasena));
+                    showToast(getString(R.string.error_password_length));
                 }
                 if(registroValido){
                     auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                showToast(getString(R.string.exito_registro));
+                                showToast(getString(R.string.successful_register));
                             }
                             else{
                                 System.out.println(task.getException());
-                                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_registro_correo));
-                                else if(task.getException() instanceof FirebaseAuthUserCollisionException) showToast(getString(R.string.error_registro_ya_existe));
-                                else showToast(getString(R.string.error_registro));
+                                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_register_email));
+                                else if(task.getException() instanceof FirebaseAuthUserCollisionException) showToast(getString(R.string.error_register_exists));
+                                else showToast(getString(R.string.error_register));
                             }
                         }
                     });
@@ -161,7 +159,7 @@ public class LoginActivity extends BaseActivity {
                 boolean loginValido=true;
                 if(email.equals("")){
                     loginValido=false;
-                    showToast(getString(R.string.error_email_vacio));
+                    showToast(getString(R.string.error_empty_email));
                 }
                 else if (!correoValido(email)){
                     loginValido=false;
@@ -169,7 +167,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 if(password.equals("")){
                     loginValido=false;
-                    showToast(getString(R.string.error_contrasena_vacia));
+                    showToast(getString(R.string.error_empty_password));
                 }
                 if(loginValido){
                     auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -180,7 +178,7 @@ public class LoginActivity extends BaseActivity {
                             }
                             else{
                                 System.out.println(task.getException());
-                                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_login_credenciales));
+                                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_login_credentials));
                             }
                         }
                     });

@@ -35,7 +35,7 @@ public class StatsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         PokemonViewModel viewModel = new ViewModelProvider(requireActivity()).get(PokemonViewModel.class);
         viewModel.getPokemon().observe(getViewLifecycleOwner(), pokemon -> { //Obtenemos el Pokemon del viewmodel
-            binding.txtStatsTitle.setText("STATS DE "+pokemon.getName().toUpperCase());
+            binding.txtStatsTitle.setText(getString(R.string.stats_title,pokemon.getName().toUpperCase())); //Le pasamos como parametro al string el nombre del pokemon
             //Cargar stats
             binding.statsDetailsLayout.removeAllViews(); //Las vistas que tiene son solo para visualizarlo en el XML, las quitamos
             int statTotalValue=0;
@@ -59,7 +59,7 @@ public class StatsFragment extends Fragment {
                 statBar.setLayoutParams(layoutParams);
                 binding.statsDetailsLayout.addView(statItem);
             }
-            binding.txtStatsDetailsTotal.setText(getString(R.string.total)+": "+statTotalValue);
+            binding.txtStatsDetailsTotal.setText(getString(R.string.total,statTotalValue));
         });
     }
 

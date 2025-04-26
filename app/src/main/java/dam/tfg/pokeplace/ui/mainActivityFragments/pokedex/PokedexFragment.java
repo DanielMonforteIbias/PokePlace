@@ -33,10 +33,11 @@ import dam.tfg.pokeplace.api.TypeCallback;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.databinding.FragmentPokedexBinding;
+import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Type;
 
-public class PokedexFragment extends Fragment {
+public class PokedexFragment extends Fragment implements OnTypeSelectedListener {
 
     private FragmentPokedexBinding binding;
     private PokemonAdapter adapter;
@@ -65,8 +66,8 @@ public class PokedexFragment extends Fragment {
         binding.btnTypeFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TypeFilterBottomSheetFragment bottomSheet = new TypeFilterBottomSheetFragment(filterTypes,PokedexFragment.this::onTypeSelected);
-                bottomSheet.show(getChildFragmentManager(), bottomSheet.getTag());
+                TypeFilterBottomSheetFragment filtersFragment = TypeFilterBottomSheetFragment.newInstance(filterTypes);
+                filtersFragment.show(getChildFragmentManager(), filtersFragment.getTag());
             }
         });
         return root;
@@ -188,7 +189,15 @@ public class PokedexFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
     }
-    private void onTypeSelected(Type type) {
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onTypeSelected(Type type) {
         currentTypeFilter=type.getName();
         int colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
         if (colorId != 0) {
@@ -198,10 +207,5 @@ public class PokedexFragment extends Fragment {
             binding.btnTypeFilter.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red_500)));
         }
         filterList(currentNameFilter,currentTypeFilter);
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }

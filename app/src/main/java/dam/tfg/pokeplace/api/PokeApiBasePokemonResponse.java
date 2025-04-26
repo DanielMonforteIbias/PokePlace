@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.models.BasePokemon;
-import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.utils.JSONExtractor;
 import dam.tfg.pokeplace.utils.ToastUtil;
 import okhttp3.Call;
@@ -39,7 +38,7 @@ public class PokeApiBasePokemonResponse {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_solicitud_api)));
+                if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_request)));
             }
 
             @Override
@@ -79,7 +78,7 @@ public class PokeApiBasePokemonResponse {
                     }
                 }
                 else {
-                    if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_respuesta_api)));
+                    if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response)));
                     System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
                 }
             }
@@ -91,7 +90,7 @@ public class PokeApiBasePokemonResponse {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_solicitud_api)));
+                if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_request)));
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -102,7 +101,7 @@ public class PokeApiBasePokemonResponse {
                     callback.onBasePokemonReceived(pokemon);
                 }
                 else {
-                    if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_respuesta_api))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
+                    if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
                     System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
                     callback.onBasePokemonReceived(null);
                 }

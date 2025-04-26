@@ -2,23 +2,16 @@ package dam.tfg.pokeplace;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,7 +20,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -109,11 +101,11 @@ public class PokemonDetailsActivity extends BaseActivity {
                     @Override
                     public void onTeamClick(Team team) {
                         if(teamService.getTeamSize(user.getUserId(),team.getTeamId())<teamSizeLimit){
-                            if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.pokemon_anadido_a_equipo)+" "+team.getName());
-                            else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_anadir_a_equipo));
+                            if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.added_to)+" "+team.getName());
+                            else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_add_to_team));
                             dialog.dismiss();
                         }
-                        else ToastUtil.showToast(getApplicationContext(),getString(R.string.limite_miembros_equipo));
+                        else ToastUtil.showToast(getApplicationContext(),getString(R.string.team_size_limit));
                     }
                 }));
             }
@@ -147,7 +139,7 @@ public class PokemonDetailsActivity extends BaseActivity {
         if (id == R.id.action_add_to_team){
             List<Team> userTeams=teamService.getAllTeams(user.getUserId());
             if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
-            else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.no_equipos_error));
+            else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.error_no_teams));
         }
         return super.onOptionsItemSelected(item);
     }

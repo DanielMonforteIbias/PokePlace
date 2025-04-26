@@ -1,6 +1,5 @@
 package dam.tfg.pokeplace.ui.mainActivityFragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -20,13 +18,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dam.tfg.pokeplace.MainActivity;
-import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.TeamDetailsActivity;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
@@ -36,7 +31,6 @@ import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Team;
-import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class TeamsFragment extends Fragment {
@@ -86,7 +80,7 @@ public class TeamsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(teams.size()<teamSizeLimit) displayAddTeamDialog();
-                else ToastUtil.showToast(getContext(),getResources().getText(R.string.limite_equipos).toString());
+                else ToastUtil.showToast(getContext(),getResources().getText(R.string.teams_limit).toString());
             }
         });
     }
@@ -117,7 +111,7 @@ public class TeamsFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     dialog.dismiss();
                 } else {
-                    ToastUtil.showToast(getContext(), getResources().getText(R.string.nombre_vacio).toString());
+                    ToastUtil.showToast(getContext(), getResources().getText(R.string.error_empty_name).toString());
                 }
             }
         });

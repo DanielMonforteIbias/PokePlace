@@ -70,7 +70,7 @@ public class AttackerFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    binding.switchAdvancedMode.setText(getResources().getText(R.string.avanzado));
+                    binding.switchAdvancedMode.setText(getResources().getText(R.string.advanced));
                     advancedEnabled=true;
                 }else{
                     binding.switchAdvancedMode.setText(getResources().getText(R.string.simple));

@@ -19,7 +19,7 @@
                 android:id="@+id/txtTypeChartTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tabla_tipos"
+                android:text="@string/type_chart"
                 android:textAlignment="center"
                 android:textSize="50sp"
                 android:textStyle="bold" />
@@ -52,7 +52,7 @@
                         android:id="@+id/txtTypeChartLegendEffective"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/efectivo" />
+                        android:text="@string/effective" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/normalLayout"
@@ -90,7 +90,7 @@
                         android:id="@+id/txtTypeChartLegendNotEffective"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/no_efectivo" />
+                        android:text="@string/not_effective" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/noEffectLayout"
@@ -109,7 +109,7 @@
                         android:id="@+id/txtTypeChartLegendNoEffect"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sin_efecto" />
+                        android:text="@string/no_effect" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

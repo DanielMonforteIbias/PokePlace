@@ -11,7 +11,7 @@
         android:id="@+id/txtCreateTeamTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nombre_equipo"
+        android:text="@string/team_name"
         android:textSize="30sp"
         android:layout_marginBottom="20dp"
         android:textStyle="bold" />
@@ -24,7 +24,7 @@
         android:maxLength="20"
         android:textSize="22sp"
         android:inputType="text"
-        android:hint="@string/nombre_equipo_placeholder" />
+        android:hint="@string/team_name_placeholder" />
 
     <LinearLayout
         android:id="@+id/buttonsDialogTeams"

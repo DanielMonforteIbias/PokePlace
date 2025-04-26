@@ -16,7 +16,7 @@
         android:textStyle="bold"
         android:textSize="40sp"
         android:visibility="gone"
-        android:text="@string/no_equipos" />
+        android:text="@string/no_teams" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/teamsList"
