@@ -142,7 +142,8 @@
                 android:layout_marginTop="8dp"
                 app:ci_height="5dp"
                 app:ci_margin="3dp"
-                app:ci_width="5dp" />
+                app:ci_width="5dp"
+                app:ci_drawable="@drawable/circleindicator_round"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

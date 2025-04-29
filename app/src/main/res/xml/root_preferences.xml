@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory app:title="@string/theme_header">
+        <SwitchPreferenceCompat
+            app:key="theme"
+            app:title="@string/dark_theme_enabled" />
+
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/language_header">
+        <ListPreference
+            app:key="language"
+            app:title="@string/app_language"
+            app:defaultValue="en"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:useSimpleSummaryProvider="true" />
+        <Preference
+            android:selectable="false"
+            android:enabled="true"
+            android:key="language_warning"
+            android:summary="@string/language_warning" />
+    </PreferenceCategory>
+</PreferenceScreen>

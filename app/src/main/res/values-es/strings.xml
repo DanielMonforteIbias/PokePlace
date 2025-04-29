@@ -143,4 +143,12 @@
     <!--Credits-->
     <string name="author">Autor: Daniel Monforte Ibias</string>
     <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
+
+    <!--Settings-->
+    <string name="settings_title">Opciones</string>
+    <string name="language_header">Idioma</string>
+    <string name="language_warning">Advertencia: Algunos textos como descripciones de Pokémon, nombres de tipos o movimientos solo están disponibles en inglés</string>
+    <string name="theme_header">Tema de la app</string>
+    <string name="dark_theme_enabled">Modo oscuro</string>
+    <string name="app_language">Idioma de la app</string>
 </resources>

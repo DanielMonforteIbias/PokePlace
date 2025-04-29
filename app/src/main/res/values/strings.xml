@@ -145,4 +145,12 @@
     <!--Credits-->
     <string name="author">Author: Daniel Monforte Ibias</string>
     <string name="credits_details">App developed as a final project for 2º DAM 2024/2025</string>
+    <!--Settings-->
+    <string name="settings_title">Settings</string>
+    <string name="preferences" translatable="false">Preferences</string>
+    <string name="language_warning">Warning: Some texts such as Pokémon descriptions, types or movements names are only available in English</string>
+    <string name="language_header">Language</string>
+    <string name="theme_header">App Theme</string>
+    <string name="dark_theme_enabled">Dark theme</string>
+    <string name="app_language">App language</string>
 </resources>

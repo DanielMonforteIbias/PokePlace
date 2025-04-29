@@ -49,6 +49,7 @@ dependencies {
     implementation (libs.play.services.auth)
     implementation (libs.glide)
     implementation(libs.okhttp)
+    implementation(libs.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -68,30 +68,37 @@ public class Data {
         return null;
     }
     public List<Pair<String, String>> getTypeCombinationsWithMultiplier(Type type, String mode,double targetMultiplier) {
-        List<Pair<String, String>> result = new ArrayList<>();
-        BiFunction<Type,Type,Double> effectivenessFunction; //Una funcion que recibe dos Types y devuelve un double. Nuestras funciones cumplen eso, y asi elegimos la funcion a usar en base a mode
-        if (mode.equalsIgnoreCase("attacker")) {
-            effectivenessFunction = this::getTypeEffectivenessTo;
-        }else if (mode.equalsIgnoreCase("defender")) {
-            effectivenessFunction = this::getTypeEffectivenessFrom;
-        }else{
-            throw new IllegalArgumentException("Modo inválido: debe ser attacker o defender");
-        }
-        for (int i=0;i<typeList.size();i++) {
-            Type t1=typeList.get(i);
-            double multiplier1 = effectivenessFunction.apply(type, t1);
-            for (int j=i;j<typeList.size();j++) {
-                Type t2=typeList.get(j);
-                if(t1.getName().equals(t2.getName())){ //Si los dos tipos son iguales, es solo un tipo
-                    if(multiplier1==targetMultiplier)result.add(new Pair<>(t1.getName(), null)); //Añadimos una Pair con un solo tipo si el multiplicador es el esperado
-                }else{
-                    double multiplier2=effectivenessFunction.apply(type, t2);
-                    double combinedMultiplier=multiplier1 * multiplier2;
-                    if (combinedMultiplier==targetMultiplier)result.add(new Pair<>(t1.getName(), t2.getName()));
-                }
+        if(type!=null){
+            List<Pair<String, String>> result = new ArrayList<>();
+            BiFunction<Type,Type,Double> effectivenessFunction = null; //Una funcion que recibe dos Types y devuelve un double. Nuestras funciones cumplen eso, y asi elegimos la funcion a usar en base a mode
+            boolean validMode=true;
+            if (mode.equalsIgnoreCase("attacker")) {
+                effectivenessFunction = this::getTypeEffectivenessTo;
+            }else if (mode.equalsIgnoreCase("defender")) {
+                effectivenessFunction = this::getTypeEffectivenessFrom;
+            }else{
+                validMode=false;
             }
+            if(validMode){
+                for (int i=0;i<typeList.size();i++) {
+                    Type t1=typeList.get(i);
+                    double multiplier1 = effectivenessFunction.apply(type, t1);
+                    for (int j=i;j<typeList.size();j++) {
+                        Type t2=typeList.get(j);
+                        if(t1.getName().equals(t2.getName())){ //Si los dos tipos son iguales, es solo un tipo
+                            if(multiplier1==targetMultiplier)result.add(new Pair<>(t1.getName(), null)); //Añadimos una Pair con un solo tipo si el multiplicador es el esperado
+                        }else{
+                            double multiplier2=effectivenessFunction.apply(type, t2);
+                            double combinedMultiplier=multiplier1 * multiplier2;
+                            if (combinedMultiplier==targetMultiplier)result.add(new Pair<>(t1.getName(), t2.getName()));
+                        }
+                    }
+                }
+                return result;
+            }
+            else return new ArrayList<Pair<String,String>>();
         }
-        return result;
+        else return new ArrayList<Pair<String,String>>();
     }
     private double getTypeEffectivenessTo(Type t1, Type t2) {
         if(t1.getDoubleDamageTo().contains(t2.getName())) return DamageMultiplier.VERY_EFFECTIVE.multiplier;

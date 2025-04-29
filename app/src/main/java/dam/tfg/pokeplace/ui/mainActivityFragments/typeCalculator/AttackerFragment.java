@@ -58,8 +58,10 @@ public class AttackerFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Type type=adapter.getItem(position);
-                currentType=type;
-                updateTypeLayouts(type);
+                if(type!=null){
+                    currentType=type;
+                    updateTypeLayouts(type);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -76,7 +78,7 @@ public class AttackerFragment extends Fragment {
                     binding.switchAdvancedMode.setText(getResources().getText(R.string.simple));
                     advancedEnabled=false;
                 }
-                updateTypeLayouts(currentType);
+                if(currentType!=null)updateTypeLayouts(currentType);
             }
         });
     }

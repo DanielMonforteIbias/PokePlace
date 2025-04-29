@@ -108,8 +108,10 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             }
         },getViewLifecycleOwner()); //Importante añadir para destruir junto al fragmento
         if(!loadTypes()){
-            getActivity().runOnUiThread(()->binding.btnTypeFilter.setVisibility(View.VISIBLE));
-            loadPokemon();
+            if(isAdded() && getActivity()!=null){
+                getActivity().runOnUiThread(()->binding.btnTypeFilter.setVisibility(View.VISIBLE));
+                loadPokemon();
+            }
         }
     }
 
@@ -122,15 +124,17 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
 
     public boolean loadTypes(){
         if (data.getTypeList().isEmpty()) { //Buscamos los tipos solo si la lista está vacía
+            binding.btnTypeFilter.setVisibility(View.GONE);
             PokeApiTypeResponse.getAllTypes(new TypeCallback() {
                 @Override
                 public void onTypeListReceived(List<Type> typeList) {
                     data.getTypeList().clear();
                     data.getTypeList().addAll(typeList);
                     filterTypes.addAll(typeList);
-
-                    getActivity().runOnUiThread(()->binding.btnTypeFilter.setVisibility(View.VISIBLE));
-                    loadPokemon();
+                    if (isAdded() && getActivity() != null) {
+                        getActivity().runOnUiThread(() -> binding.btnTypeFilter.setVisibility(View.VISIBLE));
+                        loadPokemon();
+                    }
                 }
 
                 @Override
@@ -150,10 +154,12 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
         List<BasePokemon> localBlock = basePokemonDAO.getBasePokemonList(loadLimit,current);
         if (!localBlock.isEmpty()) {
             data.getPokemonList().addAll(localBlock);
-            getActivity().runOnUiThread(() -> {
-                filterList(currentNameFilter,currentTypeFilter);
-                loadPokemon();//Se llama a si mismo para seguir cargando de 60 en 60
-            });
+            if (isAdded() && getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    filterList(currentNameFilter,currentTypeFilter);
+                    loadPokemon();//Se llama a si mismo para seguir cargando de 60 en 60
+                });
+            }
         }
         else if(current<totalPokemon){
             PokeApiBasePokemonResponse.getAllPokemons(new BasePokemonCallback() {

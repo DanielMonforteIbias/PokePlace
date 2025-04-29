@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 import dam.tfg.pokeplace.MainActivity;
@@ -27,6 +29,7 @@ import dam.tfg.pokeplace.TeamDetailsActivity;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
+import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
@@ -41,23 +44,16 @@ public class TeamsFragment extends Fragment {
 
     private TeamService teamService;
     private String userId;
+    private UserDAO userDAO;
 
     private ActivityResultLauncher<Intent>teamDetailsActivityLauncher;
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTeamsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        userDAO=new UserDAO(getContext());
         teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()));
-        userId=MainActivity.user.getUserId();
+        userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
         teams=teamService.getAllTeams(userId);
-        adapter=new TeamsAdapter(teams, new OnTeamClickListener() {
-            @Override
-            public void onTeamClick(Team team) {
-                Context context=getContext();
-                Intent intent=new Intent(context, TeamDetailsActivity.class);
-                intent.putExtra("Team",team);
-                teamDetailsActivityLauncher.launch(intent);
-            }
-        });
         teamDetailsActivityLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -72,6 +68,15 @@ public class TeamsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adapter=new TeamsAdapter(teams, new OnTeamClickListener() {
+            @Override
+            public void onTeamClick(Team team) {
+                Context context=getContext();
+                Intent intent=new Intent(context, TeamDetailsActivity.class);
+                intent.putExtra("Team",team);
+                teamDetailsActivityLauncher.launch(intent);
+            }
+        });
         updateUI();
         teamSizeLimit = getResources().getInteger(R.integer.teams_limit);
         binding.teamsList.setLayoutManager(new LinearLayoutManager(getContext()));
