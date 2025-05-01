@@ -2,6 +2,8 @@ package dam.tfg.pokeplace.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,12 +23,24 @@ import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;
+import dam.tfg.pokeplace.api.PokemonSpeciesCallback;
+import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
+import dam.tfg.pokeplace.models.Type;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder>{
     private List<BasePokemon> pokemonList;
+
+    public List<BasePokemon> getPokemonList() {
+        return pokemonList;
+    }
+
+    public void setPokemonList(List<BasePokemon> pokemonList) {
+        this.pokemonList = pokemonList;
+    }
 
     public PokemonAdapter(List<BasePokemon>pokemonList){
         this.pokemonList=pokemonList;
@@ -58,17 +73,26 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         Context context=holder.itemView.getContext();
         Glide.with(context).load(pokemon.getSprite()).into(holder.sprite);
         holder.pokedexNumber.setText(pokemon.getPokedexNumber());
+        ViewUtils.setPokemonTypeBackground(context,holder.itemView,pokemon.getType1(),20,12);
         holder.sprite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PokeApiDetailsResponse.getPokemon(pokemon.getUrl(), new PokemonCallback() {
+                String pokemonUrl=pokemon.getUrl();
+                PokeApiDetailsResponse.getPokemon(pokemonUrl, new PokemonCallback() {
                     @Override
                     public void onPokemonReceived(Pokemon pokemon) {
-                        Intent intent=new Intent(context, PokemonDetailsActivity.class);
-                        intent.putExtra("Pokemon",pokemon);
-                        context.startActivity(intent);
-                    }
+                        String urlSpecies=pokemonUrl.replace("pokemon","pokemon-species"); //Creamos la URL para conseguir la especie
+                        PokeApiDetailsResponse.getDescriptions(urlSpecies, new PokemonSpeciesCallback() {
+                            @Override
+                            public void onDescriptionsReceived(List<Pair<String, String>> descriptions) {
+                                pokemon.setDescriptions(descriptions);
+                                Intent intent=new Intent(context, PokemonDetailsActivity.class);
+                                intent.putExtra("Pokemon",pokemon);
+                                context.startActivity(intent);
+                            }
+                        },context);
 
+                    }
                     @Override
                     public void onMoveReceived(Move move) {
 

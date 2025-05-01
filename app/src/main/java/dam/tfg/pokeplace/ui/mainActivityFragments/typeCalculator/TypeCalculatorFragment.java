@@ -33,13 +33,13 @@ public class TypeCalculatorFragment extends Fragment {
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText(getResources().getString(R.string.tabla_tipos));
+                    tab.setText(getResources().getString(R.string.type_chart));
                     break;
                 case 1:
-                    tab.setText(getResources().getString(R.string.atacante));
+                    tab.setText(getResources().getString(R.string.attacker));
                     break;
                 case 2:
-                    tab.setText(getResources().getString(R.string.defensor));
+                    tab.setText(getResources().getString(R.string.defender));
                     break;
             }
         }).attach();

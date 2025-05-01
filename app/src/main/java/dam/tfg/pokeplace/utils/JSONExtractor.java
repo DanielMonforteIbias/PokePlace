@@ -1,5 +1,7 @@
 package dam.tfg.pokeplace.utils;
 
+import android.util.Pair;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -198,5 +200,23 @@ public class JSONExtractor {
             System.out.println("Move: "+move.getId());
         }
         return move;
+    }
+    public static List<Pair<String,String>> extractDescriptions(String jsonResponse){
+        List<Pair<String,String>> descriptions = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONArray descriptionsArray = jsonObject.getJSONArray("flavor_text_entries");
+            for (int i = 0; i < descriptionsArray.length(); i++) {
+                JSONObject description=descriptionsArray.getJSONObject(i);
+                if(description.getJSONObject("language").getString("name").equals("en")){ //Cogemos la descripcion en ingles
+                    String version=description.getJSONObject("version").getString("name");
+                    String descriptionText=description.getString("flavor_text");
+                    descriptions.add(new Pair<String,String>(version,descriptionText));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return descriptions;
     }
 }

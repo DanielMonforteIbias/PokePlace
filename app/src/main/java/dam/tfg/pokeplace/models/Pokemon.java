@@ -2,12 +2,14 @@ package dam.tfg.pokeplace.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Pokemon implements Parcelable {
@@ -20,14 +22,19 @@ public class Pokemon implements Parcelable {
     private Map<String, Integer> stats;
     private Type types[]=new Type[2];
     private float height, weight;
+    private List<Pair<String,String>> descriptions; //Lista de parejas (first la version del juego, second la descripcion de ese juego)
 
     public Pokemon(){
-
+        this.sprites = new ArrayList<>();
+        this.moves=new ArrayList<>();
+        this.descriptions=new ArrayList<>();
     }
     public Pokemon(String pokedexNumber, String name, ArrayList<String> sprites) {
         this.pokedexNumber = pokedexNumber;
         this.name = name;
         this.sprites = sprites;
+        this.moves=new ArrayList<>();
+        this.descriptions=new ArrayList<>();
     }
 
     protected Pokemon(Parcel in) {
@@ -48,6 +55,14 @@ public class Pokemon implements Parcelable {
             int value = in.readInt();
             stats.put(key, value);
         }
+        //Leemos el tamaño de la lista y los valores de la pareja en orden (ya que Pair no es Parcelable de por si)
+        int descriptionsSize = in.readInt();
+        descriptions = new ArrayList<>();
+        for (int i = 0; i < descriptionsSize; i++) {
+            String descriptionGame = in.readString();
+            String descriptionText = in.readString();
+            descriptions.add(new Pair<>(descriptionGame, descriptionText));
+        }
     }
 
     @Override
@@ -66,6 +81,11 @@ public class Pokemon implements Parcelable {
         for (Map.Entry<String, Integer> entry : stats.entrySet()) {
             dest.writeString(entry.getKey());
             dest.writeInt(entry.getValue());
+        }
+        dest.writeInt(descriptions.size()); //Ponemos tambien el tamaño de la lista
+        for (Pair<String, String> description : descriptions) {
+            dest.writeString(description.first);
+            dest.writeString(description.second);
         }
     }
 
@@ -163,4 +183,11 @@ public class Pokemon implements Parcelable {
         this.moves = moves;
     }
 
+    public List<Pair<String, String>> getDescriptions() {
+        return descriptions;
+    }
+
+    public void setDescriptions(List<Pair<String, String>> descriptions) {
+        this.descriptions = descriptions;
+    }
 }

@@ -31,8 +31,8 @@
                 android:id="@+id/txtMoveName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/nombre"
+                android:layout_margin="8dp"
+                android:text="@string/name"
                 android:textSize="30dp"
                 android:textStyle="bold" />
 
@@ -40,8 +40,8 @@
                 android:id="@+id/txtMoveDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="@string/descripcion" />
+                android:layout_margin="8dp"
+                android:text="@string/description" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -57,19 +57,19 @@
                 android:id="@+id/txtCategoryName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/categoria"
+                android:text="@string/category"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtPowerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/poder"
+                android:text="@string/power"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtAccuracyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/precision"
+                android:text="@string/accuracy"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtPPName"
@@ -86,7 +86,7 @@
                 android:id="@+id/txtCategoryValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/categoria"
+                android:text="@string/category"
                 android:layout_marginStart="5dp"/>
             <TextView
                 android:id="@+id/txtPowerValue"

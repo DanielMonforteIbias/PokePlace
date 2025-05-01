@@ -1,5 +1,6 @@
 package dam.tfg.pokeplace.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -66,10 +67,14 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Team team = teamsList.get(position);
-        Context context = holder.itemView.getContext();
         holder.txtName.setText(team.getName());
         holder.teamMembersLayout.removeAllViews(); //Limpiamos para evitar duplicados
         holder.itemView.post(() -> { //post hace que se ejecute lo definido cuando la vista ya ha sido medida, necesario para que getWidth y getHeight no sean 0
+            //Controlamos errores
+            if (holder.getBindingAdapterPosition() == RecyclerView.NO_POSITION) return;
+            Context context = holder.itemView.getContext();
+            if (!(context instanceof Activity) || ((Activity) context).isDestroyed()) return;
+
             int totalWidth = holder.teamMembersLayout.getWidth();
             int totalHeight = holder.teamMembersLayout.getHeight();
             int totalImagesPerRow = 3;
@@ -82,7 +87,7 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> 
                 params.width = width;
                 params.height = height;
                 imageView.setLayoutParams(params);
-                Glide.with(context).load(member.getCustomSprite()).into(imageView);
+                Glide.with(holder.itemView).load(member.getCustomSprite()).into(imageView);
                 holder.teamMembersLayout.addView(imageView);
             }
         });

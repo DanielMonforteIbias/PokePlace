@@ -1,52 +1,79 @@
 package dam.tfg.pokeplace.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dam.tfg.pokeplace.R;
+import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.utils.StringFormatter;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
-public class TypeAdapter extends ArrayAdapter<Type> {
-    private Context context;
+public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder> {
     private List<Type> types;
+    private Context context;
+    private OnTypeSelectedListener listener;
 
-    public TypeAdapter(List<Type> types,Context context) {
-        super(context,0,types);
+    public TypeAdapter(List<Type> types, Context context, OnTypeSelectedListener listener) {
+        this.types =(types!=null) ? types : new ArrayList<>(); //Si la lista no es nula la guardamos, si es nula la inicialiamos para evitar NullPointers
         this.context=context;
-        this.types=types;
+        this.listener = listener;
     }
 
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) { //Vista normal de lo seleccionado en el spinner
-        return getItemView(position, convertView, parent);
+    public static class TypeViewHolder extends RecyclerView.ViewHolder {
+        private final TextView typeName;
+        public TypeViewHolder(View itemView) {
+            super(itemView);
+            typeName=itemView.findViewById(R.id.txtTypeName);
+        }
     }
 
     @Override
-    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) { //Vista con el spinner desplegado
-        return getItemView(position, convertView, parent);
+    public TypeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_type, parent, false);
+        return new TypeViewHolder(view);
     }
-    private View getItemView(int position, View convertView, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_type, parent, false);
+
+    @Override
+    public void onBindViewHolder(TypeViewHolder holder, int position) {
         Type type = types.get(position);
-        ImageView imageView = view.findViewById(R.id.imgType);
-        TextView textView=view.findViewById(R.id.txtTypeName);
-        Glide.with(context).load(type.getSprite()).into(imageView);
-        textView.setText(StringFormatter.formatName(type.getName()));
-        return view;
+        ViewUtils.setPokemonTypeBackground(holder.itemView.getContext(),holder.itemView,type.getName(),50,0);
+        holder.typeName.setText(StringFormatter.formatName(type.getName()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onTypeSelected(type);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return types.size();
     }
 }

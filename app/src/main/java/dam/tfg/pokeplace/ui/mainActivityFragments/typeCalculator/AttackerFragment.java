@@ -20,24 +20,21 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.adapters.TypeAdapter;
-import dam.tfg.pokeplace.data.DamageMultiplier;
+import dam.tfg.pokeplace.adapters.TypeSpinnerAdapter;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.databinding.FragmentAttackerBinding;
-import dam.tfg.pokeplace.databinding.FragmentDefenderBinding;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class AttackerFragment extends Fragment {
     private FragmentAttackerBinding binding;
     private Data data;
-    private TypeAdapter adapter;
+    private TypeSpinnerAdapter adapter;
     private boolean advancedEnabled=false;
     private Type currentType=null;
     private String mode="attacker";
@@ -48,20 +45,23 @@ public class AttackerFragment extends Fragment {
         binding = FragmentAttackerBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         data=Data.getInstance();
-        adapter=new TypeAdapter(data.getTypeList(),getContext());
+        adapter=new TypeSpinnerAdapter(data.getTypeList(),getContext());
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(savedInstanceState!=null) currentType=savedInstanceState.getParcelable("currentType");
         binding.spinnerAttackerTypes.setAdapter(adapter);
         binding.spinnerAttackerTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Type type=adapter.getItem(position);
-                currentType=type;
-                updateTypeLayouts(type);
+                if(type!=null){
+                    currentType=type;
+                    updateTypeLayouts(type);
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -72,13 +72,13 @@ public class AttackerFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    binding.switchAdvancedMode.setText(getResources().getText(R.string.avanzado));
+                    binding.switchAdvancedMode.setText(getResources().getText(R.string.advanced));
                     advancedEnabled=true;
                 }else{
                     binding.switchAdvancedMode.setText(getResources().getText(R.string.simple));
                     advancedEnabled=false;
                 }
-                updateTypeLayouts(currentType);
+                if(currentType!=null)updateTypeLayouts(currentType);
             }
         });
     }
@@ -98,7 +98,14 @@ public class AttackerFragment extends Fragment {
             addTypeCombinationRowsToLayout(binding.attackerNoEffectLayout,binding.attackerNoEffectTypesAdvancedLayout,binding.attackerNoEffect,getResources().getString(R.string.attacker_x0),data.getTypeCombinationsWithMultiplier(type,mode,0),type.getName());
         }
     }
-    private void addTypeSpritesToLayout(ViewGroup layout,ViewGroup typesLayout, TextView textView, String message,List<String> typeNames, String attackerName) {
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("currentType",currentType);
+    }
+
+    private void addTypeSpritesToLayout(ViewGroup layout, ViewGroup typesLayout, TextView textView, String message, List<String> typeNames, String attackerName) {
         if(!typeNames.isEmpty()){
             layout.setVisibility(View.VISIBLE);
             textView.setText(StringFormatter.formatName(attackerName) +" "+message);

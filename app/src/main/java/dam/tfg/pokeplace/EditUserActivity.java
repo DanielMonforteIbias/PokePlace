@@ -4,25 +4,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -37,7 +32,6 @@ import dam.tfg.pokeplace.adapters.IconAdapter;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
-import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.DownloadUrlImage;
@@ -62,7 +56,7 @@ public class EditUserActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         binding = ActivityEditUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -168,7 +162,7 @@ public class EditUserActivity extends BaseActivity {
                             updateUserUI();
                             dialog.dismiss();
                         } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.nombre_vacio).toString());
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
                         }
                     }
                 });
@@ -184,14 +178,14 @@ public class EditUserActivity extends BaseActivity {
                 btnGallery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(PermissionManager.comprobarPermisosAlmacenamiento(EditUserActivity.this)){
+                        if(PermissionManager.checkStoragePermissions(EditUserActivity.this)){
                             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); //El intent abre las fotos ya existentes
                             galleryIntent.setType("image/*");
                             selectImageActivityLauncher.launch(galleryIntent);
                         }
                         else{
-                            ToastUtil.showToast(EditUserActivity.this,"Permisos de almacenamiento denegado");
-                            PermissionManager.pedirPermisosAlmacenamiento(EditUserActivity.this);
+                            ToastUtil.showToast(EditUserActivity.this,getString(R.string.storage_permission_denied));
+                            PermissionManager.requestStoragePermissions(EditUserActivity.this);
                         }
                         dialog.dismiss();
                     }
@@ -200,7 +194,7 @@ public class EditUserActivity extends BaseActivity {
                 btnCamera.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(PermissionManager.comprobarPermisosCamara(getApplicationContext())){
+                        if(PermissionManager.checkCameraPermissions(getApplicationContext())){
                             ContentValues values = new ContentValues();
                             values.put(MediaStore.Images.Media.DISPLAY_NAME, "foto_" + System.currentTimeMillis() + ".jpg");
                             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
@@ -209,8 +203,8 @@ public class EditUserActivity extends BaseActivity {
                             takePictureLauncher.launch(cameraImageUri);
                         }
                         else{
-                            Toast.makeText(EditUserActivity.this,"Permisos de camara denegado",Toast.LENGTH_SHORT).show();
-                            PermissionManager.pedirPermisosCamara(EditUserActivity.this);
+                            ToastUtil.showToast(EditUserActivity.this,getString(R.string.camera_permission_denied));
+                            PermissionManager.requestCameraPermissions(EditUserActivity.this);
                         }
                         dialog.dismiss();
                     }

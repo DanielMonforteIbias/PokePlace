@@ -69,10 +69,11 @@ public class MainActivity extends BaseActivity {
     private GoogleSignInOptions gOptions;
 
     private UserDAO userDAO;
-    public static User user;
+    private User user;
     private FirebaseUser firebaseUser;
 
     private ActivityResultLauncher<Intent> editUserActivityLauncher;
+    private ActivityResultLauncher<Intent> settingsActivityLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +144,17 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 });
+        settingsActivityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            if (result.getData()!= null && result.getData().getBooleanExtra("settingsChanged", false)) {
+                                recreate(); //Recreamos la actividad solo si hubo cambios
+                            }
+                        }
+                    }
+                });
     }
     public void updateUserUI(){
         user=userDAO.getUser(firebaseUser.getUid()); //Cogemos el user con los datos nuevos
@@ -178,7 +190,8 @@ public class MainActivity extends BaseActivity {
             editUserActivityLauncher.launch(intent);
         }
         else if (id ==R.id.action_settings){
-
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            settingsActivityLauncher.launch(intent);
         }
         else if (id == R.id.action_credits) {
             displayCredits();

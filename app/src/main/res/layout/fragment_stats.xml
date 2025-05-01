@@ -1,56 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center|top"
-    android:orientation="vertical"
-    android:paddingTop="20dp"
-    tools:context=".ui.detailsActivityFragments.StatsFragment">
-
-    <TextView
-        android:id="@+id/txtStatsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stat"
-        android:textAlignment="center"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-
+    android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/statsDetailsLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/dialog_background"
-        android:padding="5dp"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:gravity="start"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        tools:context=".ui.detailsActivityFragments.StatsFragment">
 
-        <include layout="@layout/item_stat" />
+        <TextView
+            android:id="@+id/txtStatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stat"
+            android:textAlignment="center"
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
-        <include layout="@layout/item_stat" />
+        <LinearLayout
+            android:id="@+id/statsDetailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dialog_background"
+            android:padding="5dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:orientation="vertical">
 
-        <include layout="@layout/item_stat" />
+            <include layout="@layout/item_stat" />
 
-        <include layout="@layout/item_stat" />
+            <include layout="@layout/item_stat" />
 
-        <include layout="@layout/item_stat" />
+            <include layout="@layout/item_stat" />
 
-        <include layout="@layout/item_stat" />
+            <include layout="@layout/item_stat" />
+
+            <include layout="@layout/item_stat" />
+
+            <include layout="@layout/item_stat" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtStatsDetailsTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_gravity="left"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="@string/total" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtStatsDetailsTotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_gravity="left"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:text="@string/total" />
-
-</LinearLayout>
+</ScrollView>

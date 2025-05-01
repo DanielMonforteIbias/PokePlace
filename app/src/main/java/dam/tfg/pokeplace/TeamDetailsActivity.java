@@ -3,26 +3,20 @@ package dam.tfg.pokeplace;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.List;
 
 import dam.tfg.pokeplace.adapters.TeamPokemonAdapter;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
@@ -30,10 +24,8 @@ import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
-import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.models.Team;
-import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
@@ -52,13 +44,13 @@ public class TeamDetailsActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         binding= ActivityTeamDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         setSupportActionBar(binding.toolbarTeamDetails);
-
+        if(getSupportActionBar()!=null) getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostramos la flecha para volver
         userDAO=new UserDAO(this);
         teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()));
         user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -83,6 +75,10 @@ public class TeamDetailsActivity extends BaseActivity {
             displayModifyTeamDialog();
         }else if (id==R.id.action_remove_team){
             displayRemoveTeamDialog();
+        }
+        else if (item.getItemId() == android.R.id.home) { //La flecha hacia atrás de la barra de arriba
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -112,7 +108,7 @@ public class TeamDetailsActivity extends BaseActivity {
                             updateUI();
                             dialog.dismiss();
                         } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.nombre_vacio).toString());
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
                         }
                     }
                 });
@@ -144,7 +140,6 @@ public class TeamDetailsActivity extends BaseActivity {
             }
         });
     }
-
     private void updateUI(){
         binding.toolbarTeamDetails.setTitle(team.getName());
         binding.txtTeamNameDetails.setText(team.getName());

@@ -1,6 +1,6 @@
 <resources>
-    <string name="default_web_client_id">399819984290-4irerqtpbo635s7nlsf88o8h4jkih45e.apps.googleusercontent.com</string>
-    <string name="app_name">PokePlace</string>
+    <string name="default_web_client_id" translatable="false">399819984290-4irerqtpbo635s7nlsf88o8h4jkih45e.apps.googleusercontent.com</string>
+    <string name="app_name" translatable="false">PokePlace</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">User</string>
@@ -8,130 +8,150 @@
     <string name="nav_header_desc">User photo</string>
     <!--Config-->
     <string name="default_name">User</string>
-    <string name="default_image">icon1</string>
+    <string name="default_image" translatable="false">icon1</string>
     <!--Menus-->
     <string name="menu_pokedex">Pokédex</string>
-    <string name="menu_teams">Equipos</string>
-    <string name="menu_type_calculator">Calculadora de tipos</string>
-    <string name="title_activity_pokemon_details">Detalles Pokémon</string>
+    <string name="menu_teams">Teams</string>
+    <string name="menu_type_calculator">Type Calculator</string>
+    <string name="title_activity_pokemon_details">Pokémon Details</string>
     <string name="title_info">Info</string>
     <string name="title_stats">Stats</string>
-    <string name="title_moves">Movimientos</string>
+    <string name="title_moves">Moves</string>
     <string name="action_settings">Settings</string>
-    <string name="edit_user">Editar perfil</string>
-    <string name="action_add_to_team">Añadir al equipo</string>
-    <string name="action_credits">Créditos</string>
-    <string name="action_remove_team">Eliminar equipo</string>
-    <string name="action_change_name">Cambiar nombre</string>
+    <string name="edit_user">Edit Profile</string>
+    <string name="action_add_to_team">Add to team</string>
+    <string name="action_credits">Credits</string>
+    <string name="action_remove_team">Delete team</string>
+    <string name="action_change_name">Change name</string>
 
     <!--Acciones-->
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="logout">Logout</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="go_back">Volver</string>
-    <string name="accept">Aceptar</string>
-    <string name="cancel">Cancelar</string>
-    <string name="close">Cerrar</string>
-    <string name="yes">Sí</string>
+    <string name="go_back">Return</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="yes">Yes</string>
     <string name="no">No</string>
 
     <!--Inicio sesión y registro-->
-    <string name="error_email_vacio">El correo no puede estar vacío</string>
-    <string name="error_contrasena_vacia">La contraseña no puede estar vacía</string>
-    <string name="error_email">El correo no es valido</string>
-    <string name="error_longitud_contrasena">La contraseña debe medir mínimo 6 caracteres</string>
-    <string name="error_inicio_sesion">Error en el inicio de sesión</string>
-    <string name="error_inicio_sesion_api">Error de la API al iniciar sesion</string>
-    <string name="error_registro_correo">Registro fallido, el correo no es valido</string>
-    <string name="error_registro_ya_existe">Registro fallido, ya existe un usuario con ese correo</string>
-    <string name="error_registro">Registro fallido</string>
-    <string name="error_login_credenciales">Login fallido. Credenciales incorrectas</string>
-    <string name="exito_registro">Registro exitoso. Ya puede iniciar sesión</string>
-    <string name="error_logout">Error al cerrar sesión</string>
+    <string name="error_empty_email">Email can\'t be empty</string>
+    <string name="error_empty_password">Password can\'t be empty</string>
+    <string name="error_email">Email is not valid</string>
+    <string name="error_password_length">Password must be 6 characters length minimum</string>
+    <string name="error_login">Login error</string>
+    <string name="error_login_api">API error when trying to log in</string>
+    <string name="error_register_email">Registration failed, email is not valid</string>
+    <string name="error_register_exists">Registration failed, an user with that email already exists</string>
+    <string name="error_register">Registration failed</string>
+    <string name="error_login_credentials">Login failed. Incorrect credentials</string>
+    <string name="successful_register">Successful registration. You can now log in</string>
+    <string name="error_logout">Logout error</string>
 
     <!--Manejo respuesta PokeApi-->
-    <string name="error_solicitud_api">Error en la solicitud a la API</string>
-    <string name="error_respuesta_api">Error en la respuesta de la API</string>
-
+    <string name="error_api_request">API request error</string>
+    <string name="error_api_response">API response error</string>
+    <!--Pokedex-->
+    <string name="search_name">Search by name</string>
+    <string name="search_type">Search by type</string>
+    <string name="all_types">All types</string>
     <!--Detalles-->
-    <string name="altura">Altura</string>
-    <string name="peso">Peso</string>
-    <string name="nombre">Nombre</string>
-    <string name="descripcion">Descripcion</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="version">Version</string>
     <!--Stats-->
+    <string name="stats_title">%1$s\'S STATS</string> <!--%1$s means that a parameter will be expected to be placed there-->
     <string name="stat">Stat</string>
     <string name="hp">HP</string>
-    <string name="attack">Ataque</string>
-    <string name="defense">Defensa</string>
-    <string name="special_attack">Ataque especial</string>
-    <string name="special_defense">Defensa especial</string>
-    <string name="speed">Velocidad</string>
-    <string name="total">Total</string>
-    <!--Movimientos-->
-    <string name="poder">Poder</string>
-    <string name="precision">Precision</string>
-    <string name="categoria">Categoria</string>
+    <string name="attack">Attack</string>
+    <string name="defense">Defense</string>
+    <string name="special_attack">Special Attack</string>
+    <string name="special_defense">Special Defense</string>
+    <string name="speed">Speed</string>
+    <string name="total">Total: %1$d</string>
+    <!--Moves-->
+    <string name="moves_title">%1$s\'S MOVES</string>
+    <string name="power">Power</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="category">Category</string>
     <string name="pp">PP</string>
-    <string name="movimientos">Movimientos</string>
-    <string name="status">Estado</string>
-    <string name="physical">Fisico</string>
-    <string name="special">Especial</string>
+    <string name="moves">Moves</string>
+    <string name="status">Status</string>
+    <string name="physical">Physical</string>
+    <string name="special">Special</string>
     <!--Equipos-->
-    <string name="nombre_equipo">Introduce el nombre de tu equipo</string>
-    <string name="nombre_equipo_placeholder">Nombre</string>
-    <string name="nombre_vacio">El nombre no puede estar vacío</string>
-    <string name="limite_equipos">Límite de 10 equipos alcanzado</string>
-    <string name="limite_miembros_equipo">Equipo lleno</string>
-    <string name="no_equipos">No tienes equipos</string>
-    <string name="no_equipos_error">No tienes equipos. Puedes crear uno en el fragmento "Equipos"</string>
-    <string name="pokemon_anadido_a_equipo">añadido a</string>
-    <string name="remove_team_warning">Seguro que quieres eliminar</string>
-    <string name="team_removed">eliminado</string>
-    <string name="error_anadir_a_equipo">Error al añadir Pokémon al equipo</string>
+    <string name="create_team">Create team</string>
+    <string name="team_name">Enter the team name</string>
+    <string name="team_name_placeholder">Name</string>
+    <string name="error_empty_name">Name can\'t be empty</string>
+    <string name="teams_limit">10 teams limit reached</string>
+    <string name="team_size_limit">Full team</string>
+    <string name="no_teams">You don\'t have teams</string>
+    <string name="error_no_teams">You don\'t have teams. You can create one in "Teams"</string>
+    <string name="added_to">added to</string>
+    <string name="remove_team_warning">Are you sure you want to delete</string>
+    <string name="team_removed">deleted</string>
+    <string name="error_add_to_team">Error adding Pokémon to team</string>
 
     <!--Calculadora tipos-->
-    <string name="calculadora">Calculadora de tipos</string>
-    <string name="tabla_tipos">Tabla de tipos</string>
-    <string name="tipo">Tipo</string>
-    <string name="atacante">Atacante</string>
-    <string name="defensor">Defensor</string>
+    <string name="type_calculator">Type Calculator</string>
+    <string name="type_chart">Type Chart</string>
+    <string name="type">Type</string>
+    <string name="attacker">Attacker</string>
+    <string name="defender">Defender</string>
     <string name="simple">Simple</string>
-    <string name="avanzado">Avanzado</string>
-    <string name="efectivo">Super efectivo</string>
-    <string name="no_efectivo">No muy efectivo</string>
+    <string name="advanced">Advanced</string>
+    <string name="effective">Super effectivo</string>
+    <string name="not_effective">Not very effective</string>
     <string name="normal">Normal</string>
-    <string name="sin_efecto">Sin efecto</string>
-    <string name="attacker_x4">hace x4 de daño a</string>
-    <string name="attacker_x2">hace x2 de daño a</string>
-    <string name="attacker_x0.5">hace x0.5 de daño a</string>
-    <string name="attacker_x0.25">hace x0.25 de daño a</string>
-    <string name="attacker_x0">hace x0 de daño a</string>
-    <string name="attacker_x1">hace x1 de daño a</string>
-    <string name="defender_x4">sufre x4 de daño de</string>
-    <string name="defender_x2">sufre x2 de daño de</string>
-    <string name="defender_x0.5">sufre x0.5 de daño de</string>
-    <string name="defender_x0.25">sufre x0.25 de daño de</string>
-    <string name="defender_x0">sufre x0 de daño de</string>
-    <string name="defender_x1">sufre x1 de daño de</string>
+    <string name="no_effect">No effect</string>
+    <string name="attacker_x4">deals x4 damage to</string>
+    <string name="attacker_x2">deals x2 damage to</string>
+    <string name="attacker_x0.5">deals x0.5 damage to</string>
+    <string name="attacker_x0.25">deals x0.25 damage to</string>
+    <string name="attacker_x0">deals x0 damage to</string>
+    <string name="attacker_x1">deals x1 damage to</string>
+    <string name="defender_x4">suffers x4 damage from</string>
+    <string name="defender_x2">suffers x2 damage from</string>
+    <string name="defender_x0.5">suffers x0.5 damage from</string>
+    <string name="defender_x0.25">suffers x0.25 damage from</string>
+    <string name="defender_x0">suffers x0 damage from</string>
+    <string name="defender_x1">suffers x1 damage from</string>
     <!--Edit User-->
-    <string name="change_name">Cambiar nombre</string>
-    <string name="change_image">Cambiar imagen</string>
-    <string name="save_changes">Guardar cambios</string>
-    <string name="new_user_name">Introduce tu nombre de usuario</string>
-    <string name="choose_option">Elige una opción</string>
-    <string name="camera">Sacar foto</string>
-    <string name="gallery">Elegir de galería</string>
-    <string name="url">Introducir URL</string>
-    <string name="choose_icon">Elegir icono predeterminado</string>
-    <string name="picture">imagen</string>
-    <string name="choose_your_icon">Elige tu icono</string>
-    <string name="type_url">Introduce una URL</string>
-    <string name="url_not_valid">URL no válida o no es una imagen</string>
-    <string name="not_supported">Formato no soportado</string>
-    <string name="gif_gallery">Los GIF son solo compatibles con URL</string>
+    <string name="change_name">Change name</string>
+    <string name="change_image">Change image</string>
+    <string name="save_changes">Save changes</string>
+    <string name="new_user_name">Enter your user name</string>
+    <string name="choose_option">Choose an option</string>
+    <string name="camera">Take picture</string>
+    <string name="gallery">Choose from gallery</string>
+    <string name="url">Enter URL</string>
+    <string name="choose_icon">Choose default icon</string>
+    <string name="picture">image</string>
+    <string name="choose_your_icon">Choose your icon</string>
+    <string name="type_url">Enter a URL</string>
+    <string name="url_not_valid">URL not valid or not an image</string>
+    <string name="not_supported">Format not supported</string>
+    <string name="gif_gallery">GIF are only supported with URL</string>
+
+    <!--Permissions-->
+    <string name="storage_permission_denied">Storage permissions denied</string>
+    <string name="camera_permission_denied">Camera permissions denied</string>
     <!--Credits-->
-    <string name="author">Autor: Daniel Monforte Ibias</string>
-    <string name="credits_details">Aplicación hecha como trabajo final de 2º DAM 2024/2025</string>
+    <string name="author">Author: Daniel Monforte Ibias</string>
+    <string name="credits_details">App developed as a final project for 2º DAM 2024/2025</string>
+    <!--Settings-->
+    <string name="settings_title">Settings</string>
+    <string name="preferences" translatable="false">Preferences</string>
+    <string name="language_warning">Warning: Some texts such as Pokémon descriptions, types or movements names are only available in English</string>
+    <string name="language_header">Language</string>
+    <string name="theme_header">App Theme</string>
+    <string name="dark_theme_enabled">Dark theme</string>
+    <string name="app_language">App language</string>
 </resources>

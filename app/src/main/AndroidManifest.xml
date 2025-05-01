@@ -7,10 +7,15 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,9 +27,13 @@
         android:theme="@style/Theme.PokePlace"
         tools:targetApi="31">
         <activity
-            android:name=".EditUserActivity"
+            android:name=".SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.PokePlace.NoActionBar"/>
+        <activity
+            android:name=".EditUserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PokePlace.NoActionBar" />
         <activity
             android:name=".TeamDetailsActivity"
             android:exported="false"
@@ -32,7 +41,6 @@
         <activity
             android:name=".PokemonDetailsActivity"
             android:exported="false"
-            android:label="@string/title_activity_pokemon_details"
             android:theme="@style/Theme.PokePlace.NoActionBar" />
         <activity
             android:name=".LoginActivity"
@@ -47,8 +55,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.PokePlace.NoActionBar" />
+            android:theme="@style/Theme.PokePlace.NoActionBar"/>
     </application>
 
 </manifest>

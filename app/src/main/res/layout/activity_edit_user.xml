@@ -10,59 +10,73 @@
     android:orientation="vertical"
     tools:context=".EditUserActivity">
 
-    <LinearLayout
-        android:id="@+id/userInfoEditLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_margin="30dp"
-        android:background="@drawable/dialog_background"
-        android:gravity="center|top"
-        android:orientation="vertical">
-        <ImageView
-            android:id="@+id/imgUserEdit"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginBottom="10dp"
-            tools:srcCompat="@tools:sample/avatars" />
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txtNameEdit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"
-            android:text="@string/nombre" />
-        <TextView
-            android:id="@+id/txtEmailEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/email" />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/userInfoOptionsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|top"
-        android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/userInfoEditLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="@drawable/dialog_background"
+                android:gravity="center|top"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <Button
-            android:id="@+id/btnChangeNameEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/change_name" />
-        <Button
-            android:id="@+id/btnChangeImageEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/change_image" />
+                <ImageView
+                    android:id="@+id/imgUserEdit"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginBottom="10dp"
+                    tools:srcCompat="@tools:sample/avatars" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/txtNameEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/name"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtEmailEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/email" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/userInfoOptionsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|top"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnChangeNameEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/change_name" />
+
+                <Button
+                    android:id="@+id/btnChangeImageEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/change_image" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/userInfoSaveLayout"
@@ -75,7 +89,7 @@
             android:id="@+id/btnSaveEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
+            android:layout_margin="10dp"
             android:text="@string/save_changes"
             android:textSize="25sp"
             android:textStyle="bold" />

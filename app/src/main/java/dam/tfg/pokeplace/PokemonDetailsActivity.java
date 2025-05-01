@@ -3,7 +3,6 @@ package dam.tfg.pokeplace;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -43,6 +41,7 @@ import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.StringFormatter;
 import dam.tfg.pokeplace.utils.ToastUtil;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class PokemonDetailsActivity extends BaseActivity {
     private ActivityPokemonDetailsBinding binding;
@@ -60,13 +59,12 @@ public class PokemonDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityPokemonDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.pokemonDetailsLayout, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         setSupportActionBar(binding.toolbarPokemonDetails);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_info, R.id.navigation_stats, R.id.navigation_moves).build();
@@ -102,11 +100,11 @@ public class PokemonDetailsActivity extends BaseActivity {
                     @Override
                     public void onTeamClick(Team team) {
                         if(teamService.getTeamSize(user.getUserId(),team.getTeamId())<teamSizeLimit){
-                            if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.pokemon_anadido_a_equipo)+" "+team.getName());
-                            else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_anadir_a_equipo));
+                            if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.added_to)+" "+team.getName());
+                            else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_add_to_team));
                             dialog.dismiss();
                         }
-                        else ToastUtil.showToast(getApplicationContext(),getString(R.string.limite_miembros_equipo));
+                        else ToastUtil.showToast(getApplicationContext(),getString(R.string.team_size_limit));
                     }
                 }));
             }
@@ -140,7 +138,7 @@ public class PokemonDetailsActivity extends BaseActivity {
         if (id == R.id.action_add_to_team){
             List<Team> userTeams=teamService.getAllTeams(user.getUserId());
             if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
-            else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.no_equipos_error));
+            else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.error_no_teams));
         }
         return super.onOptionsItemSelected(item);
     }

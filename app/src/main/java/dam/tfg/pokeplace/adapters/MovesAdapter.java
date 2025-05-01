@@ -18,6 +18,7 @@ import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.utils.StringFormatter;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class MovesAdapter extends RecyclerView.Adapter<MovesAdapter.ViewHolder>{
     private List<Move> movesList;
@@ -62,7 +63,10 @@ public class MovesAdapter extends RecyclerView.Adapter<MovesAdapter.ViewHolder>{
         Move move=movesList.get(position);
         Context context=holder.itemView.getContext();
         if(move.getName()!=null){ //Solo si el movimiento esta relleno, es decir, cuando tiene nombre
-            Glide.with(context).load(move.getType().getSprite()).into(holder.typeSprite);
+            if(move.getType()!=null) {
+                Glide.with(context).load(move.getType().getSprite()).into(holder.typeSprite);
+                ViewUtils.setPokemonTypeBackground(context,holder.itemView,move.getType().getName(),20,12);
+            }
             holder.name.setText(StringFormatter.formatName(move.getName()));
             holder.description.setText(move.getDescription());
             int categoryResId = context.getResources().getIdentifier(move.getDamageClass(), "string", context.getPackageName()); //Obtenemos el id del nombre de la categoria de strings

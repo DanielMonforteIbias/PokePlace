@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.MovesAdapter;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;
@@ -35,7 +36,7 @@ public class MovesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         PokemonViewModel viewModel = new ViewModelProvider(requireActivity()).get(PokemonViewModel.class);
         viewModel.getPokemon().observe(getViewLifecycleOwner(), pokemon -> { //Obtenemos el Pokemon del viewmodel
-            binding.txtMovesTitle.setText("MOVIMIENTOS DE "+pokemon.getName().toUpperCase());
+            binding.txtMovesTitle.setText(getString(R.string.moves_title,pokemon.getName().toUpperCase()));
             adapter=new MovesAdapter(pokemon.getMoves());
             binding.movesList.setAdapter(adapter);
             for (int i = 0; i <pokemon.getMoves().size(); i++) {

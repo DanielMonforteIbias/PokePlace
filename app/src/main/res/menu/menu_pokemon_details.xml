@@ -5,5 +5,5 @@
         android:id="@+id/action_add_to_team"
         android:orderInCategory="100"
         android:title="@string/action_add_to_team"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

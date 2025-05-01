@@ -45,18 +45,18 @@
 
             <Button
                 android:id="@+id/btnLogin"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:text="@string/login" />
 
             <Button
                 android:id="@+id/btnRegister"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="10dp"
+                android:layout_weight="1"
                 android:text="@string/register" />
 
         </LinearLayout>
@@ -68,6 +68,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:text="Sign in with Google"
+        android:text="@string/sign_in_with_google"
         android:textSize="30sp" />
 </LinearLayout>

@@ -19,6 +19,7 @@ public class Type implements Parcelable {
     private ArrayList<String> noDamageTo=new ArrayList<>();
     public Type(){}
     public Type(int id, String name, String sprite) {
+        this.id=id;
         this.name = name;
         this.sprite = sprite;
     }

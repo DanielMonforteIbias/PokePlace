@@ -8,102 +8,111 @@
     android:orientation="vertical"
     android:padding="10dp"
     tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-
-    <TextView
-        android:id="@+id/txtTypeChartTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tabla_tipos"
-        android:textAlignment="center"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/imgTypeChart"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:srcCompat="@drawable/typechart" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="left"
-        android:orientation="vertical"
-        tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/effectiveLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="horizontal"
-            tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-            <ImageView
-                android:id="@+id/imgEffective"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/effective"
-                android:layout_marginEnd="5dp"/>
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/txtTypeChartLegendEffective"
-                android:layout_width="wrap_content"
+                android:id="@+id/txtTypeChartTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/efectivo" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/normalLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="horizontal"
-            tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                android:text="@string/type_chart"
+                android:textAlignment="center"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+
             <ImageView
-                android:id="@+id/imgNormal"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/normal"
-                android:layout_marginEnd="5dp"/>
-            <TextView
-                android:id="@+id/txtTypeChartLegendNormal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/normal" />
+                android:id="@+id/imgTypeChart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                app:srcCompat="@drawable/typechart" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start"
+                android:orientation="vertical"
+                tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                <LinearLayout
+                    android:id="@+id/effectiveLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:orientation="horizontal"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                    <ImageView
+                        android:id="@+id/imgEffective"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/effective"
+                        android:layout_marginEnd="5dp"/>
+                    <TextView
+                        android:id="@+id/txtTypeChartLegendEffective"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/effective" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/normalLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:orientation="horizontal"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                    <ImageView
+                        android:id="@+id/imgNormal"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/normal"
+                        android:layout_marginEnd="5dp"/>
+                    <TextView
+                        android:id="@+id/txtTypeChartLegendNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/normal" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/notEffectiveLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="horizontal"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                    <ImageView
+                        android:id="@+id/imgNotEffective"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/not_effective"
+                        android:layout_marginEnd="5dp"/>
+                    <TextView
+                        android:id="@+id/txtTypeChartLegendNotEffective"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_effective" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/noEffectLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:orientation="horizontal"
+                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                    <ImageView
+                        android:id="@+id/imgNoEffect"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/no_effect"
+                        android:layout_marginEnd="5dp"/>
+                    <TextView
+                        android:id="@+id/txtTypeChartLegendNoEffect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_effect" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/notEffectiveLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="horizontal"
-            tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-            <ImageView
-                android:id="@+id/imgNotEffective"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/not_effective"
-                android:layout_marginEnd="5dp"/>
-            <TextView
-                android:id="@+id/txtTypeChartLegendNotEffective"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_efectivo" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/noEffectLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="horizontal"
-            tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-            <ImageView
-                android:id="@+id/imgNoEffect"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/no_effect"
-                android:layout_marginEnd="5dp"/>
-            <TextView
-                android:id="@+id/txtTypeChartLegendNoEffect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sin_efecto" />
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>
