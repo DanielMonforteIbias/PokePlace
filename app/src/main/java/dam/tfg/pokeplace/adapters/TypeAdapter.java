@@ -32,6 +32,7 @@ import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.utils.StringFormatter;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder> {
     private List<Type> types;
@@ -61,17 +62,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder
     @Override
     public void onBindViewHolder(TypeViewHolder holder, int position) {
         Type type = types.get(position);
-        /*Cogemos el color del tipo de colors.
-        Se ha intentado obtener dinamicamente de varias formas, con la libreria Palette o manualmente recorriendo los bitmaps,
-        pero como son imagenes pequeñas algunas tienen resultados incoherentes y no hay otro modo de que sea el color que queremos*/
-        int colorId=context.getResources().getIdentifier(type.getName(), "color", context.getPackageName());
-        int color=0;
-        if (colorId != 0) color = ContextCompat.getColor(context, colorId);
-        else color=ContextCompat.getColor(context, R.color.gray_500);
-        GradientDrawable background = new GradientDrawable(); //Background para dar color y borde redondeado
-        background.setColor(color);
-        background.setCornerRadius(50f);
-        holder.itemView.setBackground(background);
+        ViewUtils.setPokemonTypeBackground(holder.itemView.getContext(),holder.itemView,type.getName(),50,0);
         holder.typeName.setText(StringFormatter.formatName(type.getName()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

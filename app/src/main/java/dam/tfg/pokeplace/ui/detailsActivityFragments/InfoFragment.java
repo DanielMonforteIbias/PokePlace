@@ -26,6 +26,7 @@ import dam.tfg.pokeplace.adapters.DescriptionAdapter;
 import dam.tfg.pokeplace.databinding.FragmentInfoBinding;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.utils.StringFormatter;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class InfoFragment extends Fragment {
     private FragmentInfoBinding binding;
@@ -54,7 +55,10 @@ public class InfoFragment extends Fragment {
             binding.txtWeightDetails.setText(getString(R.string.weight)+" "+pokemon.getWeight()+ "kg");
             Glide.with(this).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
             viewModel.setCurrentSpriteIndex(currentSpriteIndex);
-            if(pokemon.getTypes()[0]!=null) Glide.with(this).load(pokemon.getTypes()[0].getSprite()).into(binding.imgType1);
+            if(pokemon.getTypes()[0]!=null) {
+                Glide.with(this).load(pokemon.getTypes()[0].getSprite()).into(binding.imgType1);
+                ViewUtils.setPokemonTypeBackground(getContext(),binding.spriteDetails,pokemon.getTypes()[0].getName(),10,10);
+            }
             else binding.imgType1.setVisibility(GONE);
             if(pokemon.getTypes()[1]!=null)Glide.with(this).load(pokemon.getTypes()[1].getSprite()).into(binding.imgType2);
             else binding.imgType2.setVisibility(GONE);

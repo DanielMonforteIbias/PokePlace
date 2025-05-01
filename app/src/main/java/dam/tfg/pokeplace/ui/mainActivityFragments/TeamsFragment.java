@@ -81,7 +81,7 @@ public class TeamsFragment extends Fragment {
         teamSizeLimit = getResources().getInteger(R.integer.teams_limit);
         binding.teamsList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.teamsList.setAdapter(adapter);
-        binding.imgBtnAddTeam.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddTeam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(teams.size()<teamSizeLimit) displayAddTeamDialog();

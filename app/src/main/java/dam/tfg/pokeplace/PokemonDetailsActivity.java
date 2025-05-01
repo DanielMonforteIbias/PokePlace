@@ -41,6 +41,7 @@ import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.StringFormatter;
 import dam.tfg.pokeplace.utils.ToastUtil;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class PokemonDetailsActivity extends BaseActivity {
     private ActivityPokemonDetailsBinding binding;
@@ -64,7 +65,6 @@ public class PokemonDetailsActivity extends BaseActivity {
             return insets;
         });
         setSupportActionBar(binding.toolbarPokemonDetails);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_info, R.id.navigation_stats, R.id.navigation_moves).build();
@@ -81,7 +81,6 @@ public class PokemonDetailsActivity extends BaseActivity {
         pokemon=intent.getParcelableExtra("Pokemon");
         viewModel = new ViewModelProvider(this).get(PokemonViewModel.class);
         viewModel.setPokemon(pokemon);
-
     }
 
     private void displayAddPokemonToTeamDialog(List<Team>userTeams){

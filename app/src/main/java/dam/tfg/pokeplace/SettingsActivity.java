@@ -16,23 +16,25 @@ import androidx.preference.PreferenceManager;
 
 import java.util.Locale;
 
+import dam.tfg.pokeplace.databinding.ActivityPokemonDetailsBinding;
+import dam.tfg.pokeplace.databinding.ActivitySettingsBinding;
 import dam.tfg.pokeplace.utils.BaseActivity;
 
 public class SettingsActivity extends BaseActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private SharedPreferences preferences;
     private boolean settingsChanged=false;
+    private ActivitySettingsBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
         }
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle(getString(R.string.settings_title));
+        setSupportActionBar(binding.toolbarSettings);
+        binding.toolbarSettings.setTitle(getString(R.string.settings_title)); //Para que cambie el titulo tambien al recrear la app
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostramos la flecha para volver
         preferences= getSharedPreferences(getString(R.string.preferences),MODE_PRIVATE);
         preferences.registerOnSharedPreferenceChangeListener(this);
     }

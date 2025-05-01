@@ -84,6 +84,7 @@
     <string name="physical">Físico</string>
     <string name="special">Especial</string>
     <!--Equipos-->
+    <string name="create_team">Crear equipo</string>
     <string name="team_name">Introduce el nombre de tu equipo</string>
     <string name="team_name_placeholder">Nombre</string>
     <string name="error_empty_name">El nombre no puede estar vacío</string>

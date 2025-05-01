@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="center|top"
     android:padding="20dp"
     tools:context=".ui.mainActivityFragments.TeamsFragment">
-
     <TextView
         android:id="@+id/txtNoTeams"
         android:layout_width="wrap_content"
@@ -17,28 +16,27 @@
         android:textSize="40sp"
         android:visibility="gone"
         android:text="@string/no_teams" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/teamsList"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
-    <LinearLayout
-        android:id="@+id/teamsOptionsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|end"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/imgBtnAddTeam"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:src="@drawable/add" />
-
-    </LinearLayout>
-
+        android:layout_height="match_parent"
+        tools:context=".ui.mainActivityFragments.TeamsFragment">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/teamsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/create_team"
+            android:src="@drawable/add"
+            app:backgroundTint="?attr/colorPrimary"
+            app:borderWidth="16dp"
+            app:elevation="16dp"
+            app:fabSize="normal" />
+    </RelativeLayout>
 </LinearLayout>

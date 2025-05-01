@@ -31,6 +31,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/teamPokemonList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="8dp"
+        android:padding="8dp"
+        android:background="@drawable/dialog_background"/>
 
 </LinearLayout>

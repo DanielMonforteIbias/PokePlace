@@ -50,7 +50,7 @@ public class TeamDetailsActivity extends BaseActivity {
             return insets;
         });
         setSupportActionBar(binding.toolbarTeamDetails);
-
+        if(getSupportActionBar()!=null) getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostramos la flecha para volver
         userDAO=new UserDAO(this);
         teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()));
         user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -75,6 +75,10 @@ public class TeamDetailsActivity extends BaseActivity {
             displayModifyTeamDialog();
         }else if (id==R.id.action_remove_team){
             displayRemoveTeamDialog();
+        }
+        else if (item.getItemId() == android.R.id.home) { //La flecha hacia atrás de la barra de arriba
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,7 +140,6 @@ public class TeamDetailsActivity extends BaseActivity {
             }
         });
     }
-
     private void updateUI(){
         binding.toolbarTeamDetails.setTitle(team.getName());
         binding.txtTeamNameDetails.setText(team.getName());

@@ -2,6 +2,7 @@ package dam.tfg.pokeplace.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,9 +24,12 @@ import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;
 import dam.tfg.pokeplace.api.PokemonSpeciesCallback;
+import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
+import dam.tfg.pokeplace.models.Type;
+import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder>{
     private List<BasePokemon> pokemonList;
@@ -68,6 +73,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         Context context=holder.itemView.getContext();
         Glide.with(context).load(pokemon.getSprite()).into(holder.sprite);
         holder.pokedexNumber.setText(pokemon.getPokedexNumber());
+        ViewUtils.setPokemonTypeBackground(context,holder.itemView,pokemon.getType1(),20,12);
         holder.sprite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
