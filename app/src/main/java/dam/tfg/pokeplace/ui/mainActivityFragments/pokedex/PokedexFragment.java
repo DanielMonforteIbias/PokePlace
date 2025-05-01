@@ -32,6 +32,9 @@ import dam.tfg.pokeplace.api.BasePokemonCallback;
 import dam.tfg.pokeplace.api.TypeCallback;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
+import dam.tfg.pokeplace.data.dao.TypeDAO;
+import dam.tfg.pokeplace.data.dao.TypeRelationDAO;
+import dam.tfg.pokeplace.data.service.TypeService;
 import dam.tfg.pokeplace.databinding.FragmentPokedexBinding;
 import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.BasePokemon;
@@ -47,6 +50,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     private String currentNameFilter ="";
     private String currentTypeFilter="";
     private BasePokemonDAO basePokemonDAO;
+    private TypeService typeService;
 
     private int loadLimit;
     private int totalPokemon;
@@ -56,9 +60,10 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
         View root = binding.getRoot();
 
         basePokemonDAO=new BasePokemonDAO(getContext());
+        typeService=new TypeService(new TypeDAO(getContext()),new TypeRelationDAO(getContext()));
         data=Data.getInstance();
         filterTypes=new ArrayList<>(data.getTypeList());
-        filterTypes.add(0,new Type(-1,getString(R.string.all_types),null)); //Añadimos el tipo para mostrar todos
+        filterTypes.add(0,new Type(getString(R.string.all_types),null)); //Añadimos el tipo para mostrar todos
         filteredList=new ArrayList<>(data.getPokemonList());
         binding.pokemonList.setLayoutManager(new GridLayoutManager(getContext(),4));
         adapter=new PokemonAdapter(filteredList);
@@ -125,24 +130,32 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     public boolean loadTypes(){
         if (data.getTypeList().isEmpty()) { //Buscamos los tipos solo si la lista está vacía
             binding.btnTypeFilter.setVisibility(View.GONE);
-            PokeApiTypeResponse.getAllTypes(new TypeCallback() {
-                @Override
-                public void onTypeListReceived(List<Type> typeList) {
-                    data.getTypeList().clear();
-                    data.getTypeList().addAll(typeList);
-                    filterTypes.addAll(typeList);
-                    if (isAdded() && getActivity() != null) {
-                        getActivity().runOnUiThread(() -> binding.btnTypeFilter.setVisibility(View.VISIBLE));
-                        loadPokemon();
+            data.getTypeList().addAll(typeService.getAllTypes());
+            if (data.getTypeList().isEmpty()){ //Comprobamos de nuevo si esta vacia por si no estan en la BD
+                PokeApiTypeResponse.getAllTypes(new TypeCallback() {
+                    @Override
+                    public void onTypeListReceived(List<Type> typeList) {
+                        data.getTypeList().clear();
+                        data.getTypeList().addAll(typeList);
+                        typeService.addAllTypes(typeList); //Añadimos los tipos a la BD
+                        filterTypes.addAll(typeList);
+                        if (isAdded() && getActivity() != null) {
+                            getActivity().runOnUiThread(() -> binding.btnTypeFilter.setVisibility(View.VISIBLE));
+                            loadPokemon(); //Empezamos a cargar los Pokemon cuando terminen los tipos, ya que los necesitan
+                        }
                     }
-                }
 
-                @Override
-                public void onTypeReceived(Type type) {
+                    @Override
+                    public void onTypeReceived(Type type) {
 
-                }
-            }, getContext());
-            return true;
+                    }
+                }, getContext());
+                return true;
+            }else { //Si estaban en la base de datos
+                filterTypes.addAll(data.getTypeList()); //Añadimos los tipos a la lista de filtros
+                if (isAdded() && getActivity() != null) getActivity().runOnUiThread(() -> binding.btnTypeFilter.setVisibility(View.VISIBLE)); //Volvemos a hacer visible el boton
+                return false;
+            }
         }
         else {
             return false;

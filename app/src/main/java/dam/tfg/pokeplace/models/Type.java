@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 public class Type implements Parcelable {
-    private int id;
     private String name;
     private String sprite;
     private ArrayList<String> doubleDamageFrom=new ArrayList<>();
@@ -18,14 +17,12 @@ public class Type implements Parcelable {
     private ArrayList<String> noDamageFrom=new ArrayList<>();
     private ArrayList<String> noDamageTo=new ArrayList<>();
     public Type(){}
-    public Type(int id, String name, String sprite) {
-        this.id=id;
+    public Type(String name, String sprite) {
         this.name = name;
         this.sprite = sprite;
     }
 
     protected Type(Parcel in) {
-        id = in.readInt();
         name = in.readString();
         sprite = in.readString();
         doubleDamageFrom = in.createStringArrayList();
@@ -62,14 +59,6 @@ public class Type implements Parcelable {
 
     public void setSprite(String sprite) {
         this.sprite = sprite;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public ArrayList<String> getDoubleDamageFrom() {
@@ -127,7 +116,6 @@ public class Type implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(sprite);
         dest.writeStringList(doubleDamageFrom);
