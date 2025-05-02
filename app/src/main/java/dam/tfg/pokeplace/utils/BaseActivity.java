@@ -27,15 +27,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         SharedPreferences preferences = newBase.getSharedPreferences(newBase.getString(R.string.preferences), MODE_PRIVATE);
         String language = preferences.getString("language", "en");
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
         Configuration config = new Configuration();
-        config.setLocale(locale);
+        setLocale(config,language);
         Context context = newBase.createConfigurationContext(config);
         boolean darkMode = preferences.getBoolean("theme", false);
         if (darkMode) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.attachBaseContext(context);
+    }
+    protected void setLocale(Configuration config,String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        config.setLocale(locale);
     }
     protected void showCustomDialog(int layoutResId, boolean cancelable, DialogConfigurator configurator) {
         LayoutInflater inflater = getLayoutInflater();

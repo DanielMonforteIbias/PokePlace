@@ -29,6 +29,8 @@ public class UserDAO {
         values = new ContentValues();
         values.put(DatabaseHelper.USER_NAME_COLUMN, user.getName());
         values.put(DatabaseHelper.USER_IMAGE_COLUMN,user.getImage());
+        values.put(DatabaseHelper.USER_FAV_TYPE,user.getFavType());
+        values.put(DatabaseHelper.USER_FAV_POKEMON,user.getFavPokemon());
         String where="userId=?";
         db.update(DatabaseHelper.USERS_TABLE_NAME,values,where,new String[]{user.getUserId()});
     }
@@ -50,6 +52,8 @@ public class UserDAO {
             user.setEmail(cursor.getString(1));
             user.setName(cursor.getString(2));
             user.setImage(cursor.getString(3));
+            user.setFavType(cursor.getString(4));
+            user.setFavPokemon(cursor.getString(5));
         }
         return user;
     }

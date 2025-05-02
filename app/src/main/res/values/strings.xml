@@ -133,13 +133,24 @@
     <string name="gallery">Choose from gallery</string>
     <string name="url">Enter URL</string>
     <string name="choose_icon">Choose default icon</string>
+    <string name="restore_image">Restore default image</string>
     <string name="picture">image</string>
     <string name="choose_your_icon">Choose your icon</string>
     <string name="type_url">Enter a URL</string>
     <string name="url_not_valid">URL not valid or not an image</string>
     <string name="not_supported">Format not supported</string>
     <string name="gif_gallery">GIF are only supported with URL</string>
-
+    <string name="fav_type">Favorite type: </string>
+    <string name="fav_pokemon">Favorite Pokémon: </string>
+    <string name="choose_fav_type">Choose favorite type</string>
+    <string name="choose_fav_pokemon">Choose favorite Pokemon</string>
+    <string name="field_not_set">(Not set)</string>
+    <string name="choose_your_fav_type">Choose your favorite type</string>
+    <string name="choose_your_fav_pokemon">Choose your favorite Pokemon</string>
+    <string name="search_your_pokemon">Search your favorite Pokémon…</string>
+    <string name="error_setting_fav">Error setting favorite</string>
+    <string name="clear_fav_type">Clear favorite type</string>
+    <string name="clear_fav_pokemon">Clear favorite Pokemon</string>
     <!--Permissions-->
     <string name="storage_permission_denied">Storage permissions denied</string>
     <string name="camera_permission_denied">Camera permissions denied</string>

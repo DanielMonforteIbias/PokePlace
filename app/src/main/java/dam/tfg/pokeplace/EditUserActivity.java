@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
@@ -23,15 +26,24 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import dam.tfg.pokeplace.adapters.IconAdapter;
+import dam.tfg.pokeplace.adapters.PokemonSpinnerAdapter;
+import dam.tfg.pokeplace.adapters.TypeSpinnerAdapter;
+import dam.tfg.pokeplace.data.Data;
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
+import dam.tfg.pokeplace.models.BasePokemon;
+import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.DownloadUrlImage;
@@ -43,6 +55,7 @@ public class EditUserActivity extends BaseActivity {
     private ActivityEditUserBinding binding;
     private User user;
     private UserDAO userDAO;
+    private BasePokemonDAO basePokemonDAO;
     private Uri cameraImageUri;
 
     private List<String> icons;
@@ -62,6 +75,7 @@ public class EditUserActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
+        basePokemonDAO=new BasePokemonDAO(this);
         Intent intent=getIntent();
         user=intent.getParcelableExtra("User");
         loadIcons();
@@ -89,6 +103,30 @@ public class EditUserActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 displayChangeImageDialog();
+            }
+        });
+        binding.btnChangeFavTypeEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavTypeDialog();
+            }
+        });
+        binding.imgFavTypeEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavTypeDialog();
+            }
+        });
+        binding.btnChangeFavPokemonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavPokemonDialog();
+            }
+        });
+        binding.imgFavPokemonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavPokemonDialog();
             }
         });
         binding.btnSaveEdit.setOnClickListener(new View.OnClickListener() {
@@ -225,6 +263,19 @@ public class EditUserActivity extends BaseActivity {
                         dialog.dismiss();
                     }
                 });
+                Button btnRestoreImage=dialogView.findViewById(R.id.btnRestoreImageChangeImage);
+                btnRestoreImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+                        if(firebaseUser!=null){
+                            String image=(firebaseUser.getPhotoUrl()!=null) ? firebaseUser.getPhotoUrl().toString() : getString(R.string.default_image);
+                            user.setImage(image);
+                            updateUserUI();
+                        }
+                        dialog.dismiss();
+                    }
+                });
                 Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeImage);
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -294,6 +345,107 @@ public class EditUserActivity extends BaseActivity {
         });
     }
 
+    private void displayChangeFavTypeDialog(){
+        showCustomDialog(R.layout.dialog_change_fav_type, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                Spinner typesSpinner=dialogView.findViewById(R.id.spinnerFavTypes);
+                List<Type>types=Data.getInstance().getTypeList();
+                TypeSpinnerAdapter typeAdapter=new TypeSpinnerAdapter(types,EditUserActivity.this);
+                typesSpinner.setAdapter(typeAdapter);
+                List<String>typeNames=types.stream().map(Type::getName).collect(Collectors.toList());
+                int selectedIndex=(user.getFavType()!=null)?typeNames.indexOf(user.getFavType()):0;
+                typesSpinner.setSelection(selectedIndex);
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeFavType);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnClear=dialogView.findViewById(R.id.btnClearFavType);
+                btnClear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        user.setFavType(null);
+                        updateUserUI();
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeFavType);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Type newType = (Type)typesSpinner.getSelectedItem();
+                        if (newType!=null) {
+                            user.setFavType(newType.getName());
+                            updateUserUI();
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_setting_fav).toString());
+                        }
+                    }
+                });
+            }
+        });
+    }
+    private void displayChangeFavPokemonDialog(){
+        showCustomDialog(R.layout.dialog_change_fav_pokemon, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                List<BasePokemon>pokemonList=Data.getInstance().getPokemonList();
+                AutoCompleteTextView autoCompleteTextView=dialogView.findViewById(R.id.autocompleteFavPokemon);
+                ImageView imgFavoritePokemon=dialogView.findViewById(R.id.imgSelectedFavPokemon);
+                if(user.getFavPokemon()!=null){
+                    String favPokemonSprite=basePokemonDAO.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
+                    Glide.with(EditUserActivity.this).load(favPokemonSprite).into(imgFavoritePokemon);
+                }
+                else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(imgFavoritePokemon);
+                PokemonSpinnerAdapter pokemonAdapter=new PokemonSpinnerAdapter(pokemonList,EditUserActivity.this);
+                autoCompleteTextView.setAdapter(pokemonAdapter);
+                autoCompleteTextView.setThreshold(1); //Empieza a sugerir al escribir un caracter
+                autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        BasePokemon selected = (BasePokemon) parent.getItemAtPosition(position);
+                        autoCompleteTextView.setTag(selected); //Guardamos el que esta seleccionado
+                        Glide.with(EditUserActivity.this).load(selected.getSprite()).into(imgFavoritePokemon);
+                    }
+                });
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeFavPokemon);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnClear=dialogView.findViewById(R.id.btnClearFavPokemon);
+                btnClear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        user.setFavPokemon(null);
+                        updateUserUI();
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeFavPokemon);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BasePokemon selectedPokemon=(BasePokemon)autoCompleteTextView.getTag(); //Obtenemos el seleccionado
+                        if (selectedPokemon!=null) {
+                            user.setFavPokemon(selectedPokemon.getPokedexNumber());
+                            updateUserUI();
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_setting_fav).toString());
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     private void updateUserUI(){
         binding.txtNameEdit.setText(user.getName());
         binding.txtEmailEdit.setText(user.getEmail());
@@ -312,6 +464,17 @@ public class EditUserActivity extends BaseActivity {
             }
         }
         else Glide.with(this).load(R.drawable.icon1).into(binding.imgUserEdit);
+        if(user.getFavType()!=null){
+            String sprite= Data.getInstance().getTypeByName(user.getFavType()).getSprite();
+            Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavTypeEdit);
+        }
+        else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavTypeEdit);
+
+        if(user.getFavPokemon()!=null){
+            String sprite= basePokemonDAO.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
+            Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavPokemonEdit);
+        }
+        else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavPokemonEdit);
     }
 
     private void loadIcons(){

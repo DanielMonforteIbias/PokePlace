@@ -24,6 +24,5 @@
         <item name="android:fontFamily">@font/pokemonds</item>
         <item name="android:textSize">20sp</item>
     </style>
-
     <style name="Theme.PokePlace.AppBarOverlay" parent="Theme.PokePlace.NoActionBar" />
 </resources>

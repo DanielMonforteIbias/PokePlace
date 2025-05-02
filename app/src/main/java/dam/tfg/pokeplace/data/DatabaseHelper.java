@@ -15,6 +15,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String USER_EMAIL_COLUMN="email";
     public static final String USER_NAME_COLUMN="name";
     public static final String USER_IMAGE_COLUMN="image";
+    public static final String USER_FAV_TYPE="favType";
+    public static final String USER_FAV_POKEMON="favPokemon";
     //TABLA TEAMS
     public static final String TEAMS_TABLE_NAME="TEAMS";
     public static final String TEAM_USER_ID_COLUMN="userId";
@@ -52,8 +54,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     Version 3: Tabla Pokemon
     Version 4: Tabla Team_Pokemon
     Version 5: Tabla Types y Type_Relations
+    Version 6: User favType and favPokemon columns
     */
-    private static final int databaseVersion=5;
+    private static final int databaseVersion=6;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME,null,databaseVersion); //Pasamos el nombre y la version
@@ -62,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Creacion tabla usuarios
-        String createTableUsers="CREATE TABLE "+USERS_TABLE_NAME+" ("+USER_ID_COLUMN+" TEXT PRIMARY KEY,"+USER_EMAIL_COLUMN+" TEXT NOT NULL, "+USER_NAME_COLUMN+" TEXT, "+USER_IMAGE_COLUMN+" TEXT)";
+        String createTableUsers="CREATE TABLE "+USERS_TABLE_NAME+" ("+USER_ID_COLUMN+" TEXT PRIMARY KEY,"+USER_EMAIL_COLUMN+" TEXT NOT NULL, "+USER_NAME_COLUMN+" TEXT, "+USER_IMAGE_COLUMN+" TEXT, "+USER_FAV_TYPE+" TEXT, "+USER_FAV_POKEMON+" TEXT, FOREIGN KEY ("+USER_FAV_TYPE+") REFERENCES "+TYPES_TABLE_NAME+"("+TYPES_NAME_COLUMN+"), FOREIGN KEY ("+USER_FAV_POKEMON+") REFERENCES "+POKEMON_TABLE_NAME+"("+POKEMON_POKEDEX_NUMBER_COLUMN+"))";
         db.execSQL(createTableUsers);
         //Creacion tabla equipos
         String createTableTeams="CREATE TABLE "+TEAMS_TABLE_NAME+" ("+TEAM_USER_ID_COLUMN+" TEXT,"+TEAM_ID_COLUMN+" INTEGER, "+TEAM_NAME_COLUMN+" TEXT, PRIMARY KEY("+TEAM_USER_ID_COLUMN+","+TEAM_ID_COLUMN+"), FOREIGN KEY("+TEAM_USER_ID_COLUMN+") REFERENCES "+USERS_TABLE_NAME+"("+USER_ID_COLUMN+"))";
@@ -89,6 +92,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(oldVersion<5){
             db.execSQL("CREATE TABLE "+TYPES_TABLE_NAME+" ("+TYPES_NAME_COLUMN+" TEXT PRIMARY KEY,"+TYPES_SPRITE_COLUMN+" TEXT NOT NULL)");
             db.execSQL("CREATE TABLE "+TYPE_RELATIONS_TABLE_NAME+" ("+TYPE_RELATIONS_SOURCE_TYPE+" TEXT,"+TYPE_RELATIONS_TARGET_TYPE+" TEXT,"+TYPE_RELATIONS_RELATION+" TEXT CHECK("+TYPE_RELATIONS_RELATION+" IN ('double_damage_from', 'double_damage_to','half_damage_from', 'half_damage_to','no_damage_from', 'no_damage_to')),  PRIMARY KEY ("+TYPE_RELATIONS_SOURCE_TYPE+","+TYPE_RELATIONS_TARGET_TYPE+","+TYPE_RELATIONS_RELATION+"), FOREIGN KEY ("+TYPE_RELATIONS_SOURCE_TYPE+") REFERENCES "+TYPES_TABLE_NAME+"("+TYPES_NAME_COLUMN+"),FOREIGN KEY ("+TYPE_RELATIONS_TARGET_TYPE+") REFERENCES "+TYPES_TABLE_NAME+"("+TYPES_NAME_COLUMN+"))");
+        }
+        if(oldVersion<6){
+            db.beginTransaction();
+            try {
+                /*Necesitamos crear una tabla temporal, pasar todos los registros a esa y renombrarla para que tome el lugar de la otra.
+                No se pueden añadir las nuevas columnas con alter table porque SQLite no permite añadir FKs en Alter table, y estas son foraneas*/
+                db.execSQL("CREATE TABLE USERS_TEMP ("+USER_ID_COLUMN+" TEXT PRIMARY KEY,"+USER_EMAIL_COLUMN+" TEXT NOT NULL, "+USER_NAME_COLUMN+" TEXT, "+USER_IMAGE_COLUMN+" TEXT, "+USER_FAV_TYPE+" TEXT, "+USER_FAV_POKEMON+" TEXT, FOREIGN KEY ("+USER_FAV_TYPE+") REFERENCES "+TYPES_TABLE_NAME+"("+TYPES_NAME_COLUMN+"), FOREIGN KEY ("+USER_FAV_POKEMON+") REFERENCES "+POKEMON_TABLE_NAME+"("+POKEMON_POKEDEX_NUMBER_COLUMN+"))");
+                db.execSQL("INSERT INTO USERS_TEMP ("+USER_ID_COLUMN+","+USER_EMAIL_COLUMN+","+USER_NAME_COLUMN+","+USER_IMAGE_COLUMN+")SELECT "+USER_ID_COLUMN+","+USER_EMAIL_COLUMN+","+USER_NAME_COLUMN+","+USER_IMAGE_COLUMN+" FROM "+USERS_TABLE_NAME);
+                db.execSQL("DROP TABLE "+USERS_TABLE_NAME);
+                db.execSQL("ALTER TABLE USERS_TEMP RENAME TO "+USERS_TABLE_NAME);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ public class User implements Parcelable {
     private String email;
     private String name;
     private String image;
+    private String favType;
+    private String favPokemon;
     public User(){
 
     }
@@ -25,6 +27,8 @@ public class User implements Parcelable {
         email = in.readString();
         name = in.readString();
         image = in.readString();
+        favType=in.readString();
+        favPokemon=in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -71,6 +75,22 @@ public class User implements Parcelable {
         this.image = image;
     }
 
+    public String getFavType() {
+        return favType;
+    }
+
+    public void setFavType(String favType) {
+        this.favType = favType;
+    }
+
+    public String getFavPokemon() {
+        return favPokemon;
+    }
+
+    public void setFavPokemon(String favPokemon) {
+        this.favPokemon = favPokemon;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -82,5 +102,7 @@ public class User implements Parcelable {
         dest.writeString(email);
         dest.writeString(name);
         dest.writeString(image);
+        dest.writeString(favType);
+        dest.writeString(favPokemon);
     }
 }

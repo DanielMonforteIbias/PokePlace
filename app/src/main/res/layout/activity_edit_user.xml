@@ -50,7 +50,48 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
+                    android:textSize="25sp"
                     android:text="@string/email" />
+                <LinearLayout
+                    android:id="@+id/userFavTypeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/txtFavTypeEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="25sp"
+                        android:text="@string/fav_type" />
+
+                    <ImageView
+                        android:id="@+id/imgFavTypeEdit"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        tools:srcCompat="@drawable/not_set" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/userFavPokemonLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/txtFavPokemonEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="25sp"
+                        android:text="@string/fav_pokemon" />
+
+                    <ImageView
+                        android:id="@+id/imgFavPokemonEdit"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        tools:srcCompat="@drawable/not_set" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -73,6 +114,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="@string/change_image" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/userFavsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|top"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnChangeFavTypeEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/choose_fav_type" />
+
+                <Button
+                    android:id="@+id/btnChangeFavPokemonEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/choose_fav_pokemon" />
             </LinearLayout>
         </LinearLayout>
 

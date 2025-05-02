@@ -67,6 +67,14 @@ public class Data {
         }
         return null;
     }
+    public Type getPokemonByName(String name) {
+        for (Type type : typeList) {
+            if (type.getName().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return null;
+    }
     public List<Pair<String, String>> getTypeCombinationsWithMultiplier(Type type, String mode,double targetMultiplier) {
         if(type!=null){
             List<Pair<String, String>> result = new ArrayList<>();
