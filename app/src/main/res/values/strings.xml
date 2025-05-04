@@ -85,6 +85,7 @@
     <string name="status">Status</string>
     <string name="physical">Physical</string>
     <string name="special">Special</string>
+    <string name="no_moves_for_type">No %1$s type moves</string>
     <!--Equipos-->
     <string name="create_team">Create team</string>
     <string name="team_name">Enter the team name</string>
@@ -151,6 +152,8 @@
     <string name="error_setting_fav">Error setting favorite</string>
     <string name="clear_fav_type">Clear favorite type</string>
     <string name="clear_fav_pokemon">Clear favorite Pokemon</string>
+    <string name="marked_as_fav">%1$s set as favorite</string>
+    <string name="removed_from_favorite">%1$s removed from favorite</string>
     <!--Permissions-->
     <string name="storage_permission_denied">Storage permissions denied</string>
     <string name="camera_permission_denied">Camera permissions denied</string>

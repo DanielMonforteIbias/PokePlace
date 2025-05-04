@@ -41,7 +41,6 @@ import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.StringFormatter;
 import dam.tfg.pokeplace.utils.ToastUtil;
-import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class PokemonDetailsActivity extends BaseActivity {
     private ActivityPokemonDetailsBinding binding;
@@ -81,6 +80,8 @@ public class PokemonDetailsActivity extends BaseActivity {
         pokemon=intent.getParcelableExtra("Pokemon");
         viewModel = new ViewModelProvider(this).get(PokemonViewModel.class);
         viewModel.setPokemon(pokemon);
+
+        updateFavoriteIcon(); //Actualizamos el icono de favorito cuando tenemos el user y el Pokemon, asegurando que este marcado o desmarcado segun toque
     }
 
     private void displayAddPokemonToTeamDialog(List<Team>userTeams){
@@ -133,12 +134,38 @@ public class PokemonDetailsActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_mark_as_favorite);
+        if(pokemon!=null  && user!=null){
+            if (pokemon.getPokedexNumber().equals(user.getFavPokemon())) item.setIcon(R.drawable.staron);
+            else item.setIcon(R.drawable.staroff);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void updateFavoriteIcon() {
+        invalidateOptionsMenu();
+    }
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_to_team){
             List<Team> userTeams=teamService.getAllTeams(user.getUserId());
             if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
             else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.error_no_teams));
+        }
+        else if(id==R.id.action_mark_as_favorite){
+            if(pokemon.getPokedexNumber().equals(user.getFavPokemon())){
+                user.setFavPokemon(null);
+                item.setIcon(R.drawable.staroff);
+                ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.removed_from_favorite,StringFormatter.formatName(pokemon.getName())));
+            }
+            else{
+                user.setFavPokemon(pokemon.getPokedexNumber());
+                item.setIcon(R.drawable.staron);
+                ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.marked_as_fav,StringFormatter.formatName(pokemon.getName())));
+            }
+            userDAO.updateUser(user); //Ponemos el cambio en la base de datos
         }
         return super.onOptionsItemSelected(item);
     }

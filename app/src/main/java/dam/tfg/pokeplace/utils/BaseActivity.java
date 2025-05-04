@@ -41,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         config.setLocale(locale);
     }
     protected void showCustomDialog(int layoutResId, boolean cancelable, DialogConfigurator configurator) {
+        if(isFinishing() || isDestroyed()) return; //Evitamos errores si la actividad no está en un estado valido
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(layoutResId, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

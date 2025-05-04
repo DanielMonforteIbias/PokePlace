@@ -21,6 +21,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -77,7 +78,11 @@ public class EditUserActivity extends BaseActivity {
         userDAO=new UserDAO(this);
         basePokemonDAO=new BasePokemonDAO(this);
         Intent intent=getIntent();
-        user=intent.getParcelableExtra("User");
+        if(savedInstanceState!=null) user=savedInstanceState.getParcelable("User"); //Si estamos recreando la actividad cogemos el usuario, que puede tener alguna modificacion no guardada
+        else{ //Si no, lo cogemos de la bd con el id recibido
+            String userId=intent.getStringExtra("userId");
+            user=userDAO.getUser(userId);
+        }
         loadIcons();
         adapter=new IconAdapter(icons,this);
         updateUserUI();
@@ -177,6 +182,13 @@ public class EditUserActivity extends BaseActivity {
                 }
         );
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("User",user);
+    }
+
     private void displayChangeNameDialog(){
         showCustomDialog(R.layout.dialog_change_name, false, new DialogConfigurator() {
             @Override
@@ -351,7 +363,7 @@ public class EditUserActivity extends BaseActivity {
             public void configure(AlertDialog dialog, View dialogView) {
                 Spinner typesSpinner=dialogView.findViewById(R.id.spinnerFavTypes);
                 List<Type>types=Data.getInstance().getTypeList();
-                TypeSpinnerAdapter typeAdapter=new TypeSpinnerAdapter(types,EditUserActivity.this);
+                TypeSpinnerAdapter typeAdapter=new TypeSpinnerAdapter(types,getApplicationContext());
                 typesSpinner.setAdapter(typeAdapter);
                 List<String>typeNames=types.stream().map(Type::getName).collect(Collectors.toList());
                 int selectedIndex=(user.getFavType()!=null)?typeNames.indexOf(user.getFavType()):0;
@@ -398,10 +410,10 @@ public class EditUserActivity extends BaseActivity {
                 ImageView imgFavoritePokemon=dialogView.findViewById(R.id.imgSelectedFavPokemon);
                 if(user.getFavPokemon()!=null){
                     String favPokemonSprite=basePokemonDAO.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
-                    Glide.with(EditUserActivity.this).load(favPokemonSprite).into(imgFavoritePokemon);
+                    Glide.with(getApplicationContext()).load(favPokemonSprite).into(imgFavoritePokemon);
                 }
-                else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(imgFavoritePokemon);
-                PokemonSpinnerAdapter pokemonAdapter=new PokemonSpinnerAdapter(pokemonList,EditUserActivity.this);
+                else Glide.with(getApplicationContext()).load(R.drawable.not_set).into(imgFavoritePokemon);
+                PokemonSpinnerAdapter pokemonAdapter=new PokemonSpinnerAdapter(pokemonList,getApplicationContext());
                 autoCompleteTextView.setAdapter(pokemonAdapter);
                 autoCompleteTextView.setThreshold(1); //Empieza a sugerir al escribir un caracter
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -409,7 +421,7 @@ public class EditUserActivity extends BaseActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         BasePokemon selected = (BasePokemon) parent.getItemAtPosition(position);
                         autoCompleteTextView.setTag(selected); //Guardamos el que esta seleccionado
-                        Glide.with(EditUserActivity.this).load(selected.getSprite()).into(imgFavoritePokemon);
+                        Glide.with(getApplicationContext()).load(selected.getSprite()).into(imgFavoritePokemon);
                     }
                 });
                 Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeFavPokemon);

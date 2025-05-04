@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
         if (id == R.id.action_edit_user){
             Intent intent = new Intent(getApplicationContext(), EditUserActivity.class);
-            intent.putExtra("User", user);
+            intent.putExtra("userId",user.getUserId());
             editUserActivityLauncher.launch(intent);
         }
         else if (id ==R.id.action_settings){
