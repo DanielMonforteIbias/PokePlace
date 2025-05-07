@@ -48,48 +48,31 @@ public class TypeRelationDAO {
         return type;
     }
     private void assignRelation(Type type, String targetType, String relation, boolean isTarget) {
+        boolean isSameType = type.getName().equalsIgnoreCase(targetType); //Para controlar que se añada en ambas listas si la relacion es contra si mismo
         switch (relation) {
             case "double_damage_from":
-                if (isTarget) {
-                    type.getDoubleDamageFrom().add(targetType);
-                } else {
-                    type.getDoubleDamageTo().add(targetType);
-                }
+                if (isSameType || !isTarget) type.getDoubleDamageFrom().add(targetType);
+                if (isSameType || isTarget)  type.getDoubleDamageTo().add(targetType);
                 break;
             case "double_damage_to":
-                if (isTarget) {
-                    type.getDoubleDamageTo().add(targetType);
-                } else {
-                    type.getDoubleDamageFrom().add(targetType);
-                }
+                if (isSameType || !isTarget) type.getDoubleDamageTo().add(targetType);
+                if (isSameType || isTarget)  type.getDoubleDamageFrom().add(targetType);
                 break;
             case "half_damage_from":
-                if (isTarget) {
-                    type.getHalfDamageFrom().add(targetType);
-                } else {
-                    type.getHalfDamageTo().add(targetType);
-                }
+                if (isSameType || !isTarget) type.getHalfDamageFrom().add(targetType);
+                if (isSameType || isTarget)  type.getHalfDamageTo().add(targetType);
                 break;
             case "half_damage_to":
-                if (isTarget) {
-                    type.getHalfDamageTo().add(targetType);
-                } else {
-                    type.getHalfDamageFrom().add(targetType);
-                }
+                if (isSameType || !isTarget) type.getHalfDamageTo().add(targetType);
+                if (isSameType || isTarget)  type.getHalfDamageFrom().add(targetType);
                 break;
             case "no_damage_from":
-                if (isTarget) {
-                    type.getNoDamageFrom().add(targetType);
-                } else {
-                    type.getNoDamageTo().add(targetType);
-                }
+                if (isSameType || !isTarget) type.getNoDamageFrom().add(targetType);
+                if (isSameType || isTarget)  type.getNoDamageTo().add(targetType);
                 break;
             case "no_damage_to":
-                if (isTarget) {
-                    type.getNoDamageTo().add(targetType);
-                } else {
-                    type.getNoDamageFrom().add(targetType);
-                }
+                if (isSameType || !isTarget) type.getNoDamageTo().add(targetType);
+                if (isSameType || isTarget)  type.getNoDamageFrom().add(targetType);
                 break;
         }
     }

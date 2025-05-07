@@ -99,6 +99,7 @@
     <string name="remove_team_warning">Are you sure you want to delete</string>
     <string name="team_removed">deleted</string>
     <string name="error_add_to_team">Error adding Pokémon to team</string>
+    <string name="no_pokemons_in_team">There are no Pókemon in %1$s</string>
 
     <!--Calculadora tipos-->
     <string name="type_calculator">Type Calculator</string>
@@ -157,6 +158,9 @@
     <!--Permissions-->
     <string name="storage_permission_denied">Storage permissions denied</string>
     <string name="camera_permission_denied">Camera permissions denied</string>
+    <!--website-->
+    <string name="pokeplaceweb" translatable="false">PokéPlace Web</string>
+    <string name="pokeplaceweb_url" translatable="false">https://danielmonforteibias.github.io/PokePlaceWeb/</string>
     <!--Credits-->
     <string name="author">Author: Daniel Monforte Ibias</string>
     <string name="credits_details">App developed as a final project for 2º DAM 2024/2025</string>

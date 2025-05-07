@@ -97,6 +97,7 @@
     <string name="remove_team_warning">Seguro que quieres eliminar</string>
     <string name="team_removed">eliminado</string>
     <string name="error_add_to_team">Error al añadir Pokémon al equipo</string>
+    <string name="no_pokemons_in_team">No hay Pokémon en %1$s</string>
 
     <!--Calculadora tipos-->
     <string name="type_calculator">Calculadora de tipos</string>

@@ -28,6 +28,14 @@
         android:textSize="50sp"
         android:textStyle="bold"
         android:text="@string/name" />
+    <TextView
+        android:id="@+id/txtNoPokemonInTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:visibility="gone"
+        android:text="@string/no_teams" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/teamPokemonList"
         android:layout_width="match_parent"

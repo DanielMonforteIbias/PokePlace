@@ -181,14 +181,15 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
                     data.getPokemonList().addAll(pokemonList);
                     pokemonList.forEach(basePokemonDAO::addBasePokemon); //Añadimos todos los pokemon recibidos a la BD. No se añade uno por uno durante la carga para evitar saltarse Pokemon al interrumpirla a mitades
                     System.out.println("AÑADIDOS NUEVOS POKEMON A LA BD");
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            filterList(currentNameFilter,currentTypeFilter);
-                        }
-                    });
+                    if(getActivity()!=null){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                filterList(currentNameFilter,currentTypeFilter);
+                            }
+                        });
+                    }
                 }
-
                 @Override
                 public void onBasePokemonReceived(BasePokemon pokemon) {
 

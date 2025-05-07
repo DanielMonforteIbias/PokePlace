@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -192,6 +193,10 @@ public class MainActivity extends BaseActivity {
         else if (id ==R.id.action_settings){
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             settingsActivityLauncher.launch(intent);
+        }
+        else if (id==R.id.action_pokeplaceweb){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.pokeplaceweb_url)));
+            startActivity(intent);
         }
         else if (id == R.id.action_credits) {
             displayCredits();

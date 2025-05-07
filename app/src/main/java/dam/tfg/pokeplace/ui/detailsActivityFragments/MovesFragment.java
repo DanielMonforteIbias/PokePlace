@@ -105,11 +105,13 @@ public class MovesFragment extends Fragment implements OnTypeSelectedListener {
             }
         }
         adapter.notifyDataSetChanged();
-        if(filteredList.isEmpty()){
-            binding.txtNoMovesForType.setVisibility(View.VISIBLE);
-            binding.txtNoMovesForType.setText(getString(R.string.no_moves_for_type,currentTypeFilter));
+        if(binding!=null){ //Actualizamos el TextView solo si está disponible
+            if(filteredList.isEmpty()){
+                binding.txtNoMovesForType.setVisibility(View.VISIBLE);
+                binding.txtNoMovesForType.setText(getString(R.string.no_moves_for_type,currentTypeFilter));
+            }
+            else binding.txtNoMovesForType.setVisibility(View.GONE);
         }
-        else binding.txtNoMovesForType.setVisibility(View.GONE);
     }
     @Override
     public void onTypeSelected(Type type) {

@@ -143,5 +143,16 @@ public class TeamDetailsActivity extends BaseActivity {
     private void updateUI(){
         binding.toolbarTeamDetails.setTitle(team.getName());
         binding.txtTeamNameDetails.setText(team.getName());
+        if(team!=null){
+            if(team.getTeamMembers().isEmpty()){
+                binding.txtNoPokemonInTeam.setVisibility(View.VISIBLE);
+                binding.txtNoPokemonInTeam.setText(getString(R.string.no_pokemons_in_team,team.getName()));
+                binding.teamPokemonList.setVisibility(View.GONE);
+            }
+            else{
+                binding.txtNoPokemonInTeam.setVisibility(View.GONE);
+                binding.teamPokemonList.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
