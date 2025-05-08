@@ -17,20 +17,17 @@ public class TeamPokemonDAO {
     private final SQLiteDatabase db;
     private ContentValues values=null;
 
-    private BasePokemonDAO basePokemonDAO; //Ya que TeamPokemon hereda de BasePokemon, necesitaremos recuperar datos de BasePokemon
-
     public TeamPokemonDAO(Context context) {
         db= DatabaseManager.getInstance(context).openDatabase();
-        basePokemonDAO=new BasePokemonDAO(context);
     }
-    public void addTeamPokemon(TeamPokemon pokemon) {
+    public long addTeamPokemon(TeamPokemon pokemon) { //Debe devolver long porque es el tipo generado por db.insert
         values=new ContentValues();
         values.put(DatabaseHelper.TEAM_POKEMON_USER_ID_COLUMN, pokemon.getUserId());
         values.put(DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN, pokemon.getTeamId());
         values.put(DatabaseHelper.TEAM_POKEMON_POKEDEX_NUMBER_COLUMN, pokemon.getPokedexNumber());
         values.put(DatabaseHelper.TEAM_POKEMON_CUSTOM_NAME_COLUMN, pokemon.getCustomName());
         values.put(DatabaseHelper.TEAM_POKEMON_CUSTOM_SPRITE_COLUMN, pokemon.getCustomSprite());
-        db.insert(DatabaseHelper.TEAM_POKEMON_TABLE_NAME, null, values);
+        return db.insert(DatabaseHelper.TEAM_POKEMON_TABLE_NAME, null, values); //Devolvemos el id que se genera del pokemon insertado, pues es autoincremental
     }
     public List<TeamPokemon> getTeamMembers(String userId, int teamId){
         List<TeamPokemon> teamMembers=new ArrayList<>();
@@ -40,8 +37,9 @@ public class TeamPokemonDAO {
             String pokedexNumber=String.valueOf(cursor.getInt(3));
             String customName=cursor.getString(4);
             String customSprite=cursor.getString(5);
-            BasePokemon basePokemon=basePokemonDAO.getBasePokemon(Integer.parseInt(pokedexNumber));
-            teamMembers.add(new TeamPokemon(pokedexNumber,basePokemon.getName(),basePokemon.getSprite(),basePokemon.getUrl(),basePokemon.getType1(),basePokemon.getType2(),pokemonId,userId,teamId,customName,customSprite));
+            TeamPokemon teamPokemon=new TeamPokemon(pokemonId,userId,teamId,customName,customSprite);
+            teamPokemon.setPokedexNumber(pokedexNumber);
+            teamMembers.add(teamPokemon);
         }
         cursor.close(); //Cerramos el cursor
         return teamMembers;
@@ -54,5 +52,17 @@ public class TeamPokemonDAO {
         }
         cursor.close(); //Cerramos el cursor
         return teamSize;
+    }
+    public void updateTeamPokemon(TeamPokemon teamPokemon){
+        values = new ContentValues();
+        values.put(DatabaseHelper.TEAM_POKEMON_CUSTOM_NAME_COLUMN, teamPokemon.getCustomName());
+        String where=DatabaseHelper.TEAM_POKEMON_ID_COLUMN+"=?";
+        db.update(DatabaseHelper.TEAM_POKEMON_TABLE_NAME,values,where,new String[]{String.valueOf(teamPokemon.getId())});
+        System.out.println("Actualizado "+teamPokemon.getName()+" a "+teamPokemon.getCustomName()+", con id "+teamPokemon.getId());
+    }
+    public void removeTeamPokemon(int pokemonId){
+        String condition = DatabaseHelper.TEAM_POKEMON_ID_COLUMN+"=?";
+        String[] conditionArgs = {String.valueOf(pokemonId)};
+        db.delete(DatabaseHelper.TEAM_POKEMON_TABLE_NAME, condition,conditionArgs);
     }
 }

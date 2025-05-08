@@ -22,6 +22,7 @@
     <string name="action_add_to_team">Add to team</string>
     <string name="action_credits">Credits</string>
     <string name="action_remove_team">Delete team</string>
+    <string name="action_edit_team">Edit team</string>
     <string name="action_change_name">Change name</string>
 
     <!--Acciones-->
@@ -85,6 +86,7 @@
     <string name="status">Status</string>
     <string name="physical">Physical</string>
     <string name="special">Special</string>
+    <string name="no_moves_for_type">No %1$s type moves</string>
     <!--Equipos-->
     <string name="create_team">Create team</string>
     <string name="team_name">Enter the team name</string>
@@ -98,6 +100,10 @@
     <string name="remove_team_warning">Are you sure you want to delete</string>
     <string name="team_removed">deleted</string>
     <string name="error_add_to_team">Error adding Pokémon to team</string>
+    <string name="no_pokemons_in_team">There are no Pókemon in %1$s</string>
+    <string name="choose_pokemon">Choose a Pokémon</string>
+    <string name="delete_pokemon_warning">Are you sure you want to delete %1$s?</string>
+    <string name="enter_new_nam_for">Enter new name for %1$s</string>
 
     <!--Calculadora tipos-->
     <string name="type_calculator">Type Calculator</string>
@@ -133,16 +139,38 @@
     <string name="gallery">Choose from gallery</string>
     <string name="url">Enter URL</string>
     <string name="choose_icon">Choose default icon</string>
+    <string name="restore_image">Restore default image</string>
     <string name="picture">image</string>
     <string name="choose_your_icon">Choose your icon</string>
     <string name="type_url">Enter a URL</string>
     <string name="url_not_valid">URL not valid or not an image</string>
     <string name="not_supported">Format not supported</string>
     <string name="gif_gallery">GIF are only supported with URL</string>
-
+    <string name="fav_type">Favorite type: </string>
+    <string name="fav_pokemon">Favorite Pokémon: </string>
+    <string name="choose_fav_type">Choose favorite type</string>
+    <string name="choose_fav_pokemon">Choose favorite Pokemon</string>
+    <string name="field_not_set">(Not set)</string>
+    <string name="choose_your_fav_type">Choose your favorite type</string>
+    <string name="choose_your_fav_pokemon">Choose your favorite Pokemon</string>
+    <string name="search_your_pokemon">Search your favorite Pokémon…</string>
+    <string name="error_setting_fav">Error setting favorite</string>
+    <string name="clear_fav_type">Clear favorite type</string>
+    <string name="clear_fav_pokemon">Clear favorite Pokemon</string>
+    <string name="marked_as_fav">%1$s set as favorite</string>
+    <string name="removed_from_favorite">%1$s removed from favorite</string>
+    <string name="delete_user_warning">Are you sure do you want to delete your user?</string>
+    <string name="delete_user_warning2">This action can not be undone. All your profile information and teams will be lost. Do you want to continue?</string>
+    <string name="user_deleted">User deleted successfully</string>
+    <string name="error_deleting_user">Error deleting user</string>
+    <string name="error_reauth">Error reauthenticating, cannot delete user</string>
+    <string name="enter_password">Enter your password</string>
     <!--Permissions-->
     <string name="storage_permission_denied">Storage permissions denied</string>
     <string name="camera_permission_denied">Camera permissions denied</string>
+    <!--website-->
+    <string name="pokeplaceweb" translatable="false">PokéPlace Web</string>
+    <string name="pokeplaceweb_url" translatable="false">https://danielmonforteibias.github.io/PokePlaceWeb/</string>
     <!--Credits-->
     <string name="author">Author: Daniel Monforte Ibias</string>
     <string name="credits_details">App developed as a final project for 2º DAM 2024/2025</string>

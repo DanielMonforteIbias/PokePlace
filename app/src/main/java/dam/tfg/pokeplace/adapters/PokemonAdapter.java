@@ -2,7 +2,6 @@ package dam.tfg.pokeplace.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,15 +18,13 @@ import java.util.List;
 
 import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;
 import dam.tfg.pokeplace.api.PokemonSpeciesCallback;
-import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
-import dam.tfg.pokeplace.models.Type;
+import dam.tfg.pokeplace.utils.PokemonClickHandler;
 import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHolder>{
@@ -77,27 +73,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.ViewHold
         holder.sprite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String pokemonUrl=pokemon.getUrl();
-                PokeApiDetailsResponse.getPokemon(pokemonUrl, new PokemonCallback() {
-                    @Override
-                    public void onPokemonReceived(Pokemon pokemon) {
-                        String urlSpecies=pokemonUrl.replace("pokemon","pokemon-species"); //Creamos la URL para conseguir la especie
-                        PokeApiDetailsResponse.getDescriptions(urlSpecies, new PokemonSpeciesCallback() {
-                            @Override
-                            public void onDescriptionsReceived(List<Pair<String, String>> descriptions) {
-                                pokemon.setDescriptions(descriptions);
-                                Intent intent=new Intent(context, PokemonDetailsActivity.class);
-                                intent.putExtra("Pokemon",pokemon);
-                                context.startActivity(intent);
-                            }
-                        },context);
-
-                    }
-                    @Override
-                    public void onMoveReceived(Move move) {
-
-                    }
-                },context);
+                PokemonClickHandler.handlePokemonClick(context,pokemon);
             }
         });
     }

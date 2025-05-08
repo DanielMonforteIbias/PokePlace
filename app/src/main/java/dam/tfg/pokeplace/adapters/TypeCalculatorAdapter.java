@@ -10,8 +10,8 @@ import dam.tfg.pokeplace.ui.mainActivityFragments.typeCalculator.DefenderFragmen
 import dam.tfg.pokeplace.ui.mainActivityFragments.typeCalculator.TypeChartFragment;
 
 public class TypeCalculatorAdapter extends FragmentStateAdapter {
-    public TypeCalculatorAdapter(@NonNull FragmentActivity fragmentActivity) {
-        super(fragmentActivity);
+    public TypeCalculatorAdapter(@NonNull Fragment fragment) {
+        super(fragment);
     }
 
     @NonNull

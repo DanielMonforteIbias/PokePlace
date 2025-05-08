@@ -25,11 +25,18 @@ public class UserDAO {
         values.put(DatabaseHelper.USER_IMAGE_COLUMN, user.getImage());
         db.insert(DatabaseHelper.USERS_TABLE_NAME, null, values);
     }
+    public void deleteUser(String userId) {
+        String condition = DatabaseHelper.USER_ID_COLUMN+"=?";
+        String[] conditionArgs = {userId};
+        db.delete(DatabaseHelper.USERS_TABLE_NAME, condition,conditionArgs);
+    }
     public void updateUser(User user){
         values = new ContentValues();
         values.put(DatabaseHelper.USER_NAME_COLUMN, user.getName());
         values.put(DatabaseHelper.USER_IMAGE_COLUMN,user.getImage());
-        String where="userId=?";
+        values.put(DatabaseHelper.USER_FAV_TYPE,user.getFavType());
+        values.put(DatabaseHelper.USER_FAV_POKEMON,user.getFavPokemon());
+        String where=DatabaseHelper.USER_ID_COLUMN+"=?";
         db.update(DatabaseHelper.USERS_TABLE_NAME,values,where,new String[]{user.getUserId()});
     }
     public boolean userExists(String userId){
@@ -50,6 +57,8 @@ public class UserDAO {
             user.setEmail(cursor.getString(1));
             user.setName(cursor.getString(2));
             user.setImage(cursor.getString(3));
+            user.setFavType(cursor.getString(4));
+            user.setFavPokemon(cursor.getString(5));
         }
         return user;
     }

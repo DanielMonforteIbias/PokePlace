@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -103,15 +104,15 @@ public class MainActivity extends BaseActivity {
         btnLogout = headerView.findViewById(R.id.btnLogout);
         imgFoto = headerView.findViewById(R.id.imgUser);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        user=userDAO.getUser(firebaseUser.getUid());
-
-        providerId = firebaseUser.getProviderData().get(1).getProviderId();
-        if (providerId.equals("google.com")) { //Si el proveedor es Google
-            gOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-            gClient = GoogleSignIn.getClient(this, gOptions);
+        if(firebaseUser!=null) {
+            user=userDAO.getUser(firebaseUser.getUid());
+            providerId = firebaseUser.getProviderData().get(1).getProviderId();
+            if (providerId.equals("google.com")) { //Si el proveedor es Google
+                gOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+                gClient = GoogleSignIn.getClient(this, gOptions);
+            }
+            updateUserUI();
         }
-        updateUserUI();
-
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,22 +158,24 @@ public class MainActivity extends BaseActivity {
                 });
     }
     public void updateUserUI(){
-        user=userDAO.getUser(firebaseUser.getUid()); //Cogemos el user con los datos nuevos
-        txtNombre.setText(user.getName());
-        txtEmail.setText(user.getEmail());
-        String image=user.getImage();
-        if(image!=null){
-            if(image.startsWith("http://") || image.startsWith("https://") || image.startsWith("content://") || image.startsWith("file://")) Glide.with(this).load(image).into(imgFoto); //Es una url o foto de la camara o galeria
-            else { //Si no, es un recurso de la app, un icono
-                int resId=getResources().getIdentifier(image, "drawable", getPackageName());
-                if (resId != 0) {
-                    imgFoto.setImageResource(resId);
-                } else {
-                    imgFoto.setImageResource(R.drawable.icon1); //fallback si no existe
+        if(user!=null){
+            user=userDAO.getUser(firebaseUser.getUid()); //Cogemos el user con los datos nuevos
+            txtNombre.setText(user.getName());
+            txtEmail.setText(user.getEmail());
+            String image=user.getImage();
+            if(image!=null){
+                if(image.startsWith("http://") || image.startsWith("https://") || image.startsWith("content://") || image.startsWith("file://")) Glide.with(this).load(image).into(imgFoto); //Es una url o foto de la camara o galeria
+                else { //Si no, es un recurso de la app, un icono
+                    int resId=getResources().getIdentifier(image, "drawable", getPackageName());
+                    if (resId != 0) {
+                        imgFoto.setImageResource(resId);
+                    } else {
+                        imgFoto.setImageResource(R.drawable.icon1); //fallback si no existe
+                    }
                 }
             }
+            else imgFoto.setImageResource(R.drawable.icon1);
         }
-        else imgFoto.setImageResource(R.drawable.icon1);
     }
 
     @Override
@@ -185,13 +188,19 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit_user){
-            Intent intent = new Intent(getApplicationContext(), EditUserActivity.class);
-            intent.putExtra("User", user);
-            editUserActivityLauncher.launch(intent);
+            if(user!=null){
+                Intent intent = new Intent(getApplicationContext(), EditUserActivity.class);
+                intent.putExtra("userId",user.getUserId());
+                editUserActivityLauncher.launch(intent);
+            }
         }
         else if (id ==R.id.action_settings){
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             settingsActivityLauncher.launch(intent);
+        }
+        else if (id==R.id.action_pokeplaceweb){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.pokeplaceweb_url)));
+            startActivity(intent);
         }
         else if (id == R.id.action_credits) {
             displayCredits();

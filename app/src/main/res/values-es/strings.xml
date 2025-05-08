@@ -20,6 +20,7 @@
     <string name="action_add_to_team">Añadir al equipo</string>
     <string name="action_credits">Créditos</string>
     <string name="action_remove_team">Eliminar equipo</string>
+    <string name="action_edit_team">Editar equipo</string>
     <string name="action_change_name">Cambiar nombre</string>
 
     <!--Acciones-->
@@ -83,6 +84,7 @@
     <string name="status">Estado</string>
     <string name="physical">Físico</string>
     <string name="special">Especial</string>
+    <string name="no_moves_for_type">No hay movimientos de tipo %1$s</string>
     <!--Equipos-->
     <string name="create_team">Crear equipo</string>
     <string name="team_name">Introduce el nombre de tu equipo</string>
@@ -96,6 +98,10 @@
     <string name="remove_team_warning">Seguro que quieres eliminar</string>
     <string name="team_removed">eliminado</string>
     <string name="error_add_to_team">Error al añadir Pokémon al equipo</string>
+    <string name="no_pokemons_in_team">No hay Pokémon en %1$s</string>
+    <string name="choose_pokemon">Elige un Pokémon</string>
+    <string name="delete_pokemon_warning">¿Seguro que quieres eliminar a %1$s?</string>
+    <string name="enter_new_nam_for">introduce un nuevo nombre para %1$s</string>
 
     <!--Calculadora tipos-->
     <string name="type_calculator">Calculadora de tipos</string>
@@ -131,12 +137,32 @@
     <string name="gallery">Elegir de galería</string>
     <string name="url">Introducir URL</string>
     <string name="choose_icon">Elegir icono predeterminado</string>
+    <string name="restore_image">Restablecer imagen por defecto</string>
     <string name="picture">imagen</string>
     <string name="choose_your_icon">Elige tu icono</string>
     <string name="type_url">Introduce una URL</string>
     <string name="url_not_valid">URL no válida o no es una imagen</string>
     <string name="not_supported">Formato no soportado</string>
     <string name="gif_gallery">Los GIF son solo compatibles con URL</string>
+    <string name="fav_type">Tipo favorito: </string>
+    <string name="fav_pokemon">Pokémon favorito: </string>
+    <string name="choose_fav_type">Elegir tipo favorito</string>
+    <string name="choose_fav_pokemon">Elegir Pokémon favorito</string>
+    <string name="field_not_set">(No seleccionado)</string>
+    <string name="choose_your_fav_type">Selecciona tu tipo favorito</string>
+    <string name="choose_your_fav_pokemon">Selecciona tu Pokémon favorito</string>
+    <string name="search_your_pokemon">Busca tu Pokémon favorito…</string>
+    <string name="error_setting_fav">Error al establecer favorito</string>
+    <string name="clear_fav_type">Eliminar tipo favorito</string>
+    <string name="clear_fav_pokemon">Eliminar Pokémon favorito</string>
+    <string name="marked_as_fav">%1$s establecido como favorito</string>
+    <string name="removed_from_favorite">%1$s eliminado de favorito</string>
+    <string name="delete_user_warning">¿Seguro que quieres eliminar tu usuario?</string>
+    <string name="delete_user_warning2">Esta acción no se puede deshacer. Se borrará la información de tu perfil y tus equipos. ¿Quieres continuar?</string>
+    <string name="user_deleted">Usuario eliminado</string>
+    <string name="error_deleting_user">Error eliminando usuario</string>
+    <string name="error_reauth">Error reautenticando, no se puede borrar el usuario</string>
+    <string name="enter_password">Introduce tu contraseña</string>
 
     <!--Permissions-->
     <string name="storage_permission_denied">Permisos de almacenamiento denegado</string>

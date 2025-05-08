@@ -12,8 +12,13 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_credits"
+        android:id="@+id/action_pokeplaceweb"
         android:orderInCategory="300"
+        android:title="@string/pokeplaceweb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_credits"
+        android:orderInCategory="400"
         android:title="@string/action_credits"
         app:showAsAction="never" />
 </menu>

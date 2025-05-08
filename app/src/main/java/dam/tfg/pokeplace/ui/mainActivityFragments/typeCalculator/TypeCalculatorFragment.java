@@ -28,7 +28,7 @@ public class TypeCalculatorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TypeCalculatorAdapter adapter = new TypeCalculatorAdapter(getActivity());
+        TypeCalculatorAdapter adapter = new TypeCalculatorAdapter(this);
         binding.viewPager.setAdapter(adapter);
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
             switch (position) {

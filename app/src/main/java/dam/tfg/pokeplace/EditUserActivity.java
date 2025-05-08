@@ -9,29 +9,52 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import dam.tfg.pokeplace.adapters.IconAdapter;
+import dam.tfg.pokeplace.adapters.PokemonSpinnerAdapter;
+import dam.tfg.pokeplace.adapters.TypeSpinnerAdapter;
+import dam.tfg.pokeplace.data.Data;
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
+import dam.tfg.pokeplace.data.dao.TeamDAO;
+import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
+import dam.tfg.pokeplace.models.BasePokemon;
+import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.DownloadUrlImage;
@@ -43,6 +66,7 @@ public class EditUserActivity extends BaseActivity {
     private ActivityEditUserBinding binding;
     private User user;
     private UserDAO userDAO;
+    private TeamService teamService;
     private Uri cameraImageUri;
 
     private List<String> icons;
@@ -62,8 +86,13 @@ public class EditUserActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
+        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
         Intent intent=getIntent();
-        user=intent.getParcelableExtra("User");
+        if(savedInstanceState!=null) user=savedInstanceState.getParcelable("User"); //Si estamos recreando la actividad cogemos el usuario, que puede tener alguna modificacion no guardada
+        else{ //Si no, lo cogemos de la bd con el id recibido
+            String userId=intent.getStringExtra("userId");
+            user=userDAO.getUser(userId);
+        }
         loadIcons();
         adapter=new IconAdapter(icons,this);
         updateUserUI();
@@ -91,12 +120,42 @@ public class EditUserActivity extends BaseActivity {
                 displayChangeImageDialog();
             }
         });
+        binding.btnChangeFavTypeEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavTypeDialog();
+            }
+        });
+        binding.imgFavTypeEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavTypeDialog();
+            }
+        });
+        binding.btnChangeFavPokemonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavPokemonDialog();
+            }
+        });
+        binding.imgFavPokemonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayChangeFavPokemonDialog();
+            }
+        });
         binding.btnSaveEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userDAO.updateUser(user);
                 setResult(RESULT_OK);
                 finish();
+            }
+        });
+        binding.btnDeleteUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayDeleteUserDialog();
             }
         });
         selectImageActivityLauncher=registerForActivityResult( //Cuando termine la actividad de seleccionar imagen
@@ -139,6 +198,13 @@ public class EditUserActivity extends BaseActivity {
                 }
         );
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("User",user);
+    }
+
     private void displayChangeNameDialog(){
         showCustomDialog(R.layout.dialog_change_name, false, new DialogConfigurator() {
             @Override
@@ -225,6 +291,19 @@ public class EditUserActivity extends BaseActivity {
                         dialog.dismiss();
                     }
                 });
+                Button btnRestoreImage=dialogView.findViewById(R.id.btnRestoreImageChangeImage);
+                btnRestoreImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+                        if(firebaseUser!=null){
+                            String image=(firebaseUser.getPhotoUrl()!=null) ? firebaseUser.getPhotoUrl().toString() : getString(R.string.default_image);
+                            user.setImage(image);
+                            updateUserUI();
+                        }
+                        dialog.dismiss();
+                    }
+                });
                 Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeImage);
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -294,6 +373,142 @@ public class EditUserActivity extends BaseActivity {
         });
     }
 
+    private void displayChangeFavTypeDialog(){
+        showCustomDialog(R.layout.dialog_change_fav_type, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                Spinner typesSpinner=dialogView.findViewById(R.id.spinnerFavTypes);
+                List<Type>types=Data.getInstance().getTypeList();
+                TypeSpinnerAdapter typeAdapter=new TypeSpinnerAdapter(types,getApplicationContext());
+                typesSpinner.setAdapter(typeAdapter);
+                List<String>typeNames=types.stream().map(Type::getName).collect(Collectors.toList());
+                int selectedIndex=(user.getFavType()!=null)?typeNames.indexOf(user.getFavType()):0;
+                typesSpinner.setSelection(selectedIndex);
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeFavType);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnClear=dialogView.findViewById(R.id.btnClearFavType);
+                btnClear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        user.setFavType(null);
+                        updateUserUI();
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeFavType);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Type newType = (Type)typesSpinner.getSelectedItem();
+                        if (newType!=null) {
+                            user.setFavType(newType.getName());
+                            updateUserUI();
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_setting_fav).toString());
+                        }
+                    }
+                });
+            }
+        });
+    }
+    private void displayChangeFavPokemonDialog(){
+        showCustomDialog(R.layout.dialog_change_fav_pokemon, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                List<BasePokemon>pokemonList=Data.getInstance().getPokemonList();
+                AutoCompleteTextView autoCompleteTextView=dialogView.findViewById(R.id.autocompleteFavPokemon);
+                ImageView imgFavoritePokemon=dialogView.findViewById(R.id.imgSelectedFavPokemon);
+                if(user.getFavPokemon()!=null){
+                    String favPokemonSprite=teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
+                    Glide.with(getApplicationContext()).load(favPokemonSprite).into(imgFavoritePokemon);
+                }
+                else Glide.with(getApplicationContext()).load(R.drawable.not_set).into(imgFavoritePokemon);
+                PokemonSpinnerAdapter pokemonAdapter=new PokemonSpinnerAdapter(pokemonList,getApplicationContext());
+                autoCompleteTextView.setAdapter(pokemonAdapter);
+                autoCompleteTextView.setThreshold(1); //Empieza a sugerir al escribir un caracter
+                autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        BasePokemon selected = (BasePokemon) parent.getItemAtPosition(position);
+                        autoCompleteTextView.setTag(selected); //Guardamos el que esta seleccionado
+                        Glide.with(getApplicationContext()).load(selected.getSprite()).into(imgFavoritePokemon);
+                    }
+                });
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeFavPokemon);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnClear=dialogView.findViewById(R.id.btnClearFavPokemon);
+                btnClear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        user.setFavPokemon(null);
+                        updateUserUI();
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeFavPokemon);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BasePokemon selectedPokemon=(BasePokemon)autoCompleteTextView.getTag(); //Obtenemos el seleccionado
+                        if (selectedPokemon!=null) {
+                            user.setFavPokemon(selectedPokemon.getPokedexNumber());
+                            updateUserUI();
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_setting_fav).toString());
+                        }
+                    }
+                });
+            }
+        });
+    }
+    private void displayDeleteUserDialog(){
+        showCustomDialog(R.layout.dialog_delete, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelDelete);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptDelete);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        showCustomDialog(R.layout.dialog_delete, false, new DialogConfigurator() {
+                            @Override
+                            public void configure(AlertDialog dialog2, View dialogView2) {
+                                TextView message = dialogView2.findViewById(R.id.txtDeleteTitle);
+                                message.setText(getString(R.string.delete_user_warning2));
+                                Button btnCancel2 = dialogView2.findViewById(R.id.btnCancelDelete);
+                                Button btnAccept2 = dialogView2.findViewById(R.id.btnAcceptDelete);
+                                btnCancel2.setOnClickListener(v2 -> dialog2.dismiss());
+                                btnAccept2.setOnClickListener(v2 -> {
+                                    dialog2.dismiss();
+                                    deleteUser();
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     private void updateUserUI(){
         binding.txtNameEdit.setText(user.getName());
         binding.txtEmailEdit.setText(user.getEmail());
@@ -312,6 +527,17 @@ public class EditUserActivity extends BaseActivity {
             }
         }
         else Glide.with(this).load(R.drawable.icon1).into(binding.imgUserEdit);
+        if(user.getFavType()!=null){
+            String sprite= Data.getInstance().getTypeByName(user.getFavType()).getSprite();
+            Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavTypeEdit);
+        }
+        else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavTypeEdit);
+
+        if(user.getFavPokemon()!=null){
+            String sprite= teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
+            Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavPokemonEdit);
+        }
+        else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavPokemonEdit);
     }
 
     private void loadIcons(){
@@ -320,5 +546,88 @@ public class EditUserActivity extends BaseActivity {
         for (int i = 1; i <= totalIcons; i++) {
             icons.add("icon"+i); //Todos se llaman icon+numero
         }
+    }
+    private void deleteUser(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            if (firebaseUser.getProviderData().get(1).getProviderId().equals(EmailAuthProvider.PROVIDER_ID)) { //Si el usuario es de email y password
+                displayEnterPasswordDialog(firebaseUser);
+            } else if (firebaseUser.getProviderData().get(1).getProviderId().equals(GoogleAuthProvider.PROVIDER_ID)){
+                GoogleSignInAccount googleAccount = GoogleSignIn.getLastSignedInAccount(this);
+                if (googleAccount != null) {
+                    AuthCredential credential = GoogleAuthProvider.getCredential(googleAccount.getIdToken(), null);
+                    firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            deleteUserInFirebase(firebaseUser);
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
+                        }
+                    });
+                }
+            }
+        } else {
+            goToLogin();
+        }
+    }
+    private void displayEnterPasswordDialog(FirebaseUser firebaseUser){
+        if(firebaseUser.getEmail()!=null){
+            showCustomDialog(R.layout.dialog_enter_password, false, new DialogConfigurator() {
+                @Override
+                public void configure(AlertDialog dialog, View dialogView) {
+                    EditText editTextPassword = dialogView.findViewById(R.id.editTextEnterPassword);
+                    Button btnCancel = dialogView.findViewById(R.id.btnCancelEnterPassword);
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    Button btnAccept=dialogView.findViewById(R.id.btnAcceptEnterPassword);
+                    btnAccept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String password = editTextPassword.getText().toString().trim();
+                            if (!password.isEmpty()) {
+                                dialog.dismiss();
+                                AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), password); //Debemos reautenticar el usuario
+                                firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        deleteUserInFirebase(firebaseUser);
+                                    } else {
+                                        ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
+                                    }
+                                });
+                            } else {
+                                ToastUtil.showToast(getApplicationContext(), getString(R.string.enter_password));
+                            }
+                        }
+                    });
+                }
+            });
+
+        }
+    }
+    private void deleteUserInFirebase(FirebaseUser firebaseUser){
+        firebaseUser.delete().addOnCompleteListener(task -> { //Eliminamos el usuario de Firebase
+            if (task.isSuccessful()) {
+                deleteUserData();
+                goToLogin();
+            } else {
+                ToastUtil.showToast(getApplicationContext(),getString(R.string.error_deleting_user));
+            }
+        });
+    }
+    private void deleteUserData(){
+        for(Team team:teamService.getAllTeams(user.getUserId())){ //Eliminamos sus equipos
+            teamService.removeTeam(user.getUserId(),team.getTeamId());
+        }
+        userDAO.deleteUser(user.getUserId()); //Lo eliminamos de la BD
+    }
+    private void goToLogin() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(EditUserActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Aseguramos limpiar el historial de actividade, sin permitir volver hacia atras
+        startActivity(intent);
+        finish();
     }
 }

@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -115,7 +114,6 @@ public class JSONExtractor {
         Type type=new Type();
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
-            int id = jsonObject.getInt("id");
             String name=jsonObject.getString("name");
             String sprite=jsonObject.getJSONObject("sprites").getJSONObject("generation-vi").getJSONObject("x-y").getString("name_icon"); //Se cogen los de gen6 porque estan todos menos stellar y unknown
             JSONObject damageRelations=jsonObject.getJSONObject("damage_relations");
@@ -148,7 +146,6 @@ public class JSONExtractor {
                         break;
                 }
             }
-            type.setId(id);
             type.setName(name);
             type.setSprite(sprite);
         } catch (Exception e) {

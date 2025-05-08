@@ -16,9 +16,37 @@
         android:textAlignment="center"
         android:textSize="50sp"
         android:textStyle="bold" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movesList"
+    <TextView
+        android:id="@+id/txtNoMovesForType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:visibility="gone"
+        android:text="@string/no_moves_for_type" />
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        tools:context=".ui.mainActivityFragments.pokedex.PokedexFragment">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movesList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnTypeFilterMoves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/search_type"
+            android:src="@drawable/fire"
+            app:backgroundTint="?attr/colorPrimary"
+            app:borderWidth="16dp"
+            app:elevation="16dp"
+            app:fabSize="normal" />
+    </RelativeLayout>
 </LinearLayout>

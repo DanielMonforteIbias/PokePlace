@@ -7,8 +7,13 @@
         android:title="@string/action_change_name"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_remove_team"
+        android:id="@+id/action_edit_team"
         android:orderInCategory="200"
+        android:title="@string/action_edit_team"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_remove_team"
+        android:orderInCategory="300"
         android:title="@string/action_remove_team"
         app:showAsAction="never" />
 </menu>

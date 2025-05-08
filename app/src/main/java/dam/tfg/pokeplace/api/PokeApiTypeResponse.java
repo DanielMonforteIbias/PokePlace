@@ -49,6 +49,7 @@ public class PokeApiTypeResponse {
                             public void onTypeReceived(Type type) {
                                 if (type != null) {
                                     typeList.add(type);
+                                    System.out.println("TIPO  RECIBIDO: "+type.getName());
                                 }
                                 if (restantes.decrementAndGet() == 0) {
                                     if(callback != null){

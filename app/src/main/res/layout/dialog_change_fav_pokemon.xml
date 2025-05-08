@@ -9,52 +9,59 @@
     android:padding="20dp"
     android:orientation="vertical">
     <TextView
-        android:id="@+id/txtAddPokemonToTeamTitle"
+        android:id="@+id/txtChangeFavPokemonTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choose_pokemon"
+        android:text="@string/choose_your_fav_pokemon"
         android:textAlignment="center"
         android:textSize="30sp"
         android:layout_marginBottom="20dp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/selectAddPokemonToTeamLayout"
+        android:id="@+id/selectFavPokemonLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imgAddPokemonToTeamPokemon"
+            android:id="@+id/imgSelectedFavPokemon"
             android:layout_width="75dp"
             android:layout_height="75dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <AutoCompleteTextView
-            android:id="@+id/autocompleteAddPokemonToTeam"
+            android:id="@+id/autocompleteFavPokemon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:hint="@string/name"
+            android:hint="@string/search_your_pokemon"
             android:inputType="text"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnClearFavPokemon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/clear_fav_pokemon" />
     <LinearLayout
-        android:id="@+id/buttonsDialogAddPokemonToTeam"
+        android:id="@+id/buttonsDialogChangeFavPokemon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="end"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/btnCancelAddPokemonToTeam"
+            android:id="@+id/btnCancelChangeFavPokemon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:text="@string/cancel" />
         <Button
-            android:id="@+id/btnAcceptAddPokemonToTeam"
+            android:id="@+id/btnAcceptChangeFavPokemon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/accept" />

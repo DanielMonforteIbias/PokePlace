@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_add_to_team"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="@string/action_add_to_team"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_mark_as_favorite"
+        android:orderInCategory="100"
+        android:title="@string/action_add_to_team"
+        android:icon="@drawable/staroff"
+        app:showAsAction="ifRoom" />
 </menu>

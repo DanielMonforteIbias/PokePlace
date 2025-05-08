@@ -66,7 +66,7 @@ public class PokeApiDetailsResponse {
             }
         });
     }
-    public static void getDescriptions(String speciesUrl,PokemonSpeciesCallback callback, Context context){
+    public static void getPokemonDetails(String speciesUrl, PokemonSpeciesCallback callback, Context context){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(speciesUrl).get().build();
         client.newCall(request).enqueue(new Callback() {
@@ -79,12 +79,12 @@ public class PokeApiDetailsResponse {
                 if (response.isSuccessful()) {
                     String datos = response.body().string();
                     List<Pair<String,String>> descriptions= JSONExtractor.extractDescriptions(datos);
-                    callback.onDescriptionsReceived(descriptions);
+                    callback.onDetailsReceived(descriptions);
                 }
                 else {
                     if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
                     System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
-                    callback.onDescriptionsReceived(null);
+                    callback.onDetailsReceived(null);
                 }
             }
         });
