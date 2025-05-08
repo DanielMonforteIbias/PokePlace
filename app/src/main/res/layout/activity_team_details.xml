@@ -33,15 +33,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:textAlignment="center"
         android:textSize="40sp"
         android:visibility="gone"
         android:text="@string/no_teams" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/teamPokemonList"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="8dp"
-        android:padding="8dp"
-        android:background="@drawable/dialog_background"/>
+        tools:context=".ui.mainActivityFragments.TeamsFragment">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/teamPokemonList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:padding="8dp"
+            android:background="@drawable/dialog_background"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddPokemonToTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/action_add_to_team"
+            android:src="@drawable/add"
+            app:backgroundTint="?attr/colorPrimary"
+            app:borderWidth="16dp"
+            app:elevation="16dp"
+            app:fabSize="normal" />
+    </RelativeLayout>
+
 
 </LinearLayout>

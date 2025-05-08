@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -27,8 +28,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +46,14 @@ import dam.tfg.pokeplace.adapters.PokemonSpinnerAdapter;
 import dam.tfg.pokeplace.adapters.TypeSpinnerAdapter;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
+import dam.tfg.pokeplace.data.dao.TeamDAO;
+import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.models.BasePokemon;
+import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.utils.BaseActivity;
@@ -56,7 +66,7 @@ public class EditUserActivity extends BaseActivity {
     private ActivityEditUserBinding binding;
     private User user;
     private UserDAO userDAO;
-    private BasePokemonDAO basePokemonDAO;
+    private TeamService teamService;
     private Uri cameraImageUri;
 
     private List<String> icons;
@@ -76,7 +86,7 @@ public class EditUserActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
-        basePokemonDAO=new BasePokemonDAO(this);
+        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
         Intent intent=getIntent();
         if(savedInstanceState!=null) user=savedInstanceState.getParcelable("User"); //Si estamos recreando la actividad cogemos el usuario, que puede tener alguna modificacion no guardada
         else{ //Si no, lo cogemos de la bd con el id recibido
@@ -140,6 +150,12 @@ public class EditUserActivity extends BaseActivity {
                 userDAO.updateUser(user);
                 setResult(RESULT_OK);
                 finish();
+            }
+        });
+        binding.btnDeleteUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayDeleteUserDialog();
             }
         });
         selectImageActivityLauncher=registerForActivityResult( //Cuando termine la actividad de seleccionar imagen
@@ -409,7 +425,7 @@ public class EditUserActivity extends BaseActivity {
                 AutoCompleteTextView autoCompleteTextView=dialogView.findViewById(R.id.autocompleteFavPokemon);
                 ImageView imgFavoritePokemon=dialogView.findViewById(R.id.imgSelectedFavPokemon);
                 if(user.getFavPokemon()!=null){
-                    String favPokemonSprite=basePokemonDAO.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
+                    String favPokemonSprite=teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
                     Glide.with(getApplicationContext()).load(favPokemonSprite).into(imgFavoritePokemon);
                 }
                 else Glide.with(getApplicationContext()).load(R.drawable.not_set).into(imgFavoritePokemon);
@@ -457,6 +473,41 @@ public class EditUserActivity extends BaseActivity {
             }
         });
     }
+    private void displayDeleteUserDialog(){
+        showCustomDialog(R.layout.dialog_delete_user, false, new DialogConfigurator() {
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelDeleteUser);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptDeleteUser);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        showCustomDialog(R.layout.dialog_delete_user, false, new DialogConfigurator() {
+                            @Override
+                            public void configure(AlertDialog dialog2, View dialogView2) {
+                                TextView message = dialogView2.findViewById(R.id.txtDeleteUserTitle);
+                                message.setText(getString(R.string.delete_user_warning2));
+                                Button btnCancel2 = dialogView2.findViewById(R.id.btnCancelDeleteUser);
+                                Button btnAccept2 = dialogView2.findViewById(R.id.btnAcceptDeleteUser);
+                                btnCancel2.setOnClickListener(v2 -> dialog2.dismiss());
+                                btnAccept2.setOnClickListener(v2 -> {
+                                    dialog2.dismiss();
+                                    deleteUser();
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     private void updateUserUI(){
         binding.txtNameEdit.setText(user.getName());
@@ -483,7 +534,7 @@ public class EditUserActivity extends BaseActivity {
         else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavTypeEdit);
 
         if(user.getFavPokemon()!=null){
-            String sprite= basePokemonDAO.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
+            String sprite= teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
             Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavPokemonEdit);
         }
         else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavPokemonEdit);
@@ -495,5 +546,89 @@ public class EditUserActivity extends BaseActivity {
         for (int i = 1; i <= totalIcons; i++) {
             icons.add("icon"+i); //Todos se llaman icon+numero
         }
+    }
+    private void deleteUser(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            if (firebaseUser.getProviderData().get(1).getProviderId().equals(EmailAuthProvider.PROVIDER_ID)) { //Si el usuario es de email y password
+                displayEnterPasswordDialog(firebaseUser);
+            } else if (firebaseUser.getProviderData().get(1).getProviderId().equals(GoogleAuthProvider.PROVIDER_ID)){
+                GoogleSignInAccount googleAccount = GoogleSignIn.getLastSignedInAccount(this);
+                if (googleAccount != null) {
+                    AuthCredential credential = GoogleAuthProvider.getCredential(googleAccount.getIdToken(), null);
+                    firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            deleteUserInFirebase(firebaseUser);
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
+                        }
+                    });
+                }
+            }
+        } else {
+            goToLogin();
+        }
+    }
+    private void displayEnterPasswordDialog(FirebaseUser firebaseUser){
+        if(firebaseUser.getEmail()!=null){
+            showCustomDialog(R.layout.dialog_enter_password, false, new DialogConfigurator() {
+                @Override
+                public void configure(AlertDialog dialog, View dialogView) {
+                    EditText editTextPassword = dialogView.findViewById(R.id.editTextEnterPassword);
+                    Button btnCancel = dialogView.findViewById(R.id.btnCancelEnterPassword);
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    Button btnAccept=dialogView.findViewById(R.id.btnAcceptEnterPassword);
+                    btnAccept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String password = editTextPassword.getText().toString().trim();
+                            if (!password.isEmpty()) {
+                                dialog.dismiss();
+                                AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), password); //Debemos reautenticar el usuario
+                                firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        deleteUserInFirebase(firebaseUser);
+                                    } else {
+                                        ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
+                                    }
+                                });
+                            } else {
+                                ToastUtil.showToast(getApplicationContext(), getString(R.string.enter_password));
+                            }
+
+                        }
+                    });
+                }
+            });
+
+        }
+    }
+    private void deleteUserInFirebase(FirebaseUser firebaseUser){
+        firebaseUser.delete().addOnCompleteListener(task -> { //Eliminamos el usuario de Firebase
+            if (task.isSuccessful()) {
+                deleteUserData();
+                goToLogin();
+            } else {
+                ToastUtil.showToast(getApplicationContext(),getString(R.string.error_deleting_user));
+            }
+        });
+    }
+    private void deleteUserData(){
+        for(Team team:teamService.getAllTeams(user.getUserId())){ //Eliminamos sus equipos
+            teamService.removeTeam(user.getUserId(),team.getTeamId());
+        }
+        userDAO.deleteUser(user.getUserId()); //Lo eliminamos de la BD
+    }
+    private void goToLogin() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(EditUserActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Aseguramos limpiar el historial de actividade, sin permitir volver hacia atras
+        startActivity(intent);
+        finish();
     }
 }

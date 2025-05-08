@@ -27,6 +27,7 @@ import dam.tfg.pokeplace.MainActivity;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.TeamDetailsActivity;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
@@ -51,7 +52,7 @@ public class TeamsFragment extends Fragment {
         binding = FragmentTeamsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         userDAO=new UserDAO(getContext());
-        teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()));
+        teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()),new BasePokemonDAO(getContext()));
         userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
         teams=teamService.getAllTeams(userId);
         teamDetailsActivityLauncher=registerForActivityResult(

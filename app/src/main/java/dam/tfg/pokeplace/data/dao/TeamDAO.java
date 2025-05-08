@@ -36,7 +36,7 @@ public class TeamDAO {
     }
     public void removeTeam(String userId, int teamId){
         String condition = DatabaseHelper.TEAM_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?"; //Condicion para el borrado
-        String conditionArgs[] = { userId, String.valueOf(teamId) }; //Ponemos los parámetros recibidos en los ? de la condicion anterior
+        String[] conditionArgs = { userId, String.valueOf(teamId) }; //Ponemos los parámetros recibidos en los ? de la condicion anterior
         db.delete(DatabaseHelper.TEAMS_TABLE_NAME, condition,conditionArgs);
     }
 

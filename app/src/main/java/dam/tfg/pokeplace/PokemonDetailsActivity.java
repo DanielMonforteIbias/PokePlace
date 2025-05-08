@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
@@ -72,7 +73,7 @@ public class PokemonDetailsActivity extends BaseActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         userDAO=new UserDAO(this);
-        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()));
+        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()), new BasePokemonDAO(getApplicationContext()));
         user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
         teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
 
@@ -85,7 +86,7 @@ public class PokemonDetailsActivity extends BaseActivity {
     }
 
     private void displayAddPokemonToTeamDialog(List<Team>userTeams){
-        showCustomDialog(R.layout.dialog_add_pokemon_to_team, false, new DialogConfigurator() {
+        showCustomDialog(R.layout.dialog_add_pokemon_to_team_list, false, new DialogConfigurator() {
             @Override
             public void configure(AlertDialog dialog, View dialogView) {
                 Button btnCancel = dialogView.findViewById(R.id.btnCancelAddToTeam);
@@ -121,7 +122,7 @@ public class PokemonDetailsActivity extends BaseActivity {
             teamPokemon.setPokedexNumber(pokemon.getPokedexNumber());
             teamPokemon.setCustomName(pokemon.getName()); //El nombre por defecto es el mismo nombre del Pokemon
             teamPokemon.setCustomSprite(pokemon.getSprites().get(currentSpriteIndex)); //El sprite por defecto es el que esté viendo el usuario
-            teamService.addTeamPokemon(teamPokemon);
+            long addedPokemonId=teamService.addTeamPokemon(teamPokemon);
             return true;
         } else {
             return false;

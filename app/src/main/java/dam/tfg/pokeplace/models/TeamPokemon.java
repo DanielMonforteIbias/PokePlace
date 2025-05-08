@@ -90,6 +90,13 @@ public class TeamPokemon extends BasePokemon implements Parcelable {
         this.customSprite = customSprite;
     }
 
+    public void completeBaseData(BasePokemon base) {
+        this.setName(base.getName());
+        this.setSprite(base.getSprite());
+        this.setUrl(base.getUrl());
+        this.setType1(base.getType1());
+        this.setType2(base.getType2());
+    }
     @Override
     public int describeContents() {
         return 0;

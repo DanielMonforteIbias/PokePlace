@@ -19,6 +19,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/btnDeleteUser"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="4dp"
+                android:layout_gravity="end"
+                app:srcCompat="@drawable/delete" />
+
             <LinearLayout
                 android:id="@+id/userInfoEditLayout"
                 android:layout_width="match_parent"

@@ -25,6 +25,11 @@ public class UserDAO {
         values.put(DatabaseHelper.USER_IMAGE_COLUMN, user.getImage());
         db.insert(DatabaseHelper.USERS_TABLE_NAME, null, values);
     }
+    public void deleteUser(String userId) {
+        String condition = DatabaseHelper.USER_ID_COLUMN+"=?";
+        String[] conditionArgs = {userId};
+        db.delete(DatabaseHelper.USERS_TABLE_NAME, condition,conditionArgs);
+    }
     public void updateUser(User user){
         values = new ContentValues();
         values.put(DatabaseHelper.USER_NAME_COLUMN, user.getName());

@@ -100,6 +100,7 @@
     <string name="team_removed">deleted</string>
     <string name="error_add_to_team">Error adding Pokémon to team</string>
     <string name="no_pokemons_in_team">There are no Pókemon in %1$s</string>
+    <string name="choose_pokemon">Choose a Pokémon</string>
 
     <!--Calculadora tipos-->
     <string name="type_calculator">Type Calculator</string>
@@ -155,6 +156,12 @@
     <string name="clear_fav_pokemon">Clear favorite Pokemon</string>
     <string name="marked_as_fav">%1$s set as favorite</string>
     <string name="removed_from_favorite">%1$s removed from favorite</string>
+    <string name="delete_user_warning">Are you sure do you want to delete your user?</string>
+    <string name="delete_user_warning2">This action can not be undone. All your profile information and teams will be lost. Do you want to continue?</string>
+    <string name="user_deleted">User deleted successfully</string>
+    <string name="error_deleting_user">Error deleting user</string>
+    <string name="error_reauth">Error reauthenticating, cannot delete user</string>
+    <string name="enter_password">Enter your password</string>
     <!--Permissions-->
     <string name="storage_permission_denied">Storage permissions denied</string>
     <string name="camera_permission_denied">Camera permissions denied</string>
