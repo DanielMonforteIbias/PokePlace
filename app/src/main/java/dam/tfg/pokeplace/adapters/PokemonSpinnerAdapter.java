@@ -48,8 +48,10 @@ public class PokemonSpinnerAdapter extends ArrayAdapter<BasePokemon> {
         BasePokemon pokemon= getItem(position);
         ImageView imageView = view.findViewById(R.id.imgPokemonSpinner);
         TextView textView=view.findViewById(R.id.txtPokemonNameSpinner);
-        Glide.with(context).load(pokemon.getSprite()).into(imageView);
-        textView.setText(StringFormatter.formatName(pokemon.getName()));
+        if(pokemon!=null){
+            Glide.with(context).load(pokemon.getSprite()).into(imageView);
+            textView.setText(StringFormatter.formatName(pokemon.getName()));
+        }
         return view;
     }
 

@@ -91,20 +91,22 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_pokedex, menu);
                 SearchView searchView = (SearchView) menu.findItem(R.id.action_search_name).getActionView();
-                searchView.setQueryHint(getString(R.string.search_name));
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
+                if(searchView!=null){
+                    searchView.setQueryHint(getString(R.string.search_name));
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        currentNameFilter =newText;
-                        filterList(currentNameFilter,currentTypeFilter);
-                        return true;
-                    }
-                });
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            currentNameFilter =newText;
+                            filterList(currentNameFilter,currentTypeFilter);
+                            return true;
+                        }
+                    });
+                }
             }
 
             @Override
@@ -200,7 +202,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     private void filterList(String nameFilter, String typeFilter) {
         filteredList.clear();
         for (BasePokemon p : data.getPokemonList()) {
-            boolean nameMatches = p.getName().toLowerCase().contains(nameFilter.toLowerCase());
+            boolean nameMatches = p.getName().toLowerCase().contains(nameFilter.trim().toLowerCase());
             String type1=p.getType1();
             String type2=p.getType2();
             boolean noTypeFilter=typeFilter == null || typeFilter.isEmpty() || typeFilter.equals(getString(R.string.all_types));

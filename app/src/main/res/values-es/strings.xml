@@ -20,6 +20,7 @@
     <string name="action_add_to_team">Añadir al equipo</string>
     <string name="action_credits">Créditos</string>
     <string name="action_remove_team">Eliminar equipo</string>
+    <string name="action_edit_team">Editar equipo</string>
     <string name="action_change_name">Cambiar nombre</string>
 
     <!--Acciones-->
@@ -99,6 +100,8 @@
     <string name="error_add_to_team">Error al añadir Pokémon al equipo</string>
     <string name="no_pokemons_in_team">No hay Pokémon en %1$s</string>
     <string name="choose_pokemon">Elige un Pokémon</string>
+    <string name="delete_pokemon_warning">¿Seguro que quieres eliminar a %1$s?</string>
+    <string name="enter_new_nam_for">introduce un nuevo nombre para %1$s</string>
 
     <!--Calculadora tipos-->
     <string name="type_calculator">Calculadora de tipos</string>

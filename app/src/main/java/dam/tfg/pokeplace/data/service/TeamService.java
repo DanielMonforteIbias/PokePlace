@@ -68,4 +68,10 @@ public class TeamService {
     public long addTeamPokemon(TeamPokemon pokemon) {
         return teamPokemonDAO.addTeamPokemon(pokemon);
     }
+    public void updateTeamPokemon(TeamPokemon pokemon){
+        teamPokemonDAO.updateTeamPokemon(pokemon);
+    }
+    public void removeTeamPokemon(int pokemonId){
+        teamPokemonDAO.removeTeamPokemon(pokemonId);
+    }
 }

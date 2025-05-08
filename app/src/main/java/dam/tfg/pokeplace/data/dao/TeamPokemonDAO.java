@@ -53,4 +53,16 @@ public class TeamPokemonDAO {
         cursor.close(); //Cerramos el cursor
         return teamSize;
     }
+    public void updateTeamPokemon(TeamPokemon teamPokemon){
+        values = new ContentValues();
+        values.put(DatabaseHelper.TEAM_POKEMON_CUSTOM_NAME_COLUMN, teamPokemon.getCustomName());
+        String where=DatabaseHelper.TEAM_POKEMON_ID_COLUMN+"=?";
+        db.update(DatabaseHelper.TEAM_POKEMON_TABLE_NAME,values,where,new String[]{String.valueOf(teamPokemon.getId())});
+        System.out.println("Actualizado "+teamPokemon.getName()+" a "+teamPokemon.getCustomName()+", con id "+teamPokemon.getId());
+    }
+    public void removeTeamPokemon(int pokemonId){
+        String condition = DatabaseHelper.TEAM_POKEMON_ID_COLUMN+"=?";
+        String[] conditionArgs = {String.valueOf(pokemonId)};
+        db.delete(DatabaseHelper.TEAM_POKEMON_TABLE_NAME, condition,conditionArgs);
+    }
 }

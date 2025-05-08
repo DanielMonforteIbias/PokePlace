@@ -22,8 +22,9 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:paddingTop="8dp">
 
@@ -63,6 +64,27 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitStart"
                 tools:srcCompat="@tools:sample/avatars" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/teamPokemonButtonsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/teamPokemonRename"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/edit" />
+
+            <ImageView
+                android:id="@+id/teamPokemonDelete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/delete" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

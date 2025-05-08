@@ -474,28 +474,28 @@ public class EditUserActivity extends BaseActivity {
         });
     }
     private void displayDeleteUserDialog(){
-        showCustomDialog(R.layout.dialog_delete_user, false, new DialogConfigurator() {
+        showCustomDialog(R.layout.dialog_delete, false, new DialogConfigurator() {
             @Override
             public void configure(AlertDialog dialog, View dialogView) {
-                Button btnCancel = dialogView.findViewById(R.id.btnCancelDeleteUser);
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelDelete);
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
                     }
                 });
-                Button btnAccept=dialogView.findViewById(R.id.btnAcceptDeleteUser);
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptDelete);
                 btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        showCustomDialog(R.layout.dialog_delete_user, false, new DialogConfigurator() {
+                        showCustomDialog(R.layout.dialog_delete, false, new DialogConfigurator() {
                             @Override
                             public void configure(AlertDialog dialog2, View dialogView2) {
-                                TextView message = dialogView2.findViewById(R.id.txtDeleteUserTitle);
+                                TextView message = dialogView2.findViewById(R.id.txtDeleteTitle);
                                 message.setText(getString(R.string.delete_user_warning2));
-                                Button btnCancel2 = dialogView2.findViewById(R.id.btnCancelDeleteUser);
-                                Button btnAccept2 = dialogView2.findViewById(R.id.btnAcceptDeleteUser);
+                                Button btnCancel2 = dialogView2.findViewById(R.id.btnCancelDelete);
+                                Button btnAccept2 = dialogView2.findViewById(R.id.btnAcceptDelete);
                                 btnCancel2.setOnClickListener(v2 -> dialog2.dismiss());
                                 btnAccept2.setOnClickListener(v2 -> {
                                     dialog2.dismiss();
@@ -600,7 +600,6 @@ public class EditUserActivity extends BaseActivity {
                             } else {
                                 ToastUtil.showToast(getApplicationContext(), getString(R.string.enter_password));
                             }
-
                         }
                     });
                 }

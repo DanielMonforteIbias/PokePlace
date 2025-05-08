@@ -36,7 +36,7 @@ public class UserDAO {
         values.put(DatabaseHelper.USER_IMAGE_COLUMN,user.getImage());
         values.put(DatabaseHelper.USER_FAV_TYPE,user.getFavType());
         values.put(DatabaseHelper.USER_FAV_POKEMON,user.getFavPokemon());
-        String where="userId=?";
+        String where=DatabaseHelper.USER_ID_COLUMN+"=?";
         db.update(DatabaseHelper.USERS_TABLE_NAME,values,where,new String[]{user.getUserId()});
     }
     public boolean userExists(String userId){

@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
+import dam.tfg.pokeplace.interfaces.OnTeamPokemonActionListener;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
@@ -70,7 +72,19 @@ public class TeamDetailsActivity extends BaseActivity {
         Intent intent=getIntent();
         team=intent.getParcelableExtra("Team");
         teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
-        adapter=new TeamPokemonAdapter(team.getTeamMembers());
+        adapter=new TeamPokemonAdapter(team.getTeamMembers(), new OnTeamPokemonActionListener() {
+            @Override
+            public void onRenameClick(TeamPokemon pokemon) {
+                int position = team.getTeamMembers().indexOf(pokemon); //Necesitaremos la posicion para actualizar el item en el RecyclerView
+                if (position != -1) displayChangePokemonNameDialog(pokemon, position);
+            }
+
+            @Override
+            public void onDeleteClick(TeamPokemon pokemon) {
+                int position = team.getTeamMembers().indexOf(pokemon);
+                if (position != -1) displayDeletePokemonDialog(pokemon,position);
+            }
+        });
         binding.teamPokemonList.setLayoutManager(new GridLayoutManager(getApplicationContext(),1));
         binding.teamPokemonList.setAdapter(adapter);
         binding.btnAddPokemonToTeam.setOnClickListener(new View.OnClickListener() {
@@ -91,9 +105,12 @@ public class TeamDetailsActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_change_name){
-            displayModifyTeamDialog();
-        }else if (id==R.id.action_remove_team){
+        if (id==R.id.action_change_name){
+            displayChangeTeamNameDialog();
+        }else if (id==R.id.action_edit_team){
+            adapter.setEditing(!adapter.isEditing());
+        }
+        else if (id==R.id.action_remove_team){
             displayRemoveTeamDialog();
         }
         else if (item.getItemId() == android.R.id.home) { //La flecha hacia atrás de la barra de arriba
@@ -103,8 +120,8 @@ public class TeamDetailsActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void displayModifyTeamDialog(){
-        showCustomDialog(R.layout.dialog_create_team, false, new DialogConfigurator() {
+    private void displayChangeTeamNameDialog(){
+        showCustomDialog(R.layout.dialog_create_team, false, new DialogConfigurator() { //Reusamos el diálogo de crear equipo
             @Override
             public void configure(AlertDialog dialog, View dialogView) {
                 EditText input = dialogView.findViewById(R.id.editTextTeamName);
@@ -160,6 +177,66 @@ public class TeamDetailsActivity extends BaseActivity {
             }
         });
     }
+    private void displayChangePokemonNameDialog(TeamPokemon pokemon, int position){
+        showCustomDialog(R.layout.dialog_change_name, false, new DialogConfigurator() { //Reusamos el diálogo de cambiar nombre de usuario
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                TextView textViewChangeNameTitle=dialogView.findViewById(R.id.txtChangeNameTitle);
+                textViewChangeNameTitle.setText(getString(R.string.enter_new_nam_for,pokemon.getCustomName()));
+                EditText input = dialogView.findViewById(R.id.editTextChangeName);
+                input.setText(pokemon.getCustomName());
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeName);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeName);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String newName = input.getText().toString().trim();
+                        if (!newName.isEmpty()) {
+                            dialog.dismiss();
+                            pokemon.setCustomName(newName);
+                            teamService.updateTeamPokemon(pokemon);
+                            adapter.notifyItemChanged(position);
+                        } else {
+                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
+                        }
+                    }
+                });
+            }
+        });
+    }
+    private void displayDeletePokemonDialog(TeamPokemon pokemon, int position){
+        showCustomDialog(R.layout.dialog_delete, false, new DialogConfigurator() { //Reusamos el diálogo de borrar usuario
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                TextView textViewDeleteTitle=dialogView.findViewById(R.id.txtDeleteTitle);
+                textViewDeleteTitle.setText(getString(R.string.delete_pokemon_warning,pokemon.getCustomName()));
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelDelete);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptDelete);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        team.getTeamMembers().remove(position);
+                        teamService.removeTeamPokemon(pokemon.getId());
+                        adapter.notifyItemRemoved(position);
+                    }
+                });
+            }
+        });
+    }
+
     private void displayAddToTeamDialog(){
         showCustomDialog(R.layout.dialog_add_pokemon_to_team, false, new DialogConfigurator() {
             @Override
