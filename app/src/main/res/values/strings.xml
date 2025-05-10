@@ -185,4 +185,7 @@
     <string name="app_language">App language</string>
     <!--Descriptions-->
     <string name="sprite">Sprite</string>
+
+    <!--Firestore-->
+    <string name="users_collection_name" translatable="false">users</string>
 </resources>

@@ -38,6 +38,7 @@ import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.sync.UserSync;
 import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.StringFormatter;
@@ -51,6 +52,7 @@ public class PokemonDetailsActivity extends BaseActivity {
     private int teamSizeLimit;
 
     private UserDAO userDAO;
+    private UserSync userSync;
     public static User user;
     private TeamService teamService;
 
@@ -73,6 +75,7 @@ public class PokemonDetailsActivity extends BaseActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         userDAO=new UserDAO(this);
+        userSync=new UserSync();
         teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()), new BasePokemonDAO(getApplicationContext()));
         user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
         teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
@@ -167,6 +170,7 @@ public class PokemonDetailsActivity extends BaseActivity {
                 ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.marked_as_fav,StringFormatter.formatName(pokemon.getName())));
             }
             userDAO.updateUser(user); //Ponemos el cambio en la base de datos
+            userSync.updateUser(user); //En Firestore tambien
         }
         return super.onOptionsItemSelected(item);
     }

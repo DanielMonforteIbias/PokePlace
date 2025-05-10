@@ -28,6 +28,7 @@ palette = "1.0.0"
 playServicesAuth = "21.3.0"
 viewpager2 = "1.1.0"
 preference = "1.2.1"
+firebaseFirestore = "25.1.4"
 
 [libraries]
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
@@ -57,6 +58,7 @@ palette = { module = "androidx.palette:palette", version.ref = "palette" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

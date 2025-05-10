@@ -30,11 +30,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,7 @@ import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.sync.UserSync;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.DownloadUrlImage;
 import dam.tfg.pokeplace.utils.FilesUtils;
@@ -66,6 +70,7 @@ public class EditUserActivity extends BaseActivity {
     private ActivityEditUserBinding binding;
     private User user;
     private UserDAO userDAO;
+    private UserSync userSync;
     private TeamService teamService;
     private Uri cameraImageUri;
 
@@ -86,6 +91,7 @@ public class EditUserActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
+        userSync=new UserSync();
         teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
         Intent intent=getIntent();
         if(savedInstanceState!=null) user=savedInstanceState.getParcelable("User"); //Si estamos recreando la actividad cogemos el usuario, que puede tener alguna modificacion no guardada
@@ -148,6 +154,7 @@ public class EditUserActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 userDAO.updateUser(user);
+                userSync.updateUser(user);
                 setResult(RESULT_OK);
                 finish();
             }
@@ -385,6 +392,7 @@ public class EditUserActivity extends BaseActivity {
                 typesSpinner.setAdapter(typeAdapter);
                 List<String>typeNames=types.stream().map(Type::getName).collect(Collectors.toList());
                 int selectedIndex=(user.getFavType()!=null)?typeNames.indexOf(user.getFavType()):0;
+                if(selectedIndex==-1)selectedIndex=0; //Si es -1 porque no se ha encontrado el tipo, lo ponemos a 0
                 typesSpinner.setSelection(selectedIndex);
                 Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeFavType);
                 btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -427,8 +435,9 @@ public class EditUserActivity extends BaseActivity {
                 AutoCompleteTextView autoCompleteTextView=dialogView.findViewById(R.id.autocompleteFavPokemon);
                 ImageView imgFavoritePokemon=dialogView.findViewById(R.id.imgSelectedFavPokemon);
                 if(user.getFavPokemon()!=null){
-                    String favPokemonSprite=teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
-                    Glide.with(getApplicationContext()).load(favPokemonSprite).into(imgFavoritePokemon);
+                    BasePokemon favPokemon=teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon()));
+                    if(favPokemon!=null)Glide.with(getApplicationContext()).load(favPokemon.getSprite()).into(imgFavoritePokemon);
+                    else Glide.with(getApplicationContext()).load(R.drawable.not_set).into(imgFavoritePokemon);
                 }
                 else Glide.with(getApplicationContext()).load(R.drawable.not_set).into(imgFavoritePokemon);
                 PokemonSpinnerAdapter pokemonAdapter=new PokemonSpinnerAdapter(pokemonList,getApplicationContext());
@@ -531,14 +540,16 @@ public class EditUserActivity extends BaseActivity {
         }
         else Glide.with(this).load(R.drawable.icon1).into(binding.imgUserEdit);
         if(user.getFavType()!=null){
-            String sprite= Data.getInstance().getTypeByName(user.getFavType()).getSprite();
-            Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavTypeEdit);
+            Type type=Data.getInstance().getTypeByName(user.getFavType());
+            if(type!=null) Glide.with(EditUserActivity.this).load(type.getSprite()).into(binding.imgFavTypeEdit);
+            else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavTypeEdit); //Puede ser nulo trajimos el favorito de Firestore y aun no ha cargado de la API el Pokemon
         }
         else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavTypeEdit);
 
         if(user.getFavPokemon()!=null){
-            String sprite= teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon())).getSprite();
-            Glide.with(EditUserActivity.this).load(sprite).into(binding.imgFavPokemonEdit);
+            BasePokemon basePokemon= teamService.getBasePokemon(Integer.parseInt(user.getFavPokemon()));
+            if(basePokemon!=null) Glide.with(EditUserActivity.this).load(basePokemon.getSprite()).into(binding.imgFavPokemonEdit); //Puede ser nulo trajimos el favorito de Firestore y aun no ha cargado de la API el Pokemon
+            else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavPokemonEdit);
         }
         else Glide.with(EditUserActivity.this).load(R.drawable.not_set).into(binding.imgFavPokemonEdit);
     }
@@ -561,7 +572,7 @@ public class EditUserActivity extends BaseActivity {
                     AuthCredential credential = GoogleAuthProvider.getCredential(googleAccount.getIdToken(), null);
                     firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            deleteUserInFirebase(firebaseUser);
+                            deleteUser(firebaseUser);
                         } else {
                             ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
                         }
@@ -595,7 +606,7 @@ public class EditUserActivity extends BaseActivity {
                                 AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), password); //Debemos reautenticar el usuario
                                 firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
-                                        deleteUserInFirebase(firebaseUser);
+                                        deleteUser(firebaseUser);
                                     } else {
                                         ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
                                     }
@@ -610,21 +621,41 @@ public class EditUserActivity extends BaseActivity {
 
         }
     }
-    private void deleteUserInFirebase(FirebaseUser firebaseUser){
-        firebaseUser.delete().addOnCompleteListener(task -> { //Eliminamos el usuario de Firebase
+    private void deleteUser(FirebaseUser firebaseUser){
+        //Backup por si falla
+        User userBackup = new User(user.getUserId(), user.getEmail(), user.getName(), user.getImage());
+        userBackup.setFavType(user.getFavType());
+        userBackup.setFavPokemon(user.getFavPokemon());
+        deleteUserData(); //Borramos primero los datos en local y firestore, pues si borramos primero el usuario de firebase fallará la eliminacion de datos de firestore porque ya no existe
+        firebaseUser.delete().addOnCompleteListener(task -> { //Por ultimo, eliminamos el usuario de Firebase
             if (task.isSuccessful()) {
-                deleteUserData();
                 goToLogin();
-            } else {
+            } else { //Si falla, restauramos los datos
                 ToastUtil.showToast(getApplicationContext(),getString(R.string.error_deleting_user));
+                restoreUserData(userBackup);
             }
         });
     }
+
     private void deleteUserData(){
         for(Team team:teamService.getAllTeams(user.getUserId())){ //Eliminamos sus equipos
             teamService.removeTeam(user.getUserId(),team.getTeamId());
         }
         userDAO.deleteUser(user.getUserId()); //Lo eliminamos de la BD
+        userSync.deleteUser(user.getUserId()); //De Firestore tambien
+    }
+    private void restoreUserData(User userBackup) {
+        //Restauramos los datos tanto en local como en Firestore, solo si se habían borrado
+        if (!userDAO.userExists(userBackup.getUserId())) userDAO.addUser(userBackup);
+        userSync.userExists(userBackup.getUserId(), new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (!document.exists()) userSync.addUser(userBackup);
+                }
+            }
+        });
     }
     private void goToLogin() {
         FirebaseAuth.getInstance().signOut();

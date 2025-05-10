@@ -1,5 +1,6 @@
 package dam.tfg.pokeplace;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -30,10 +31,13 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.sync.FirestorePaths;
+import dam.tfg.pokeplace.sync.UserSync;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
@@ -41,13 +45,13 @@ public class LoginActivity extends BaseActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-    private BeginSignInRequest signInRequest;
     private GoogleSignInOptions gOptions;
     private GoogleSignInClient gClient;
     private ActivityLoginBinding binding;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private UserDAO userDAO;
+    private UserSync userSync;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,16 +63,13 @@ public class LoginActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
+        userSync=new UserSync();
         auth = FirebaseAuth.getInstance();
         if(checkLoginStatus()){
-            iniciarSesion();
+            binding.main.setVisibility(View.GONE);
+            login();
         }
-        //Sincronizar con Firebase
-        signInRequest = BeginSignInRequest.builder().setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder().setSupported(true)
-                        // Your server's client ID, not your Android client ID.
-                        .setServerClientId(getString(R.string.default_web_client_id))
-                        // Only show accounts previously used to sign in.
-                        .setFilterByAuthorizedAccounts(true).build()).build();
+
         gOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         gClient = GoogleSignIn.getClient(this, gOptions);
         binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +97,7 @@ public class LoginActivity extends BaseActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) { //Al completar la tarea
                                             if (task.isSuccessful()) { //Si ha sido exitosa
-                                                iniciarSesion();
+                                                login();
                                             }
                                         }
                                     });
@@ -115,15 +116,15 @@ public class LoginActivity extends BaseActivity {
                 String email=binding.editTextEmail.getText().toString();
                 String password=binding.editTextPassword.getText().toString();
                 boolean registroValido=true;
-                if(email.equals("")){
+                if(email.isEmpty()){
                     registroValido=false;
                     showToast(getString(R.string.error_empty_email));
                 }
-                else if (!correoValido(email)){
+                else if (!validEmail(email)){
                     registroValido=false;
                     showToast(getString(R.string.error_email));
                 }
-                if(password.equals("")){
+                if(password.isEmpty()){
                     registroValido=false;
                     showToast(getString(R.string.error_empty_password));
                 }
@@ -139,7 +140,6 @@ public class LoginActivity extends BaseActivity {
                                 showToast(getString(R.string.successful_register));
                             }
                             else{
-                                System.out.println(task.getException());
                                 if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_register_email));
                                 else if(task.getException() instanceof FirebaseAuthUserCollisionException) showToast(getString(R.string.error_register_exists));
                                 else showToast(getString(R.string.error_register));
@@ -157,15 +157,15 @@ public class LoginActivity extends BaseActivity {
                 String email=binding.editTextEmail.getText().toString();
                 String password=binding.editTextPassword.getText().toString();
                 boolean loginValido=true;
-                if(email.equals("")){
+                if(email.isEmpty()){
                     loginValido=false;
                     showToast(getString(R.string.error_empty_email));
                 }
-                else if (!correoValido(email)){
+                else if (!validEmail(email)){
                     loginValido=false;
                     showToast(getString(R.string.error_email));
                 }
-                if(password.equals("")){
+                if(password.isEmpty()){
                     loginValido=false;
                     showToast(getString(R.string.error_empty_password));
                 }
@@ -174,10 +174,9 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                iniciarSesion();
+                                login();
                             }
                             else{
-                                System.out.println(task.getException());
                                 if(task.getException() instanceof FirebaseAuthInvalidCredentialsException) showToast(getString(R.string.error_login_credentials));
                             }
                         }
@@ -185,6 +184,7 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
+
     }
 
     private boolean checkLoginStatus() {
@@ -192,19 +192,51 @@ public class LoginActivity extends BaseActivity {
         return currentUser != null; //Devuelve true si hay cuenta, es decir, si no es null, y false si es null
     }
 
-    private void iniciarSesion(){
+    private void login(){
         user = auth.getCurrentUser();
-        if(!userDAO.userExists(user.getUid())) { //Si el usuario no existe en la base de datos
+        if(user!=null){
             String name= (user.getDisplayName()!=null)?user.getDisplayName():getString(R.string.default_name);
             String image= (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : getString(R.string.default_image);
-            userDAO.addUser(new User(user.getUid(),user.getEmail(),name,image));
+            User newUser=new User(user.getUid(),user.getEmail(),name,image);
+            userSync.userExists(user.getUid(), new OnCompleteListener<DocumentSnapshot>() { //Comprobamos que existe en Firestore
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {//Si existe en firestore, lo traemos a local
+                            String remoteUserId=document.getString(FirestorePaths.USER_ID);
+                            String remoteUserEmail=document.getString(FirestorePaths.USER_EMAIL);
+                            String remoteUserName=document.getString(FirestorePaths.USER_NAME);
+                            String remoteUserImage=document.getString(FirestorePaths.USER_IMAGE);
+                            String remoteUserFavType=document.getString(FirestorePaths.USER_FAV_TYPE);
+                            String remoteUserFavPokemon=document.getString(FirestorePaths.USER_FAV_POKEMON);
+                            User remoteUser=new User(remoteUserId,remoteUserEmail,remoteUserName,remoteUserImage);
+                            remoteUser.setFavType(remoteUserFavType);
+                            remoteUser.setFavPokemon(remoteUserFavPokemon);
+                            if(!userDAO.userExists(remoteUserId)) userDAO.addUser(remoteUser);
+                            else userDAO.updateUser(remoteUser); //Si existe, lo actualizamos con los datos remotos, por si hicimos cambios en otro dispositivo mientras ya estábamos en este, para poder verlos aqui tambien
+                        }
+                        else{ //Si no existe, lo añadimos a Firestore y a la bd local si tampoco existe
+                            userSync.addUser(newUser);
+                            if(!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
+                        }
+                    }
+                    else{ //Si no se puede completar la tarea, por lo menos lo metemos en la bd local si no estaba
+                        if(!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
+                    }
+                    openMainActivity(); //Una vez termine la sincronizacion abrimos la MainActivity
+                }
+            });
         }
+        else showToast(getString(R.string.error_login));
+    }
+    public void openMainActivity(){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
-    public boolean correoValido(String correo){
-        return Patterns.EMAIL_ADDRESS.matcher(correo).matches(); //Devolvemos el resultado de si el correo concuerda con el patrón o no
+    public boolean validEmail(String email){
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches(); //Devolvemos el resultado de si el correo concuerda con el patrón o no
     }
 
     private void showToast(String s){
