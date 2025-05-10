@@ -286,14 +286,9 @@ public class TeamDetailsActivity extends BaseActivity {
                         if (selectedPokemon!=null) {
                             String pokemonName=autoCompleteTextView.getText().toString(); //El nombre personalizado del Pokemon será lo escrito en el campo. Generalmente su nombre, pero esto da la opcion de cambiar lo escrito una vez seleccionado para personalizarlo
                             if(!pokemonName.isEmpty()){
-                                TeamPokemon teamPokemon=new TeamPokemon();
-                                teamPokemon.setUserId(user.getUserId());
-                                teamPokemon.setTeamId(team.getTeamId());
+                                TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),user.getUserId(),team.getTeamId(),pokemonName,selectedPokemon.getSprite());
                                 teamPokemon.setPokedexNumber(selectedPokemon.getPokedexNumber());
-                                teamPokemon.setCustomName(pokemonName);
-                                teamPokemon.setCustomSprite(selectedPokemon.getSprite());
-                                long insertedPokemonId=teamService.addTeamPokemon(teamPokemon); //Lo añadimos en la BD y obtenemos su id generado
-                                teamPokemon.setId((int)insertedPokemonId); //Le asignamos dicho id
+                                teamService.addTeamPokemon(teamPokemon); //Lo añadimos en la BD
                                 teamPokemon.completeBaseData(selectedPokemon); //Completamos el resto de campos
                                 userSync.addTeamPokemon(teamPokemon);
                                 team.getTeamMembers().add(teamPokemon); //Lo añadimos al equipo de esta actividad

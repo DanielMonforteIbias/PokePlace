@@ -105,7 +105,7 @@
     <string name="choose_pokemon">Choose a Pokémon</string>
     <string name="delete_pokemon_warning">Are you sure you want to delete %1$s?</string>
     <string name="enter_new_nam_for">Enter new name for %1$s</string>
-
+    <string name="error_pokemon_not_available">Pokémon not loaded yet</string>
     <!--Calculadora tipos-->
     <string name="type_calculator">Type Calculator</string>
     <string name="type_chart">Type Chart</string>

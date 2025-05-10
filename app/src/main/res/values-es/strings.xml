@@ -65,6 +65,7 @@
     <string name="name">Nombre</string>
     <string name="description">Descripcion</string>
     <string name="version">Versión</string>
+    <string name="error_pokemon_not_available">Pokémon no cargado todavía</string>
     <!--Stats-->
     <string name="stats_title">STATS DE %1$s</string>
     <string name="stat">Stat</string>

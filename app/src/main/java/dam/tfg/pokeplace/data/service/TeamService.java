@@ -1,12 +1,8 @@
 package dam.tfg.pokeplace.data.service;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import dam.tfg.pokeplace.data.DatabaseHelper;
 import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
@@ -54,7 +50,7 @@ public class TeamService {
         return teamDAO.getNewTeamId(userId);
     }
     public void changeTeamName(Team team){
-        teamDAO.changeTeamName(team);
+        teamDAO.updateTeam(team);
     }
     public void removeTeam(String userId, int teamId){
         teamDAO.removeTeam(userId,teamId);
@@ -62,16 +58,28 @@ public class TeamService {
     public int getTeamSize(String userId, int teamId){
         return teamPokemonDAO.getTeamSize(userId,teamId);
     }
+    public void updateTeam(Team team){
+        teamDAO.updateTeam(team);
+    }
+    public boolean teamExists(String userId, int teamId){
+        return teamDAO.teamExists(userId,teamId);
+    }
     public BasePokemon getBasePokemon(int pokedexNumber){
         return basePokemonDAO.getBasePokemon(pokedexNumber);
     }
-    public long addTeamPokemon(TeamPokemon pokemon) {
-        return teamPokemonDAO.addTeamPokemon(pokemon);
+    public void addTeamPokemon(TeamPokemon pokemon) {
+        teamPokemonDAO.addTeamPokemon(pokemon);
+    }
+    public String generateNewPokemonId(){
+        return teamPokemonDAO.generateNewPokemonId();
     }
     public void updateTeamPokemon(TeamPokemon pokemon){
         teamPokemonDAO.updateTeamPokemon(pokemon);
     }
-    public void removeTeamPokemon(int pokemonId){
+    public void removeTeamPokemon(String pokemonId){
         teamPokemonDAO.removeTeamPokemon(pokemonId);
+    }
+    public boolean teamPokemonExists(String teamPokemonId){
+        return teamPokemonDAO.teamPokemonExists(teamPokemonId);
     }
 }

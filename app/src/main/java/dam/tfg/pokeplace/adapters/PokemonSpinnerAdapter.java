@@ -1,6 +1,7 @@
 package dam.tfg.pokeplace.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,26 +62,27 @@ public class PokemonSpinnerAdapter extends ArrayAdapter<BasePokemon> {
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                suggestions.clear();
+                List<BasePokemon> filteredList = new ArrayList<>(); //Usamos otra lista y no suggestions directamente porque esto está en un hilo secundario pero a suggestions se accede eesde el principal
                 if (constraint != null && constraint.length() > 0) {
                     String prefix = constraint.toString().toLowerCase();
                     for (BasePokemon p : pokemonList) {
-                        if (p.getName().toLowerCase().startsWith(prefix)) {
-                            suggestions.add(p);
-                        }
+                        if (p.getName().toLowerCase().startsWith(prefix)) filteredList.add(p);
                     }
-                } else {
-                    suggestions.addAll(pokemonList);
-                }
-
+                }else filteredList.addAll(pokemonList);
                 FilterResults results = new FilterResults();
-                results.values = suggestions;
-                results.count = suggestions.size();
+                results.values = filteredList;
+                results.count = filteredList.size();
                 return results;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (results != null && results.values != null) {
+                    @SuppressWarnings("unchecked") //Sabemos que la lista es de este tipo
+                    List<BasePokemon> list = (List<BasePokemon>) results.values;
+                    suggestions = new ArrayList<>(list); //Creamos una nueva lista en base a los resultados, esta vez en el hilo principal, pues suggestions es la relacionada con el adpater
+                }
+                else suggestions = new ArrayList<>();
                 notifyDataSetChanged();
             }
 
@@ -97,6 +99,11 @@ public class PokemonSpinnerAdapter extends ArrayAdapter<BasePokemon> {
 
     @Override
     public BasePokemon getItem(int position) {
-        return suggestions.get(position);
+        if (position >= 0 && position < suggestions.size()) {
+            return suggestions.get(position);
+        } else {
+            Log.e("PokemonAdapter", "ERROR: Position" + position + "/" + suggestions.size() + ")");
+            return null;
+        }
     }
 }

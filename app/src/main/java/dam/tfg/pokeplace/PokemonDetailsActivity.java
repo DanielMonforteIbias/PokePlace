@@ -119,14 +119,9 @@ public class PokemonDetailsActivity extends BaseActivity {
     private boolean addPokemonToTeam(Team team){
         Integer currentSpriteIndex = viewModel.getCurrentSpriteIndex().getValue();
         if (currentSpriteIndex != null) {
-            TeamPokemon teamPokemon=new TeamPokemon();
-            teamPokemon.setUserId(user.getUserId());
-            teamPokemon.setTeamId(team.getTeamId());
+            TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),user.getUserId(),team.getTeamId(),pokemon.getName(),pokemon.getSprites().get(currentSpriteIndex));
             teamPokemon.setPokedexNumber(pokemon.getPokedexNumber());
-            teamPokemon.setCustomName(pokemon.getName()); //El nombre por defecto es el mismo nombre del Pokemon
-            teamPokemon.setCustomSprite(pokemon.getSprites().get(currentSpriteIndex)); //El sprite por defecto es el que esté viendo el usuario
-            long addedPokemonId=teamService.addTeamPokemon(teamPokemon);
-            teamPokemon.setId((int)addedPokemonId); //El id se genera durante la insercion porque es auto incremental
+            teamService.addTeamPokemon(teamPokemon);
             userSync.addTeamPokemon(teamPokemon);
             return true;
         } else {

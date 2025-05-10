@@ -7,6 +7,7 @@ import android.util.Pair;
 import java.util.List;
 
 import dam.tfg.pokeplace.PokemonDetailsActivity;
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;
 import dam.tfg.pokeplace.api.PokemonSpeciesCallback;
@@ -16,7 +17,10 @@ import dam.tfg.pokeplace.models.Pokemon;
 
 public class PokemonClickHandler {
     public static void handlePokemonClick(Context context, BasePokemon pokemon){
-        fetchPokemon(pokemon,context);
+        if(pokemon!=null){
+            if(pokemon.getUrl()!=null)fetchPokemon(pokemon,context);
+            else ToastUtil.showToast(context,context.getString(R.string.error_pokemon_not_available));
+        }
     }
     private static void fetchPokemon(BasePokemon pokemon, Context context) {
         String url=pokemon.getUrl();
@@ -37,13 +41,13 @@ public class PokemonClickHandler {
             @Override
             public void onDetailsReceived(List<Pair<String, String>> descriptions) {
                 pokemon.setDescriptions(descriptions);
-                launchPokemoNDetailsActivity(context,pokemon);
+                launchPokemonDetailsActivity(context,pokemon);
             }
 
         },context);
     }
 
-    private static void launchPokemoNDetailsActivity(Context context, Pokemon pokemon){
+    private static void launchPokemonDetailsActivity(Context context, Pokemon pokemon){
         Intent intent=new Intent(context, PokemonDetailsActivity.class);
         intent.putExtra("Pokemon",pokemon);
         context.startActivity(intent);

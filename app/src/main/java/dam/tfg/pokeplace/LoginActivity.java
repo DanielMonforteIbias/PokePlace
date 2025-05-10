@@ -33,8 +33,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
+import dam.tfg.pokeplace.data.dao.TeamDAO;
+import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
+import dam.tfg.pokeplace.interfaces.OnUserFetchedListener;
+import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.sync.FirestorePaths;
 import dam.tfg.pokeplace.sync.UserSync;
@@ -51,6 +62,7 @@ public class LoginActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private UserDAO userDAO;
+    private TeamService teamService;
     private UserSync userSync;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,7 @@ public class LoginActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
+        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
         userSync=new UserSync();
         auth = FirebaseAuth.getInstance();
         if(checkLoginStatus()){
@@ -191,45 +204,57 @@ public class LoginActivity extends BaseActivity {
         FirebaseUser currentUser = auth.getCurrentUser(); //Obtenemos el usuario con sesión iniciada
         return currentUser != null; //Devuelve true si hay cuenta, es decir, si no es null, y false si es null
     }
-
-    private void login(){
+    private void login() {
         user = auth.getCurrentUser();
-        if(user!=null){
-            String name= (user.getDisplayName()!=null)?user.getDisplayName():getString(R.string.default_name);
-            String image= (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : getString(R.string.default_image);
-            User newUser=new User(user.getUid(),user.getEmail(),name,image);
+        if (user != null) {
+            String name = (user.getDisplayName() != null) ? user.getDisplayName() : getString(R.string.default_name);
+            String image = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : getString(R.string.default_image);
+            User newUser = new User(user.getUid(), user.getEmail(), name, image);
+            AtomicInteger pendingTasks = new AtomicInteger(0);
             userSync.userExists(user.getUid(), new OnCompleteListener<DocumentSnapshot>() { //Comprobamos que existe en Firestore
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {//Si existe en firestore, lo traemos a local
-                            String remoteUserId=document.getString(FirestorePaths.USER_ID);
-                            String remoteUserEmail=document.getString(FirestorePaths.USER_EMAIL);
-                            String remoteUserName=document.getString(FirestorePaths.USER_NAME);
-                            String remoteUserImage=document.getString(FirestorePaths.USER_IMAGE);
-                            String remoteUserFavType=document.getString(FirestorePaths.USER_FAV_TYPE);
-                            String remoteUserFavPokemon=document.getString(FirestorePaths.USER_FAV_POKEMON);
-                            User remoteUser=new User(remoteUserId,remoteUserEmail,remoteUserName,remoteUserImage);
-                            remoteUser.setFavType(remoteUserFavType);
-                            remoteUser.setFavPokemon(remoteUserFavPokemon);
-                            if(!userDAO.userExists(remoteUserId)) userDAO.addUser(remoteUser);
-                            else userDAO.updateUser(remoteUser); //Si existe, lo actualizamos con los datos remotos, por si hicimos cambios en otro dispositivo mientras ya estábamos en este, para poder verlos aqui tambien
-                        }
-                        else{ //Si no existe, lo añadimos a Firestore y a la bd local si tampoco existe
+                        if (document.exists()) { //Si existe en firestore, lo traemos a local
+                            pendingTasks.addAndGet(2);// Vamos a lanzar dos tareas: onUserFetched y onTeamsFetched
+                            userSync.getUser(document.getString(FirestorePaths.USER_ID), new OnUserFetchedListener() {
+                                @Override
+                                public void onUserFetched(User user) {
+                                    if (!userDAO.userExists(user.getUserId())) userDAO.addUser(user);
+                                    else userDAO.updateUser(user); //Si existe, lo actualizamos con los datos remotos, por si hicimos cambios en otro dispositivo mientras ya estábamos en este, para poder verlos aqui tambien
+                                    if (pendingTasks.decrementAndGet() == 0) openMainActivity();
+                                }
+                                @Override
+                                public void onTeamsFetched(List<Team> teams, Map<String, List<TeamPokemon>> teamMembersMap) {
+                                    for (Team team : teams) {
+                                        if (!teamService.teamExists(team.getUserId(), team.getTeamId())) teamService.addTeam(team);
+                                        else teamService.updateTeam(team);
+                                        List<TeamPokemon> members = teamMembersMap.get(String.valueOf(team.getTeamId()));
+                                        if (members != null) {
+                                            for (TeamPokemon pokemon : members) {
+                                                if (!teamService.teamPokemonExists(pokemon.getId())) teamService.addTeamPokemon(pokemon);
+                                                else teamService.updateTeamPokemon(pokemon);
+                                            }
+                                        }
+                                    }
+                                    if (pendingTasks.decrementAndGet() == 0) openMainActivity();
+                                }
+                            });
+                        } else { //Si no existe, lo añadimos a Firestore y a la bd local si tampoco existe
                             userSync.addUser(newUser);
-                            if(!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
+                            if (!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
+                            openMainActivity();
                         }
+                    } else { //Si no se puede completar la tarea, por lo menos lo metemos en la bd local si no estaba
+                        if (!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
+                        openMainActivity();
                     }
-                    else{ //Si no se puede completar la tarea, por lo menos lo metemos en la bd local si no estaba
-                        if(!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
-                    }
-                    openMainActivity(); //Una vez termine la sincronizacion abrimos la MainActivity
                 }
             });
-        }
-        else showToast(getString(R.string.error_login));
+        } else showToast(getString(R.string.error_login));
     }
+
     public void openMainActivity(){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);

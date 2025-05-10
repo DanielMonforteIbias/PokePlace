@@ -57,7 +57,7 @@ public class TeamsFragment extends Fragment {
         userDAO=new UserDAO(getContext());
         userSync=new UserSync();
         teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()),new BasePokemonDAO(getContext()));
-        userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
         teams=teamService.getAllTeams(userId);
         teamDetailsActivityLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
