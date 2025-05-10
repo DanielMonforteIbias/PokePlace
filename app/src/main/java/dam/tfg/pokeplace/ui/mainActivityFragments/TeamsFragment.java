@@ -35,6 +35,7 @@ import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.sync.UserSync;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
@@ -47,12 +48,14 @@ public class TeamsFragment extends Fragment {
     private TeamService teamService;
     private String userId;
     private UserDAO userDAO;
+    private UserSync userSync;
 
     private ActivityResultLauncher<Intent>teamDetailsActivityLauncher;
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTeamsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         userDAO=new UserDAO(getContext());
+        userSync=new UserSync();
         teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()),new BasePokemonDAO(getContext()));
         userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
         teams=teamService.getAllTeams(userId);
@@ -103,6 +106,7 @@ public class TeamsFragment extends Fragment {
                     if (!teamName.isEmpty()) {
                         Team newTeam = new Team(userId, teamService.getNewTeamId(userId), teamName);
                         teamService.addTeam(newTeam);
+                        userSync.addTeam(newTeam);
                         teams.add(newTeam);
                         updateUI();
                         adapter.notifyItemInserted(teams.size()-1);

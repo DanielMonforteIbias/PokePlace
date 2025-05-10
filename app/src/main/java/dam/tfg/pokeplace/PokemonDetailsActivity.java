@@ -126,6 +126,8 @@ public class PokemonDetailsActivity extends BaseActivity {
             teamPokemon.setCustomName(pokemon.getName()); //El nombre por defecto es el mismo nombre del Pokemon
             teamPokemon.setCustomSprite(pokemon.getSprites().get(currentSpriteIndex)); //El sprite por defecto es el que esté viendo el usuario
             long addedPokemonId=teamService.addTeamPokemon(teamPokemon);
+            teamPokemon.setId((int)addedPokemonId); //El id se genera durante la insercion porque es auto incremental
+            userSync.addTeamPokemon(teamPokemon);
             return true;
         } else {
             return false;

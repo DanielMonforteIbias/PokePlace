@@ -41,6 +41,7 @@ import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
+import dam.tfg.pokeplace.sync.UserSync;
 import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
@@ -50,6 +51,7 @@ public class TeamDetailsActivity extends BaseActivity {
     private TeamPokemonAdapter adapter;
 
     private UserDAO userDAO;
+    private UserSync userSync;
     public static User user;
     private TeamService teamService;
     private int teamSizeLimit;
@@ -68,10 +70,10 @@ public class TeamDetailsActivity extends BaseActivity {
         if(getSupportActionBar()!=null) getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostramos la flecha para volver
         userDAO=new UserDAO(this);
         teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
-        user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
+        userSync=new UserSync();
         Intent intent=getIntent();
         team=intent.getParcelableExtra("Team");
+        if(team!=null) user=userDAO.getUser(team.getUserId()); //En vez de usar el objeto user de Firebase usamos el id de user que hay en el team
         teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
         adapter=new TeamPokemonAdapter(team.getTeamMembers(), new OnTeamPokemonActionListener() {
             @Override
@@ -142,6 +144,7 @@ public class TeamDetailsActivity extends BaseActivity {
                         if (!teamName.isEmpty()) {
                             Team newTeam=new Team(team.getUserId(),team.getTeamId(),teamName);
                             teamService.changeTeamName(newTeam);
+                            userSync.updateTeam(newTeam);
                             team.setName(teamName); //Cambiamos el nombre del team actual de la actividad
                             updateUI();
                             dialog.dismiss();
@@ -169,6 +172,7 @@ public class TeamDetailsActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         teamService.removeTeam(user.getUserId(),team.getTeamId());
+                        userSync.deleteTeam(team);
                         ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
                         dialog.dismiss();
                         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
@@ -202,6 +206,7 @@ public class TeamDetailsActivity extends BaseActivity {
                             dialog.dismiss();
                             pokemon.setCustomName(newName);
                             teamService.updateTeamPokemon(pokemon);
+                            userSync.updateTeamPokemon(pokemon);
                             adapter.notifyItemChanged(position);
                             //Al cambiar el nombre no hace falta actualizar la interfaz entera, con notificar al adaptador del cambio se actualizará su nombre
                         } else {
@@ -233,6 +238,7 @@ public class TeamDetailsActivity extends BaseActivity {
                         dialog.dismiss();
                         team.getTeamMembers().remove(position);
                         teamService.removeTeamPokemon(pokemon.getId());
+                        userSync.deleteTeamPokemon(pokemon);
                         adapter.notifyItemRemoved(position);
                         if(team.getTeamMembers().isEmpty()){
                             binding.teamPokemonList.post(() -> {  //Sin esto, si borramos un Pokémon y desaparece la lista, y luego añadimos otro, se vería la vista restante del anterior por unos momentos
@@ -289,6 +295,7 @@ public class TeamDetailsActivity extends BaseActivity {
                                 long insertedPokemonId=teamService.addTeamPokemon(teamPokemon); //Lo añadimos en la BD y obtenemos su id generado
                                 teamPokemon.setId((int)insertedPokemonId); //Le asignamos dicho id
                                 teamPokemon.completeBaseData(selectedPokemon); //Completamos el resto de campos
+                                userSync.addTeamPokemon(teamPokemon);
                                 team.getTeamMembers().add(teamPokemon); //Lo añadimos al equipo de esta actividad
                                 adapter.notifyItemInserted(team.getTeamMembers().size()-1);
                                 updateUI();

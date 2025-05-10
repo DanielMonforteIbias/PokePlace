@@ -55,6 +55,7 @@ import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
+import dam.tfg.pokeplace.interfaces.OnUserDataDeletedListener;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.Type;
@@ -626,23 +627,27 @@ public class EditUserActivity extends BaseActivity {
         User userBackup = new User(user.getUserId(), user.getEmail(), user.getName(), user.getImage());
         userBackup.setFavType(user.getFavType());
         userBackup.setFavPokemon(user.getFavPokemon());
-        deleteUserData(); //Borramos primero los datos en local y firestore, pues si borramos primero el usuario de firebase fallará la eliminacion de datos de firestore porque ya no existe
-        firebaseUser.delete().addOnCompleteListener(task -> { //Por ultimo, eliminamos el usuario de Firebase
-            if (task.isSuccessful()) {
-                goToLogin();
-            } else { //Si falla, restauramos los datos
-                ToastUtil.showToast(getApplicationContext(),getString(R.string.error_deleting_user));
-                restoreUserData(userBackup);
+        deleteUserData(new OnUserDataDeletedListener() {//Borramos primero los datos en local y firestore, pues si borramos primero el usuario de firebase fallará la eliminacion de datos de firestore porque ya no existe
+            @Override
+            public void onUserDataDeleted() {
+                firebaseUser.delete().addOnCompleteListener(task -> { //Por ultimo, eliminamos el usuario de Firebase
+                    if (task.isSuccessful()) {
+                        goToLogin();
+                    } else { //Si falla, restauramos los datos
+                        ToastUtil.showToast(getApplicationContext(),getString(R.string.error_deleting_user));
+                        restoreUserData(userBackup);
+                    }
+                });
             }
         });
     }
 
-    private void deleteUserData(){
+    private void deleteUserData(OnUserDataDeletedListener listener){
         for(Team team:teamService.getAllTeams(user.getUserId())){ //Eliminamos sus equipos
             teamService.removeTeam(user.getUserId(),team.getTeamId());
         }
         userDAO.deleteUser(user.getUserId()); //Lo eliminamos de la BD
-        userSync.deleteUser(user.getUserId()); //De Firestore tambien
+        userSync.deleteUser(user.getUserId(),listener); //De Firestore tambien
     }
     private void restoreUserData(User userBackup) {
         //Restauramos los datos tanto en local como en Firestore, solo si se habían borrado

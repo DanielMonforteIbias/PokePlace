@@ -4,13 +4,18 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import dam.tfg.pokeplace.interfaces.OnUserDataDeletedListener;
+import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 
 public class UserSync {
@@ -39,12 +44,99 @@ public class UserSync {
         userMap.put(FirestorePaths.USER_FAV_POKEMON,user.getFavPokemon());
         userDocument.update(userMap);
     }
-    public void deleteUser(String userId){
-        DocumentReference userRef = db.collection(FirestorePaths.USERS_COLLECTION).document(userId); //Obtenemos el documento del usuario
-        userRef.delete();
+    public void deleteUser(String userId, OnUserDataDeletedListener listener){
+        //Antes de borrar el usuario, obtenemos la subcoleccion de equipos y de ella las subcolecciones de miembros para borrarlas a mano, ya que Firestore no lo hace automaticamente
+        DocumentReference userRef = db.collection(FirestorePaths.USERS_COLLECTION).document(userId);
+        CollectionReference teamsRef = db.collection(FirestorePaths.USERS_COLLECTION).document(userId).collection(FirestorePaths.TEAMS_COLLECTION);
+        teamsRef.get().addOnSuccessListener(teamSnapshot -> {
+            final int totalTeams = teamSnapshot.size();
+            if (totalTeams == 0) { //Si no tiene equipos borramos el user directamente
+                userRef.delete();
+                listener.onUserDataDeleted();
+                return;
+            }
+            final int[] deletedTeams = {0};
+            for (DocumentSnapshot teamDoc : teamSnapshot) {
+                CollectionReference membersRef = teamDoc.getReference().collection(FirestorePaths.MEMBERS_COLLECTION);
+                membersRef.get().addOnSuccessListener(membersSnapshot -> {
+                    final int totalMembers=membersSnapshot.size();
+                    if(totalMembers==0){ //Si no tiene miembros, borramos directamente el equipo
+                        teamDoc.getReference().delete().addOnSuccessListener(unused -> {
+                            deletedTeams[0]++;
+                            if (deletedTeams[0] == totalTeams) { //Borramos el usuario solo cuando se hayan borrado todos sus equipos
+                                userRef.delete();
+                                listener.onUserDataDeleted();
+                            }
+                        });
+                    }
+                    else{
+                        WriteBatch batch = db.batch();
+                        for (DocumentSnapshot memberDoc : membersSnapshot) {
+                            batch.delete(memberDoc.getReference());
+                        }
+                        batch.commit().addOnSuccessListener(unused -> { //Borramos el equipo solo cuando se hayan borrado todos sus miembros
+                            teamDoc.getReference().delete().addOnSuccessListener(unused2 -> {
+                                deletedTeams[0]++;
+                                if (deletedTeams[0] == totalTeams) { //Borramos el usuario solo cuando se hayan borrado todos sus equipos
+                                    userRef.delete();
+                                    listener.onUserDataDeleted();
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+        });
     }
     public void userExists(String userId, OnCompleteListener<DocumentSnapshot> listener) {
         DocumentReference userDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(userId);
         userDocument.get().addOnCompleteListener(listener);
+    }
+    public void addTeam(Team team) {
+        DocumentReference teamDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(team.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(team.getTeamId()));
+        Map<String, Object> teamMap = new HashMap<>();
+        teamMap.put(FirestorePaths.TEAM_ID, team.getTeamId());
+        teamMap.put(FirestorePaths.TEAM_NAME, team.getName());
+        teamDocument.set(teamMap);
+    }
+    public void updateTeam(Team team) {
+        DocumentReference teamDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(team.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(team.getTeamId()));
+        Map<String, Object> teamMap = new HashMap<>();
+        teamMap.put(FirestorePaths.TEAM_NAME,team.getName());
+        teamDocument.update(teamMap);
+    }
+    public void deleteTeam(Team team){
+        //Antes de borrar el equipo debemos borrar la subcoleccion de members, ya que Firestore no borra subcolecciones automáticamente
+        CollectionReference membersRef = db.collection(FirestorePaths.USERS_COLLECTION).document(team.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(team.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION);
+        membersRef.get().addOnSuccessListener(querySnapshot -> {
+            WriteBatch batch = db.batch();
+            for (DocumentSnapshot memberDoc : querySnapshot) {
+                batch.delete(memberDoc.getReference());
+            }
+            batch.commit().addOnSuccessListener(unused -> {
+                db.collection(FirestorePaths.USERS_COLLECTION).document(team.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(team.getTeamId())).delete();
+            });
+        });
+    }
+    public void addTeamPokemon(TeamPokemon teamPokemon) {
+        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamPokemon.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
+        Map<String, Object> teamPokemonMap = new HashMap<>();
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_ID, teamPokemon.getId());
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_POKEDEX_NUMBER, teamPokemon.getPokedexNumber());
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_CUSTOM_NAME, teamPokemon.getCustomName());
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_CUSTOM_SPRITE, teamPokemon.getCustomSprite());
+        teamPokemonDocument.set(teamPokemonMap);
+    }
+    public void updateTeamPokemon(TeamPokemon teamPokemon) {
+        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamPokemon.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
+        Map<String, Object> teamPokemonMap = new HashMap<>();
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_POKEDEX_NUMBER, teamPokemon.getPokedexNumber());
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_CUSTOM_NAME, teamPokemon.getCustomName());
+        teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_CUSTOM_SPRITE, teamPokemon.getCustomSprite());
+        teamPokemonDocument.update(teamPokemonMap);
+    }
+    public void deleteTeamPokemon(TeamPokemon teamPokemon){
+        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamPokemon.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
+        teamPokemonDocument.delete();
     }
 }

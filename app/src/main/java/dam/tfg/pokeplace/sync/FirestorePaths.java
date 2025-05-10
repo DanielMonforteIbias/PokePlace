@@ -12,4 +12,12 @@ public class FirestorePaths {
     public static final String USER_IMAGE="image";
     public static final String USER_FAV_TYPE="favType";
     public static final String USER_FAV_POKEMON="favPokemon";
+    //Team attributes
+    public static final String TEAM_ID="teamId";
+    public static final String TEAM_NAME="name";
+    //Members attributes
+    public static final String TEAM_POKEMON_ID="teamPokemonId";
+    public static final String TEAM_POKEMON_POKEDEX_NUMBER="pokedexNumber";
+    public static final String TEAM_POKEMON_CUSTOM_NAME="customName";
+    public static final String TEAM_POKEMON_CUSTOM_SPRITE="customSprite";
 }
