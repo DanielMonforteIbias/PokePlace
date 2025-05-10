@@ -34,6 +34,7 @@
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
     <string name="close">Cerrar</string>
+    <string name="delete">Delete</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
 
@@ -178,4 +179,6 @@
     <string name="theme_header">Tema de la app</string>
     <string name="dark_theme_enabled">Modo oscuro</string>
     <string name="app_language">Idioma de la app</string>
+    <!--Descriptions-->
+    <string name="sprite">Sprite</string>
 </resources>

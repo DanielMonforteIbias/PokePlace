@@ -36,6 +36,7 @@
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
+    <string name="delete">Borrar</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -182,4 +183,6 @@
     <string name="theme_header">App Theme</string>
     <string name="dark_theme_enabled">Dark theme</string>
     <string name="app_language">App language</string>
+    <!--Descriptions-->
+    <string name="sprite">Sprite</string>
 </resources>

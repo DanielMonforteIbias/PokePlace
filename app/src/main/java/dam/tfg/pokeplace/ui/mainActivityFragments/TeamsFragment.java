@@ -35,6 +35,7 @@ import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Team;
+import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class TeamsFragment extends Fragment {
@@ -91,38 +92,27 @@ public class TeamsFragment extends Fragment {
         });
     }
     private void displayAddTeamDialog(){
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_create_team, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        EditText input = dialogView.findViewById(R.id.editTextTeamName);
-        Button btnCancel = dialogView.findViewById(R.id.btnCancelTeam);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        Button btnAccept=dialogView.findViewById(R.id.btnAcceptTeam);
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String teamName = input.getText().toString().trim();
-                if (!teamName.isEmpty()) {
-                    Team newTeam=new Team(userId,teamService.getNewTeamId(userId),teamName);
-                    teamService.addTeam(newTeam);
-                    teams.add(newTeam);
-                    updateUI();
-                    adapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                } else {
-                    ToastUtil.showToast(getContext(), getResources().getText(R.string.error_empty_name).toString());
-                }
-            }
-        });
-        dialog.setCancelable(false);
-        dialog.show();
+        if (getActivity() != null) {
+            ((BaseActivity)getActivity()).showCustomDialog(R.layout.dialog_create_team, false, (dialog, dialogView) -> {
+                EditText input = dialogView.findViewById(R.id.editTextTeamName);
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelTeam);
+                Button btnAccept = dialogView.findViewById(R.id.btnAcceptTeam);
+                btnCancel.setOnClickListener(v -> dialog.dismiss());
+                btnAccept.setOnClickListener(v -> {
+                    String teamName = input.getText().toString().trim();
+                    if (!teamName.isEmpty()) {
+                        Team newTeam = new Team(userId, teamService.getNewTeamId(userId), teamName);
+                        teamService.addTeam(newTeam);
+                        teams.add(newTeam);
+                        updateUI();
+                        adapter.notifyItemInserted(teams.size()-1);
+                        dialog.dismiss();
+                    } else {
+                        ToastUtil.showToast(getContext(), getString(R.string.error_empty_name));
+                    }
+                });
+            });
+        }
     }
     private void updateUI(){
         if(teamService.getAllTeams(userId).isEmpty())binding.txtNoTeams.setVisibility(View.VISIBLE);

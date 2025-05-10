@@ -279,16 +279,18 @@ public class EditUserActivity extends BaseActivity {
                 btnUrl.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        displayChangeImageUrlDialog();
                         dialog.dismiss();
+                        EditUserActivity.this.dialogActive=false; //Ponemos que no hay dialogo activo para poder abrir otro
+                        displayChangeImageUrlDialog();
                     }
                 });
                 Button btnChooseIcon = dialogView.findViewById(R.id.btnChooseIconChangeImage);
                 btnChooseIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        displayChangeIconDialog();
                         dialog.dismiss();
+                        EditUserActivity.this.dialogActive=false; //Ponemos que no hay dialogo activo para poder abrir otro
+                        displayChangeIconDialog();
                     }
                 });
                 Button btnRestoreImage=dialogView.findViewById(R.id.btnRestoreImageChangeImage);
@@ -489,6 +491,7 @@ public class EditUserActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        EditUserActivity.this.dialogActive=false; //Ponemos que no hay dialogo activo para poder abrir otro
                         showCustomDialog(R.layout.dialog_delete, false, new DialogConfigurator() {
                             @Override
                             public void configure(AlertDialog dialog2, View dialogView2) {

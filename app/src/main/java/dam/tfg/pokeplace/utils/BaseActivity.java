@@ -2,6 +2,7 @@ package dam.tfg.pokeplace.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import dam.tfg.pokeplace.interfaces.DialogConfigurator;
  * Clase de la que heredan todas las actividades de la app para usar varios comportamientos en común sin repetirlos en cada
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    protected boolean dialogActive =false;
     /**
      * Configuramos el idioma y modo del contexto antes de crear la actividad
      * @param newBase El nuevo contexto
@@ -40,16 +42,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         Locale.setDefault(locale);
         config.setLocale(locale);
     }
-    protected void showCustomDialog(int layoutResId, boolean cancelable, DialogConfigurator configurator) {
+
+    public void showCustomDialog(int layoutResId, boolean cancelable, DialogConfigurator configurator) { //Es public y no protected para poder usarlo tambien desde fragmentos dentro de las actividades
         if(isFinishing() || isDestroyed()) return; //Evitamos errores si la actividad no está en un estado valido
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(layoutResId, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        configurator.configure(dialog, dialogView);
-        dialog.setCancelable(cancelable);
-        dialog.show();
+        if(!dialogActive){
+            dialogActive =true; //Marcamos que hay dialogo activo para no poder abrir varios. Si queremos abrir un diálogo desde otro, debemos poner dialogActive a false a mano antes de abrir el segundo, o al intentarlo detectará que hay uno y no lo abrirá (aunque se haga el dismiss antes que abrir el segundo)
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(layoutResId, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialogView);
+            AlertDialog dialog = builder.create();
+            configurator.configure(dialog, dialogView);
+            dialog.setCancelable(cancelable);
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    dialogActive =false; //Al cerrar el dialogo ya podemos volver a abrir otro
+                }
+            });
+            dialog.show();
+        }
     }
 
     @Override
