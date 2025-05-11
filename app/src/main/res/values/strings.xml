@@ -187,5 +187,6 @@
     <string name="sprite">Sprite</string>
 
     <!--Firestore-->
-    <string name="users_collection_name" translatable="false">users</string>
+    <string name="error_syncing_teams_size">Error syncing %1$s, teams limit reached</string>
+    <string name="error_syncing_no_connection">Couldn\'t sync data from the cloud. Check your Internet connection</string>
 </resources>

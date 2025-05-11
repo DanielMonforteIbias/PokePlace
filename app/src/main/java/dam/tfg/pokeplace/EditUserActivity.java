@@ -92,8 +92,8 @@ public class EditUserActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
-        userSync=new UserSync();
-        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
+        userSync=new UserSync(this);
+        teamService=new TeamService(getApplicationContext());
         Intent intent=getIntent();
         if(savedInstanceState!=null) user=savedInstanceState.getParcelable("User"); //Si estamos recreando la actividad cogemos el usuario, que puede tener alguna modificacion no guardada
         else{ //Si no, lo cogemos de la bd con el id recibido
@@ -644,7 +644,7 @@ public class EditUserActivity extends BaseActivity {
 
     private void deleteUserData(OnUserDataDeletedListener listener){
         for(Team team:teamService.getAllTeams(user.getUserId())){ //Eliminamos sus equipos
-            teamService.removeTeam(user.getUserId(),team.getTeamId());
+            teamService.removeTeam(team.getTeamId());
         }
         userDAO.deleteUser(user.getUserId()); //Lo eliminamos de la BD
         userSync.deleteUser(user.getUserId(),listener); //De Firestore tambien

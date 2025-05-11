@@ -7,23 +7,20 @@ import androidx.annotation.NonNull;
 
 public class TeamPokemon extends BasePokemon implements Parcelable {
     private String id;
-    private String userId;
-    private int teamId;
+    private String teamId;
     private String customName;
     private String customSprite;
     public TeamPokemon(){}
-    public TeamPokemon(String id, String userId, int teamId, String customName, String customSprite) {
+    public TeamPokemon(String id,String teamId, String customName, String customSprite) {
         this.id = id;
-        this.userId = userId;
         this.teamId = teamId;
         this.customName = customName;
         this.customSprite = customSprite;
     }
 
-    public TeamPokemon(String pokedexNumber, String name, String sprite, String url, String type1, String type2, String id, String userId, int teamId, String customName, String customSprite) {
+    public TeamPokemon(String pokedexNumber, String name, String sprite, String url, String type1, String type2, String id,String teamId, String customName, String customSprite) {
         super(pokedexNumber, name, sprite, url, type1, type2);
         this.id = id;
-        this.userId = userId;
         this.teamId = teamId;
         this.customName = customName;
         this.customSprite = customSprite;
@@ -32,8 +29,7 @@ public class TeamPokemon extends BasePokemon implements Parcelable {
     protected TeamPokemon(Parcel in) {
         super(in);
         id = in.readString();
-        userId = in.readString();
-        teamId = in.readInt();
+        teamId = in.readString();
         customName = in.readString();
         customSprite = in.readString();
     }
@@ -58,19 +54,11 @@ public class TeamPokemon extends BasePokemon implements Parcelable {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public int getTeamId() {
+    public String getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(String teamId) {
         this.teamId = teamId;
     }
 
@@ -108,8 +96,7 @@ public class TeamPokemon extends BasePokemon implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(id);
-        dest.writeString(userId);
-        dest.writeInt(teamId);
+        dest.writeString(teamId);
         dest.writeString(customName);
         dest.writeString(customSprite);
     }

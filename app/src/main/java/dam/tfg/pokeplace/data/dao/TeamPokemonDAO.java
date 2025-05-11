@@ -26,9 +26,9 @@ public class TeamPokemonDAO {
     }
     public void addTeamPokemon(TeamPokemon pokemon) {
         values=new ContentValues();
-        if(getTeamSize(pokemon.getUserId(),pokemon.getTeamId())<teamSizeLimit){
+        System.out.println(getTeamSize(pokemon.getTeamId()));
+        if(getTeamSize(pokemon.getTeamId())<teamSizeLimit){
             values.put(DatabaseHelper.TEAM_POKEMON_ID_COLUMN, pokemon.getId());
-            values.put(DatabaseHelper.TEAM_POKEMON_USER_ID_COLUMN, pokemon.getUserId());
             values.put(DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN, pokemon.getTeamId());
             values.put(DatabaseHelper.TEAM_POKEMON_POKEDEX_NUMBER_COLUMN, pokemon.getPokedexNumber());
             values.put(DatabaseHelper.TEAM_POKEMON_CUSTOM_NAME_COLUMN, pokemon.getCustomName());
@@ -36,24 +36,24 @@ public class TeamPokemonDAO {
             db.insert(DatabaseHelper.TEAM_POKEMON_TABLE_NAME, null, values);
         }
     }
-    public List<TeamPokemon> getTeamMembers(String userId, int teamId){
+    public List<TeamPokemon> getTeamMembers(String teamId){
         List<TeamPokemon> teamMembers=new ArrayList<>();
-        Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAM_POKEMON_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_POKEMON_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN+"=?",new String[]{userId,String.valueOf(teamId)});
+        Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAM_POKEMON_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN+"=?",new String[]{teamId});
         while (cursor.moveToNext()) { //Recorremos el cursor
             String pokemonId=cursor.getString(0);
-            String pokedexNumber=String.valueOf(cursor.getInt(3));
-            String customName=cursor.getString(4);
-            String customSprite=cursor.getString(5);
-            TeamPokemon teamPokemon=new TeamPokemon(pokemonId,userId,teamId,customName,customSprite);
+            String pokedexNumber=String.valueOf(cursor.getInt(2));
+            String customName=cursor.getString(3);
+            String customSprite=cursor.getString(4);
+            TeamPokemon teamPokemon=new TeamPokemon(pokemonId,teamId,customName,customSprite);
             teamPokemon.setPokedexNumber(pokedexNumber);
             teamMembers.add(teamPokemon);
         }
         cursor.close(); //Cerramos el cursor
         return teamMembers;
     }
-    public int getTeamSize(String userId, int teamId){
+    public int getTeamSize(String teamId){
         int teamSize=0;
-        Cursor cursor=db.rawQuery("SELECT COUNT(*) FROM "+DatabaseHelper.TEAM_POKEMON_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_POKEMON_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN+"=?",new String[]{userId,String.valueOf(teamId)});
+        Cursor cursor=db.rawQuery("SELECT COUNT(*) FROM "+DatabaseHelper.TEAM_POKEMON_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN+"=?",new String[]{teamId});
         if(cursor.moveToFirst()) { //Si hay resultado en la consulta
             teamSize=cursor.getInt(0); //Obtenemos el primer dato que hay (solo habrá uno ya que es un count)
         }

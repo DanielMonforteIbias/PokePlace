@@ -1,6 +1,5 @@
 package dam.tfg.pokeplace;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -16,7 +15,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,11 +33,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TeamDAO;
-import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
@@ -75,8 +72,8 @@ public class LoginActivity extends BaseActivity {
             return insets;
         });
         userDAO=new UserDAO(this);
-        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
-        userSync=new UserSync();
+        teamService=new TeamService(getApplicationContext());
+        userSync=new UserSync(getApplicationContext());
         auth = FirebaseAuth.getInstance();
         if(checkLoginStatus()){
             binding.main.setVisibility(View.GONE);
@@ -227,11 +224,27 @@ public class LoginActivity extends BaseActivity {
                                 }
                                 @Override
                                 public void onTeamsFetched(List<Team> teams, Map<String, List<TeamPokemon>> teamMembersMap) {
+                                    //Borramos los equipos que ya no existan en Firestore
+                                    Set<String> remoteTeamIds = teams.stream().map(Team::getTeamId).collect(Collectors.toSet());
+                                    for (Team localTeam : teamService.getAllTeams(user.getUid())) {
+                                        if (!remoteTeamIds.contains(localTeam.getTeamId())) teamService.removeTeam(localTeam.getTeamId());
+                                    }
+                                    //Insertamos o actualizamos los equipos
                                     for (Team team : teams) {
-                                        if (!teamService.teamExists(team.getUserId(), team.getTeamId())) teamService.addTeam(team);
+                                        if (!teamService.teamExists(team.getTeamId())) {
+                                            if(teamService.getAllTeams(team.getUserId()).size()<teamService.teamsLimit) teamService.addTeam(team);
+                                            else showToast(getString(R.string.error_syncing_teams_size,team.getName()));
+                                        }
                                         else teamService.updateTeam(team);
                                         List<TeamPokemon> members = teamMembersMap.get(String.valueOf(team.getTeamId()));
                                         if (members != null) {
+                                            //Borramos los que ya no existan en Firestore
+                                            Set<String> remoteMemberIds = members.stream().map(TeamPokemon::getId).collect(Collectors.toSet());
+                                            for (TeamPokemon localMember : teamService.getTeamWithMembers(team.getTeamId()).getTeamMembers()) {
+                                                if (!remoteMemberIds.contains(localMember.getId())) teamService.removeTeamPokemon(localMember.getId());
+                                            }
+
+                                            //Insertamos o actualizamos los mimebros
                                             for (TeamPokemon pokemon : members) {
                                                 if (!teamService.teamPokemonExists(pokemon.getId())) teamService.addTeamPokemon(pokemon);
                                                 else teamService.updateTeamPokemon(pokemon);
@@ -248,6 +261,7 @@ public class LoginActivity extends BaseActivity {
                         }
                     } else { //Si no se puede completar la tarea, por lo menos lo metemos en la bd local si no estaba
                         if (!userDAO.userExists(newUser.getUserId())) userDAO.addUser(newUser);
+                        showToast(getString(R.string.error_syncing_no_connection));
                         openMainActivity();
                     }
                 }

@@ -75,9 +75,9 @@ public class PokemonDetailsActivity extends BaseActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         userDAO=new UserDAO(this);
-        userSync=new UserSync();
-        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()), new BasePokemonDAO(getApplicationContext()));
-        user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        userSync=new UserSync(getApplicationContext());
+        teamService=new TeamService(getApplicationContext());
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null)user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
         teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
 
         Intent intent=getIntent();
@@ -104,7 +104,7 @@ public class PokemonDetailsActivity extends BaseActivity {
                 recyclerView.setAdapter(new TeamsAdapter(userTeams, new OnTeamClickListener() {
                     @Override
                     public void onTeamClick(Team team) {
-                        if(teamService.getTeamSize(user.getUserId(),team.getTeamId())<teamSizeLimit){
+                        if(teamService.getTeamSize(team.getTeamId())<teamSizeLimit){
                             if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.added_to)+" "+team.getName());
                             else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_add_to_team));
                             dialog.dismiss();
@@ -119,7 +119,7 @@ public class PokemonDetailsActivity extends BaseActivity {
     private boolean addPokemonToTeam(Team team){
         Integer currentSpriteIndex = viewModel.getCurrentSpriteIndex().getValue();
         if (currentSpriteIndex != null) {
-            TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),user.getUserId(),team.getTeamId(),pokemon.getName(),pokemon.getSprites().get(currentSpriteIndex));
+            TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),team.getTeamId(),pokemon.getName(),pokemon.getSprites().get(currentSpriteIndex));
             teamPokemon.setPokedexNumber(pokemon.getPokedexNumber());
             teamService.addTeamPokemon(teamPokemon);
             userSync.addTeamPokemon(teamPokemon);

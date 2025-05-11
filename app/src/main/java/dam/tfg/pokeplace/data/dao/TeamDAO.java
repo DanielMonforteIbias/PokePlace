@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import dam.tfg.pokeplace.data.DatabaseHelper;
 import dam.tfg.pokeplace.data.DatabaseManager;
@@ -33,13 +34,13 @@ public class TeamDAO {
         String where=DatabaseHelper.TEAM_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?";
         db.update(DatabaseHelper.TEAMS_TABLE_NAME,values,where,new String[]{team.getUserId(),String.valueOf(team.getTeamId())});
     }
-    public void removeTeam(String userId, int teamId){
-        String condition = DatabaseHelper.TEAM_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?"; //Condicion para el borrado
-        String[] conditionArgs = { userId, String.valueOf(teamId) }; //Ponemos los parámetros recibidos en los ? de la condicion anterior
+    public void removeTeam(String teamId){
+        String condition = DatabaseHelper.TEAM_ID_COLUMN+"=?"; //Condicion para el borrado
+        String[] conditionArgs = {teamId}; //Ponemos los parámetros recibidos en los ? de la condicion anterior
         db.delete(DatabaseHelper.TEAMS_TABLE_NAME, condition,conditionArgs);
     }
-    public boolean teamExists(String userId, int teamId){
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TEAMS_TABLE_NAME + " WHERE "+DatabaseHelper.TEAM_USER_ID_COLUMN+" = ? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?", new String[]{userId,String.valueOf(teamId)});
+    public boolean teamExists(String teamId){
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + DatabaseHelper.TEAMS_TABLE_NAME + " WHERE "+DatabaseHelper.TEAM_ID_COLUMN+"=?", new String[]{teamId});
         boolean exists = false;
         if(cursor.moveToFirst()) {
             int count=cursor.getInt(0);
@@ -48,12 +49,12 @@ public class TeamDAO {
         cursor.close(); //Cerramos el cursor
         return exists; //Devolvemos si existe o no
     }
-    public Team getTeam(String userId, int teamId){
+    public Team getTeam(String teamId){
         Team team=new Team();
-        Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAMS_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_USER_ID_COLUMN+"=? AND "+DatabaseHelper.TEAM_ID_COLUMN+"=?",new String[]{userId,String.valueOf(teamId)});
+        Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAMS_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_ID_COLUMN+"=?",new String[]{teamId});
         if(cursor.moveToNext()){
             team.setUserId(cursor.getString(0));
-            team.setTeamId(cursor.getInt(1));
+            team.setTeamId(cursor.getString(1));
             team.setName(cursor.getString(2));
         }
         cursor.close();
@@ -63,20 +64,14 @@ public class TeamDAO {
         List<Team>teams=new ArrayList<>();
         Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAMS_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_USER_ID_COLUMN+"=?",new String[]{userId});
         while (cursor.moveToNext()) { //Recorremos el cursor
-            int teamId=cursor.getInt(1);
+            String teamId=cursor.getString(1);
             String teamName=cursor.getString(2);
             teams.add(new Team(userId,teamId,teamName));
         }
         cursor.close(); //Cerramos el cursor
         return teams;
     }
-    public int getNewTeamId(String userId){
-        int newId=1;
-        Cursor cursor=db.rawQuery("SELECT MAX("+DatabaseHelper.TEAM_ID_COLUMN+") FROM "+DatabaseHelper.TEAMS_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_USER_ID_COLUMN+"=?",new String[]{userId});
-        if(cursor.moveToFirst()) { //Si hay resultado en la consulta
-            newId=cursor.getInt(0)+1; //El nuevo id sera el del maximo +1
-        }
-        cursor.close(); //Cerramos el cursor
-        return newId;
+    public String getNewTeamId(){
+        return UUID.randomUUID().toString();
     }
 }

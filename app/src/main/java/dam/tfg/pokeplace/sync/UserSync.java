@@ -1,13 +1,17 @@
 package dam.tfg.pokeplace.sync;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.interfaces.OnUserDataDeletedListener;
 import dam.tfg.pokeplace.interfaces.OnUserFetchedListener;
 import dam.tfg.pokeplace.models.Team;
@@ -23,9 +28,11 @@ import dam.tfg.pokeplace.models.User;
 
 public class UserSync {
     private FirebaseFirestore db;
+    private TeamService teamService;
 
-    public UserSync(){
+    public UserSync(Context context){
         db= FirebaseFirestore.getInstance(); //Inicializamos la variable para la base de datos de Firestore
+        teamService=new TeamService(context);
     }
     public void addUser(User user) {
         DocumentReference userDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(user.getUserId()); //La colección de usuarios tendrá un documento para cada uno, con su id como nombre
@@ -93,7 +100,7 @@ public class UserSync {
     }
     public void userExists(String userId, OnCompleteListener<DocumentSnapshot> listener) {
         DocumentReference userDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(userId);
-        userDocument.get().addOnCompleteListener(listener);
+        userDocument.get(Source.SERVER).addOnCompleteListener(listener); //Lo cogemos si o si del servidor
     }
     public void getUser(String userId, OnUserFetchedListener listener) {
         db.collection(FirestorePaths.USERS_COLLECTION).document(userId).get().addOnSuccessListener(doc -> {
@@ -126,32 +133,29 @@ public class UserSync {
             final int totalTeams = teamSnapshot.size();
             final int[] processedTeams = {0};
             for (DocumentSnapshot teamDoc : teamSnapshot) {
-                Long teamIdLong = teamDoc.getLong(FirestorePaths.TEAM_ID); //Long y no long por si es nulo
+                String teamId = teamDoc.getString(FirestorePaths.TEAM_ID);
                 String teamName = teamDoc.getString(FirestorePaths.TEAM_NAME);
-                if(teamIdLong!=null){
-                    int teamId=teamIdLong.intValue();
-                    Team team = new Team(userId,teamId,teamName);
-                    teams.add(team);
-                    teamDoc.getReference().collection(FirestorePaths.MEMBERS_COLLECTION).get().addOnSuccessListener(membersSnapshot -> {
-                        List<TeamPokemon> members = new ArrayList<>();
-                        for (DocumentSnapshot memberDoc : membersSnapshot) {
-                            String memberId = memberDoc.getString(FirestorePaths.TEAM_POKEMON_ID);
-                            String pokedexNumber = memberDoc.getString(FirestorePaths.TEAM_POKEMON_POKEDEX_NUMBER);
-                            String customName = memberDoc.getString(FirestorePaths.TEAM_POKEMON_CUSTOM_NAME);
-                            String customSprite = memberDoc.getString(FirestorePaths.TEAM_POKEMON_CUSTOM_SPRITE);
-                            if(memberId!=null){
-                                TeamPokemon pokemon=new TeamPokemon(memberId,userId,teamId,customName,customSprite);
-                                pokemon.setPokedexNumber(pokedexNumber);
-                                members.add(pokemon);
-                            }
+                Team team = new Team(userId,teamId,teamName);
+                teams.add(team);
+                teamDoc.getReference().collection(FirestorePaths.MEMBERS_COLLECTION).get().addOnSuccessListener(membersSnapshot -> {
+                    List<TeamPokemon> members = new ArrayList<>();
+                    for (DocumentSnapshot memberDoc : membersSnapshot) {
+                        String memberId = memberDoc.getString(FirestorePaths.TEAM_POKEMON_ID);
+                        String pokedexNumber = memberDoc.getString(FirestorePaths.TEAM_POKEMON_POKEDEX_NUMBER);
+                        String customName = memberDoc.getString(FirestorePaths.TEAM_POKEMON_CUSTOM_NAME);
+                        String customSprite = memberDoc.getString(FirestorePaths.TEAM_POKEMON_CUSTOM_SPRITE);
+                        if(memberId!=null){
+                            TeamPokemon pokemon=new TeamPokemon(memberId,teamId,customName,customSprite);
+                            pokemon.setPokedexNumber(pokedexNumber);
+                            members.add(pokemon);
                         }
-                        teamMembersMap.put(String.valueOf(teamId), members);
-                        processedTeams[0]++;
-                        if (processedTeams[0] == totalTeams) {
-                            listener.onTeamsFetched(teams, teamMembersMap);
-                        }
-                    });
-                }
+                    }
+                    teamMembersMap.put(String.valueOf(teamId), members);
+                    processedTeams[0]++;
+                    if (processedTeams[0] == totalTeams) {
+                        listener.onTeamsFetched(teams, teamMembersMap);
+                    }
+                });
             }
         }).addOnFailureListener(e -> {
             listener.onTeamsFetched(new ArrayList<>(), new HashMap<>());
@@ -187,7 +191,7 @@ public class UserSync {
         });
     }
     public void addTeamPokemon(TeamPokemon teamPokemon) {
-        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamPokemon.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
+        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamService.getTeamWithMembers(teamPokemon.getTeamId()).getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
         Map<String, Object> teamPokemonMap = new HashMap<>();
         teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_ID, teamPokemon.getId());
         teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_POKEDEX_NUMBER, teamPokemon.getPokedexNumber());
@@ -196,7 +200,7 @@ public class UserSync {
         teamPokemonDocument.set(teamPokemonMap);
     }
     public void updateTeamPokemon(TeamPokemon teamPokemon) {
-        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamPokemon.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
+        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamService.getTeamWithMembers(teamPokemon.getTeamId()).getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
         Map<String, Object> teamPokemonMap = new HashMap<>();
         teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_POKEDEX_NUMBER, teamPokemon.getPokedexNumber());
         teamPokemonMap.put(FirestorePaths.TEAM_POKEMON_CUSTOM_NAME, teamPokemon.getCustomName());
@@ -204,7 +208,7 @@ public class UserSync {
         teamPokemonDocument.update(teamPokemonMap);
     }
     public void deleteTeamPokemon(TeamPokemon teamPokemon){
-        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamPokemon.getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
+        DocumentReference teamPokemonDocument = db.collection(FirestorePaths.USERS_COLLECTION).document(teamService.getTeamWithMembers(teamPokemon.getTeamId()).getUserId()).collection(FirestorePaths.TEAMS_COLLECTION).document(String.valueOf(teamPokemon.getTeamId())).collection(FirestorePaths.MEMBERS_COLLECTION).document(String.valueOf(teamPokemon.getId()));
         teamPokemonDocument.delete();
     }
 }

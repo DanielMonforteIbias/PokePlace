@@ -1,8 +1,11 @@
 package dam.tfg.pokeplace.data.service;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.data.dao.TeamDAO;
 import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
@@ -14,16 +17,18 @@ public class TeamService {
     private TeamDAO teamDAO;
     private TeamPokemonDAO teamPokemonDAO;
     private BasePokemonDAO basePokemonDAO;
+    public int teamsLimit =0;
 
-    public TeamService(TeamDAO teamDAO, TeamPokemonDAO teamPokemonDAO, BasePokemonDAO basePokemonDAO) {
-        this.teamDAO = teamDAO;
-        this.teamPokemonDAO = teamPokemonDAO;
-        this.basePokemonDAO=basePokemonDAO;
+    public TeamService(Context context) {
+        this.teamDAO = new TeamDAO(context);
+        this.teamPokemonDAO = new TeamPokemonDAO(context);
+        this.basePokemonDAO=new BasePokemonDAO(context);
+        this.teamsLimit =context.getResources().getInteger(R.integer.teams_limit);
     }
 
-    public Team getTeamWithMembers(String userId, int teamId) {
-        Team team = teamDAO.getTeam(userId, teamId);
-        ArrayList<TeamPokemon> teamMembers = (ArrayList<TeamPokemon>) teamPokemonDAO.getTeamMembers(userId, teamId);
+    public Team getTeamWithMembers(String teamId) {
+        Team team = teamDAO.getTeam(teamId);
+        ArrayList<TeamPokemon> teamMembers = (ArrayList<TeamPokemon>) teamPokemonDAO.getTeamMembers(teamId);
         for(TeamPokemon teamPokemon:teamMembers){ //Se completa la informacion en esta capa para no mezclar los DAOs uno dentro del otro
             teamPokemon.completeBaseData(basePokemonDAO.getBasePokemon(Integer.parseInt(teamPokemon.getPokedexNumber())));
         }
@@ -33,7 +38,7 @@ public class TeamService {
     public List<Team> getAllTeams(String userId) {
         List<Team> teams = teamDAO.getAllTeams(userId);
         for (Team team : teams) {
-            ArrayList<TeamPokemon> members = (ArrayList<TeamPokemon>) teamPokemonDAO.getTeamMembers(userId, team.getTeamId());
+            ArrayList<TeamPokemon> members = (ArrayList<TeamPokemon>) teamPokemonDAO.getTeamMembers(team.getTeamId());
             for(TeamPokemon teamPokemon:members){ //Se completa la informacion en esta capa para no mezclar los DAOs uno dentro del otro
                 teamPokemon.completeBaseData(basePokemonDAO.getBasePokemon(Integer.parseInt(teamPokemon.getPokedexNumber())));
             }
@@ -46,23 +51,23 @@ public class TeamService {
         teamDAO.addTeam(team);
     }
 
-    public int getNewTeamId(String userId) {
-        return teamDAO.getNewTeamId(userId);
+    public String getNewTeamId() {
+        return teamDAO.getNewTeamId();
     }
     public void changeTeamName(Team team){
         teamDAO.updateTeam(team);
     }
-    public void removeTeam(String userId, int teamId){
-        teamDAO.removeTeam(userId,teamId);
+    public void removeTeam(String teamId){
+        teamDAO.removeTeam(teamId);
     }
-    public int getTeamSize(String userId, int teamId){
-        return teamPokemonDAO.getTeamSize(userId,teamId);
+    public int getTeamSize(String teamId){
+        return teamPokemonDAO.getTeamSize(teamId);
     }
     public void updateTeam(Team team){
         teamDAO.updateTeam(team);
     }
-    public boolean teamExists(String userId, int teamId){
-        return teamDAO.teamExists(userId,teamId);
+    public boolean teamExists(String teamId){
+        return teamDAO.teamExists(teamId);
     }
     public BasePokemon getBasePokemon(int pokedexNumber){
         return basePokemonDAO.getBasePokemon(pokedexNumber);

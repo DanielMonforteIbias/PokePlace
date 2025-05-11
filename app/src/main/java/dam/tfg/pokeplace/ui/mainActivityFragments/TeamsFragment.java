@@ -55,8 +55,8 @@ public class TeamsFragment extends Fragment {
         binding = FragmentTeamsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         userDAO=new UserDAO(getContext());
-        userSync=new UserSync();
-        teamService=new TeamService(new TeamDAO(getContext()),new TeamPokemonDAO(getContext()),new BasePokemonDAO(getContext()));
+        userSync=new UserSync(getContext());
+        teamService=new TeamService(getContext());
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
         teams=teamService.getAllTeams(userId);
         teamDetailsActivityLauncher=registerForActivityResult(
@@ -104,7 +104,7 @@ public class TeamsFragment extends Fragment {
                 btnAccept.setOnClickListener(v -> {
                     String teamName = input.getText().toString().trim();
                     if (!teamName.isEmpty()) {
-                        Team newTeam = new Team(userId, teamService.getNewTeamId(userId), teamName);
+                        Team newTeam = new Team(userId, teamService.getNewTeamId(), teamName);
                         teamService.addTeam(newTeam);
                         userSync.addTeam(newTeam);
                         teams.add(newTeam);

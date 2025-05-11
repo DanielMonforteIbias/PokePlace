@@ -182,4 +182,8 @@
     <string name="app_language">Idioma de la app</string>
     <!--Descriptions-->
     <string name="sprite">Sprite</string>
+
+    <!--Firestore-->
+    <string name="error_syncing_teams_size">Error sincronizando %1$s, límite de equipos alcanzado</string>
+    <string name="error_syncing_no_connection">No se pudo sincronizar con la nube. Comprueba tu conexión a Internet</string>
 </resources>

@@ -69,8 +69,8 @@ public class TeamDetailsActivity extends BaseActivity {
         setSupportActionBar(binding.toolbarTeamDetails);
         if(getSupportActionBar()!=null) getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostramos la flecha para volver
         userDAO=new UserDAO(this);
-        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
-        userSync=new UserSync();
+        teamService=new TeamService(getApplicationContext());
+        userSync=new UserSync(getApplicationContext());
         Intent intent=getIntent();
         team=intent.getParcelableExtra("Team");
         if(team!=null) user=userDAO.getUser(team.getUserId()); //En vez de usar el objeto user de Firebase usamos el id de user que hay en el team
@@ -171,7 +171,7 @@ public class TeamDetailsActivity extends BaseActivity {
                 btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        teamService.removeTeam(user.getUserId(),team.getTeamId());
+                        teamService.removeTeam(team.getTeamId());
                         userSync.deleteTeam(team);
                         ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
                         dialog.dismiss();
@@ -286,7 +286,7 @@ public class TeamDetailsActivity extends BaseActivity {
                         if (selectedPokemon!=null) {
                             String pokemonName=autoCompleteTextView.getText().toString(); //El nombre personalizado del Pokemon será lo escrito en el campo. Generalmente su nombre, pero esto da la opcion de cambiar lo escrito una vez seleccionado para personalizarlo
                             if(!pokemonName.isEmpty()){
-                                TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),user.getUserId(),team.getTeamId(),pokemonName,selectedPokemon.getSprite());
+                                TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),team.getTeamId(),pokemonName,selectedPokemon.getSprite());
                                 teamPokemon.setPokedexNumber(selectedPokemon.getPokedexNumber());
                                 teamService.addTeamPokemon(teamPokemon); //Lo añadimos en la BD
                                 teamPokemon.completeBaseData(selectedPokemon); //Completamos el resto de campos
