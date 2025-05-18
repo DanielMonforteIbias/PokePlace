@@ -26,7 +26,6 @@ public class TeamPokemonDAO {
     }
     public void addTeamPokemon(TeamPokemon pokemon) {
         values=new ContentValues();
-        System.out.println(getTeamSize(pokemon.getTeamId()));
         if(getTeamSize(pokemon.getTeamId())<teamSizeLimit){
             values.put(DatabaseHelper.TEAM_POKEMON_ID_COLUMN, pokemon.getId());
             values.put(DatabaseHelper.TEAM_POKEMON_TEAM_ID_COLUMN, pokemon.getTeamId());

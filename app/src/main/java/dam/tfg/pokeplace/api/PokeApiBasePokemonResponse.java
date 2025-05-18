@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
 import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.utils.JSONExtractor;
 import dam.tfg.pokeplace.utils.ToastUtil;
@@ -26,10 +25,7 @@ public class PokeApiBasePokemonResponse {
     private static int limit=60; //Cargaremos de 60 en 60 para tener todos pero no esperar a todos para que el usuario no espere mucho
     private static int totalPokemon=1025; //Aunque haya 1304 resultados en la API, hay 1025 Pokemon
 
-    private static BasePokemonDAO basePokemonDAO;
-
-    public static void getAllPokemons(BasePokemonCallback callback, Context context, int currentPokemonNumber){
-        basePokemonDAO=new BasePokemonDAO(context);
+    /*public static void getAllPokemon(BasePokemonCallback callback, Context context, int currentPokemonNumber){
         if(currentPokemonNumber>=totalPokemon) return; //Si ya  estan todos, no hacemos nada
         offset=currentPokemonNumber; //El offset es donde empezaremos. De normal sera 0, pero puede que se llame este metodo al retomar la carga si se dejo a medias, asi que empezamos por donde se quedo
         if(offset+limit>totalPokemon)limit=totalPokemon-offset; //si quedan menos del limite, cogemos solo los que quedan hasta llegar al limite, no lo siguiente
@@ -67,7 +63,7 @@ public class PokeApiBasePokemonResponse {
                                             Collections.sort(pokemonList, (p1, p2) -> {return Integer.compare(Integer.parseInt(p1.getPokedexNumber()),Integer.parseInt(p2.getPokedexNumber()));});//Ordenamos la lista por numero de Pokedex, porque viene desordenada al ser asincrono
                                             callback.onBasePokemonListReceived(pokemonList);
                                             offset+=limit;
-                                            if(offset<totalPokemon)getAllPokemons(callback,context,offset); //Llamamos al metodo de nuevo para cargar los 60 siguientes solo si aun quedan
+                                            if(offset<totalPokemon) getAllPokemon(callback,context,offset); //Llamamos al metodo de nuevo para cargar los 60 siguientes solo si aun quedan
                                         }catch(NullPointerException e){ //Si se cierra la actividad durante la carga da este error
                                             System.out.println("Error. Fragment nulo");
                                         }
@@ -79,7 +75,7 @@ public class PokeApiBasePokemonResponse {
                 }
                 else {
                     if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response)));
-                    System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
+                    if(response.body()!=null)System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body());
                 }
             }
         });
@@ -96,7 +92,7 @@ public class PokeApiBasePokemonResponse {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String datos = response.body().string();
-                    BasePokemon pokemon= JSONExtractor.extractBasePokemon(datos);
+                    BasePokemon pokemon= JSONExtractor.extractBasePokemonAPI(datos);
                     pokemon.setUrl(pokemonUrl);
                     callback.onBasePokemonReceived(pokemon);
                 }
@@ -107,5 +103,5 @@ public class PokeApiBasePokemonResponse {
                 }
             }
         });
-    }
+    }*/
 }

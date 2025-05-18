@@ -57,6 +57,9 @@
     <!--Manejo respuesta PokeApi-->
     <string name="error_api_request">API request error</string>
     <string name="error_api_response">API response error</string>
+    <!--Manejo lectura JSON-->
+    <string name="error_json_empty">No Pokémon found</string>
+    <string name="error_no_json">Pokémon file not found</string>
     <!--Pokedex-->
     <string name="search_name">Search by name</string>
     <string name="search_type">Search by type</string>

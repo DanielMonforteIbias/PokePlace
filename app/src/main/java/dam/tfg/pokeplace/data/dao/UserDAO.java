@@ -23,8 +23,8 @@ public class UserDAO {
         values.put(DatabaseHelper.USER_EMAIL_COLUMN, user.getEmail());
         values.put(DatabaseHelper.USER_NAME_COLUMN, user.getName());
         values.put(DatabaseHelper.USER_IMAGE_COLUMN, user.getImage());
-        values.put(DatabaseHelper.USER_FAV_TYPE,user.getFavType());
-        values.put(DatabaseHelper.USER_FAV_POKEMON,user.getFavPokemon());
+        values.put(DatabaseHelper.USER_FAV_TYPE_COLUMN,user.getFavType());
+        values.put(DatabaseHelper.USER_FAV_POKEMON_COLUMN,user.getFavPokemon());
         db.insert(DatabaseHelper.USERS_TABLE_NAME, null, values);
     }
     public void deleteUser(String userId) {
@@ -36,8 +36,8 @@ public class UserDAO {
         values = new ContentValues();
         values.put(DatabaseHelper.USER_NAME_COLUMN, user.getName());
         values.put(DatabaseHelper.USER_IMAGE_COLUMN,user.getImage());
-        values.put(DatabaseHelper.USER_FAV_TYPE,user.getFavType());
-        values.put(DatabaseHelper.USER_FAV_POKEMON,user.getFavPokemon());
+        values.put(DatabaseHelper.USER_FAV_TYPE_COLUMN,user.getFavType());
+        values.put(DatabaseHelper.USER_FAV_POKEMON_COLUMN,user.getFavPokemon());
         String where=DatabaseHelper.USER_ID_COLUMN+"=?";
         db.update(DatabaseHelper.USERS_TABLE_NAME,values,where,new String[]{user.getUserId()});
     }

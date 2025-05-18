@@ -21,7 +21,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class PokeApiTypeResponse {
-    private static int limit=18; //Aunque haya 20 tipos en la pokeapi, el unknown y el estelar no los contamos
+    /*private static int limit=18; //Aunque haya 20 tipos en la pokeapi, el unknown y el estelar no los contamos
     public static void getAllTypes(TypeCallback callback, Context context){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url("https://pokeapi.co/api/v2/type?limit="+limit).get().build();
@@ -80,7 +80,7 @@ public class PokeApiTypeResponse {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String datos = response.body().string();
-                    Type type= JSONExtractor.extractType(datos);
+                    Type type= JSONExtractor.extractTypeAPI(datos);
                     callback.onTypeReceived(type);
                 }
                 else {
@@ -90,5 +90,5 @@ public class PokeApiTypeResponse {
                 }
             }
         });
-    }
+    }*/
 }

@@ -21,13 +21,15 @@ public class TypeCalculatorFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTypeCalculatorBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        configureViewPager();
+    }
+    public void configureViewPager(){
         TypeCalculatorAdapter adapter = new TypeCalculatorAdapter(this);
         binding.viewPager.setAdapter(adapter);
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
@@ -44,7 +46,6 @@ public class TypeCalculatorFragment extends Fragment {
             }
         }).attach();
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

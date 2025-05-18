@@ -1,5 +1,6 @@
 package dam.tfg.pokeplace.data;
 
+import android.content.Context;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -7,9 +8,11 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
+import dam.tfg.pokeplace.data.service.TypeService;
 import dam.tfg.pokeplace.models.BasePokemon;
-import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Type;
+import dam.tfg.pokeplace.utils.JSONExtractor;
 
 public class Data {
     private static Data instance;
@@ -25,18 +28,31 @@ public class Data {
         }
         return instance;
     }
+    public void loadTypes(Context context){
+        TypeService typeService=new TypeService(context);
+        this.typeList.addAll(typeService.getAllTypes());
+        if (this.typeList.isEmpty()){ //Comprobamos de nuevo si esta vacia por si no estan en la BD
+            System.out.println("ARCHIVO");
+            this.typeList=JSONExtractor.extractTypeList(context);
+            typeService.addAllTypes(this.typeList); //Los añadimos a la BD
+        }
+        //Si estaban en la base de datos ya se habran añadido
+    }
+    public void loadPokemon(Context context){
+        BasePokemonDAO basePokemonDAO=new BasePokemonDAO(context);
+        this.pokemonList.addAll(basePokemonDAO.getBasePokemonList());
+        if(this.pokemonList.isEmpty()){
+            System.out.println("ARCHIVO");
+            this.pokemonList= JSONExtractor.extractBasePokemonList(context);
+            this.pokemonList.forEach(basePokemonDAO::addBasePokemon);
+        }//Si estaban en la base de datos ya se habran añadido
 
-    public void setPokemonList(List<BasePokemon> list) {
-        this.pokemonList = list;
     }
 
     public List<BasePokemon> getPokemonList() {
         return pokemonList;
     }
 
-    public void setTypeList(List<Type> list) {
-        this.typeList = list;
-    }
 
     public List<Type> getTypeList() {
         return typeList;

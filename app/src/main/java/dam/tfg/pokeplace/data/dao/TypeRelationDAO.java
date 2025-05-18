@@ -25,15 +25,15 @@ public class TypeRelationDAO {
         */
         if(!relationExists(targetType,sourceType,complementaryRelation)) {
             values=new ContentValues();
-            values.put(DatabaseHelper.TYPE_RELATIONS_SOURCE_TYPE, sourceType);
-            values.put(DatabaseHelper.TYPE_RELATIONS_TARGET_TYPE, targetType);
-            values.put(DatabaseHelper.TYPE_RELATIONS_RELATION, relation);
+            values.put(DatabaseHelper.TYPE_RELATIONS_SOURCE_TYPE_COLUMN, sourceType);
+            values.put(DatabaseHelper.TYPE_RELATIONS_TARGET_TYPE_COLUMN, targetType);
+            values.put(DatabaseHelper.TYPE_RELATIONS_RELATION_COLUMN, relation);
             db.insert(DatabaseHelper.TYPE_RELATIONS_TABLE_NAME, null, values);
         }
     }
     public Type loadRelationsForType(Type type) {
         String typeName = type.getName();
-        Cursor cursor = db.query(DatabaseHelper.TYPE_RELATIONS_TABLE_NAME, null, DatabaseHelper.TYPE_RELATIONS_SOURCE_TYPE+" = ? OR "+DatabaseHelper.TYPE_RELATIONS_TARGET_TYPE +"= ?", new String[]{typeName, typeName}, null, null, null);
+        Cursor cursor = db.query(DatabaseHelper.TYPE_RELATIONS_TABLE_NAME, null, DatabaseHelper.TYPE_RELATIONS_SOURCE_TYPE_COLUMN +" = ? OR "+DatabaseHelper.TYPE_RELATIONS_TARGET_TYPE_COLUMN +"= ?", new String[]{typeName, typeName}, null, null, null);
         while (cursor.moveToNext()) {
             String source = cursor.getString(0);
             String target = cursor.getString(1);
@@ -96,7 +96,7 @@ public class TypeRelationDAO {
     }
 
     private boolean relationExists(String sourceType, String targetType, String relation) {
-        Cursor cursor = db.query(DatabaseHelper.TYPE_RELATIONS_TABLE_NAME, null, DatabaseHelper.TYPE_RELATIONS_SOURCE_TYPE+" = ? AND "+DatabaseHelper.TYPE_RELATIONS_TARGET_TYPE+" = ? AND "+DatabaseHelper.TYPE_RELATIONS_RELATION+" = ?", new String[]{sourceType, targetType, relation}, null, null, null);
+        Cursor cursor = db.query(DatabaseHelper.TYPE_RELATIONS_TABLE_NAME, null, DatabaseHelper.TYPE_RELATIONS_SOURCE_TYPE_COLUMN +" = ? AND "+DatabaseHelper.TYPE_RELATIONS_TARGET_TYPE_COLUMN +" = ? AND "+DatabaseHelper.TYPE_RELATIONS_RELATION_COLUMN +" = ?", new String[]{sourceType, targetType, relation}, null, null, null);
         boolean exists = (cursor != null && cursor.getCount() > 0);
         if (cursor != null) {
             cursor.close();

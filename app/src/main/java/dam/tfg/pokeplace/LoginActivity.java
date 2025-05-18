@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
@@ -71,6 +72,8 @@ public class LoginActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Data.getInstance().loadTypes(getApplicationContext());
+        Data.getInstance().loadPokemon(getApplicationContext());
         userDAO=new UserDAO(this);
         teamService=new TeamService(getApplicationContext());
         userSync=new UserSync(getApplicationContext());

@@ -2,7 +2,6 @@ package dam.tfg.pokeplace.ui.mainActivityFragments.pokedex;
 
 import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
 
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,18 +47,18 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     private List<BasePokemon>filteredList=new ArrayList<>();
     private String currentNameFilter ="";
     private String currentTypeFilter="";
-    private BasePokemonDAO basePokemonDAO;
-    private TypeService typeService;
+    //private BasePokemonDAO basePokemonDAO;
+    //private TypeService typeService;
 
-    private int loadLimit;
-    private int totalPokemon;
+    //private int loadLimit;
+    //private int totalPokemon;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPokedexBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        basePokemonDAO=new BasePokemonDAO(getContext());
-        typeService=new TypeService(new TypeDAO(getContext()),new TypeRelationDAO(getContext()));
+        //basePokemonDAO=new BasePokemonDAO(getContext());
+        //typeService=new TypeService(new TypeDAO(getContext()),new TypeRelationDAO(getContext()));
         data=Data.getInstance();
         filterTypes=new ArrayList<>(data.getTypeList());
         filterTypes.add(0,new Type(getString(R.string.all_types),null)); //Añadimos el tipo para mostrar todos
@@ -84,8 +82,8 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             currentNameFilter=savedInstanceState.getString("currentNameFilter");
             currentTypeFilter=savedInstanceState.getString("currentTypeFilter");
         }*/
-        loadLimit = getResources().getInteger(R.integer.load_limit);
-        totalPokemon=getResources().getInteger(R.integer.total_pokemon);
+        /*loadLimit = getResources().getInteger(R.integer.load_limit);
+        totalPokemon=getResources().getInteger(R.integer.total_pokemon);*/
         requireActivity().addMenuProvider(new MenuProvider() { //Añadimos el menu con la SearchView solo a este fragment
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
@@ -114,12 +112,12 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
                 return false;
             }
         },getViewLifecycleOwner()); //Importante añadir para destruir junto al fragmento
-        if(!loadTypes()){
+        /*if(!loadTypes()){
             if(isAdded() && getActivity()!=null){
                 getActivity().runOnUiThread(()->binding.btnTypeFilter.setVisibility(View.VISIBLE));
                 loadPokemon();
             }
-        }
+        }*/
     }
 
     @Override
@@ -129,7 +127,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
         outState.putString("currenTypeFilter",currentTypeFilter);
     }
 
-    public boolean loadTypes(){
+    /*public boolean loadTypes(){
         if (data.getTypeList().isEmpty()) { //Buscamos los tipos solo si la lista está vacía
             binding.btnTypeFilter.setVisibility(View.GONE);
             data.getTypeList().addAll(typeService.getAllTypes());
@@ -177,7 +175,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             }
         }
         else if(current<totalPokemon){
-            PokeApiBasePokemonResponse.getAllPokemons(new BasePokemonCallback() {
+            PokeApiBasePokemonResponse.getAllPokemon(new BasePokemonCallback() {
                 @Override
                 public void onBasePokemonListReceived(List<BasePokemon> pokemonList) {
                     data.getPokemonList().addAll(pokemonList);
@@ -198,7 +196,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
                 }
             }, getContext(),data.getPokemonList().size()); //Le pasamos el numero de Pokemon actual por si la carga se quedo a medias, para retomar donde estaba
         }
-    }
+    }*/
     private void filterList(String nameFilter, String typeFilter) {
         filteredList.clear();
         for (BasePokemon p : data.getPokemonList()) {
