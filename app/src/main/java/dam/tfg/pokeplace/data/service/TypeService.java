@@ -9,8 +9,8 @@ import dam.tfg.pokeplace.data.dao.TypeRelationDAO;
 import dam.tfg.pokeplace.models.Type;
 
 public class TypeService {
-    private TypeDAO typeDAO;
-    private TypeRelationDAO typeRelationDAO;
+    private final TypeDAO typeDAO;
+    private final TypeRelationDAO typeRelationDAO;
 
     public TypeService(Context context) {
         this.typeDAO = new TypeDAO(context);

@@ -20,8 +20,8 @@ import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class IconAdapter extends BaseAdapter {
-    private List<String> iconNames;
-    private Context context;
+    private final List<String> iconNames;
+    private final Context context;
 
     public IconAdapter(List<String>iconNames,Context context) {
         this.iconNames=iconNames;

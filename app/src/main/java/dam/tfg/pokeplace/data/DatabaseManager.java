@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class DatabaseManager {
     private static DatabaseManager instance;
     private SQLiteDatabase database;
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
 
     private DatabaseManager(Context context) {
         dbHelper = new DatabaseHelper(context.getApplicationContext());

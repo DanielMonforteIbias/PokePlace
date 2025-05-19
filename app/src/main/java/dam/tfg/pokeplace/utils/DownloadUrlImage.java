@@ -1,6 +1,7 @@
 package dam.tfg.pokeplace.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.net.HttpURLConnection;
@@ -13,6 +14,7 @@ public class DownloadUrlImage extends AsyncTaskExecutorService<String, Void, Boo
     private final Context context;
     private final Consumer<String> callback;
     private String url;
+    private final String TAG="DOWNLOADURLIMAGE";
     public DownloadUrlImage(Context context, Consumer<String> callback) {
         this.context = context;
         this.callback = callback;
@@ -29,7 +31,7 @@ public class DownloadUrlImage extends AsyncTaskExecutorService<String, Void, Boo
             if (url.endsWith(".svg")) return false; //Formato no soportado
             return contentType != null && contentType.startsWith("image/");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
             return false;
         }
     }

@@ -35,8 +35,8 @@ import dam.tfg.pokeplace.utils.StringFormatter;
 import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder> {
-    private List<Type> types;
-    private OnTypeSelectedListener listener;
+    private final List<Type> types;
+    private final OnTypeSelectedListener listener;
 
     public TypeAdapter(List<Type> types, Context context, OnTypeSelectedListener listener) {
         this.types =(types!=null) ? types : new ArrayList<>(); //Si la lista no es nula la guardamos, si es nula la inicialiamos para evitar NullPointers

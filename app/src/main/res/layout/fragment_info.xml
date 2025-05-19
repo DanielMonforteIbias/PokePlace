@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/pokemonDetailsLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center|top"
         android:orientation="vertical">
 
@@ -28,21 +28,24 @@
                 android:id="@+id/spriteLeftArrow"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:contentDescription="@string/left_arrow"
                 app:srcCompat="@drawable/leftarrow" />
 
             <ImageView
                 android:id="@+id/spriteDetails"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
                 android:background="@drawable/dialog_background"
+                android:contentDescription="@string/pokemon"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
                 android:id="@+id/spriteRightArrow"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:contentDescription="@string/right_arrow"
                 app:srcCompat="@drawable/rightarrow" />
         </LinearLayout>
 
@@ -54,10 +57,10 @@
 
             <TextView
                 android:id="@+id/txtNameDetails"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Name"
+                android:text="@string/name"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -65,7 +68,7 @@
                 android:id="@+id/txtNumberDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="000"
+                android:text="@string/pokedexNumberPlaceholder"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -83,6 +86,7 @@
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_margin="5dp"
+                android:contentDescription="@string/type"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
@@ -90,6 +94,7 @@
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_margin="5dp"
+                android:contentDescription="@string/type"
                 tools:srcCompat="@tools:sample/avatars" />
         </LinearLayout>
 
@@ -98,6 +103,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="start"
+            android:contentDescription="@string/sound"
             app:srcCompat="@drawable/sound" />
 
         <LinearLayout

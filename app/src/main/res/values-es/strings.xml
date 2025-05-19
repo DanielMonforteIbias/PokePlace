@@ -63,12 +63,15 @@
     <string name="search_type">Buscar por tipo</string>
     <string name="all_types">Todos los tipos</string>
     <!--Detalles-->
-    <string name="height">Altura</string>
-    <string name="weight">Peso</string>
+    <string name="height">Altura: %1$s%2$s</string>
+    <string name="weight">Peso: %1$s%2$s</string>
     <string name="name">Nombre</string>
     <string name="description">Descripcion</string>
     <string name="version">Versión</string>
     <string name="error_pokemon_not_available">Pokémon no cargado todavía</string>
+    <string name="left_arrow">Flecha izquierda</string>
+    <string name="right_arrow">Flecha derecha</string>
+    <string name="sound">Sonido</string>
     <!--Stats-->
     <string name="stats_title">STATS DE %1$s</string>
     <string name="stat">Stat</string>
@@ -120,18 +123,18 @@
     <string name="not_effective">No muy efectivo</string>
     <string name="normal">Normal</string>
     <string name="no_effect">Sin efecto</string>
-    <string name="attacker_x4">hace x4 de daño a</string>
-    <string name="attacker_x2">hace x2 de daño a</string>
-    <string name="attacker_x0.5">hace x0.5 de daño a</string>
-    <string name="attacker_x0.25">hace x0.25 de daño a</string>
-    <string name="attacker_x0">hace x0 de daño a</string>
-    <string name="attacker_x1">hace x1 de daño a</string>
-    <string name="defender_x4">sufre x4 de daño de</string>
-    <string name="defender_x2">sufre x2 de daño de</string>
-    <string name="defender_x0.5">sufre x0.5 de daño de</string>
-    <string name="defender_x0.25">sufre x0.25 de daño de</string>
-    <string name="defender_x0">sufre x0 de daño de</string>
-    <string name="defender_x1">sufre x1 de daño de</string>
+    <string name="attacker_x4">%1$s hace x4 de daño a</string>
+    <string name="attacker_x2">%1$s hace x2 de daño a</string>
+    <string name="attacker_x0.5">%1$s hace x0.5 de daño a</string>
+    <string name="attacker_x0.25">%1$s hace x0.25 de daño a</string>
+    <string name="attacker_x0">%1$s hace x0 de daño a</string>
+    <string name="attacker_x1">%1$s hace x1 de daño a</string>
+    <string name="defender_x4">%1$s sufre x4 de daño de</string>
+    <string name="defender_x2">%1$s sufre x2 de daño de</string>
+    <string name="defender_x0.5">%1$s sufre x0.5 de daño de</string>
+    <string name="defender_x0.25">%1$s sufre x0.25 de daño de</string>
+    <string name="defender_x0">%1$s sufre x0 de daño de</string>
+    <string name="defender_x1">%1$s sufre x1 de daño de</string>
     <!--Edit User-->
     <string name="change_name">Cambiar nombre</string>
     <string name="change_image">Cambiar imagen</string>

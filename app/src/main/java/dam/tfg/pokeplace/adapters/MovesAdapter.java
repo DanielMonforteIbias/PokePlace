@@ -21,7 +21,7 @@ import dam.tfg.pokeplace.utils.StringFormatter;
 import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class MovesAdapter extends RecyclerView.Adapter<MovesAdapter.ViewHolder>{
-    private List<Move> movesList;
+    private final List<Move> movesList;
     public MovesAdapter(List<Move>movesList){
         this.movesList=movesList;
     }

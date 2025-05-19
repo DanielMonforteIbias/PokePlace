@@ -29,24 +29,27 @@ public class Data {
         return instance;
     }
     public void loadTypes(Context context){
-        TypeService typeService=new TypeService(context);
-        this.typeList.addAll(typeService.getAllTypes());
-        if (this.typeList.isEmpty()){ //Comprobamos de nuevo si esta vacia por si no estan en la BD
-            System.out.println("ARCHIVO");
-            this.typeList=JSONExtractor.extractTypeList(context);
-            typeService.addAllTypes(this.typeList); //Los añadimos a la BD
+        if(this.typeList.isEmpty()){ //Si la lista está vacia
+            TypeService typeService=new TypeService(context);
+            this.typeList.addAll(typeService.getAllTypes()); //Cogemos los tipos de la base de datos
+            if (this.typeList.isEmpty()){ //Si sigue estando vacia
+                this.typeList=JSONExtractor.extractTypeList(context); //Los cogemos del JSON
+                typeService.addAllTypes(this.typeList); //Los añadimos a la BD
+            }
+            //Si estaban en la base de datos ya se habran añadido
         }
-        //Si estaban en la base de datos ya se habran añadido
+        //Si no está vacia no los añadimos para no duplicar
     }
     public void loadPokemon(Context context){
-        BasePokemonDAO basePokemonDAO=new BasePokemonDAO(context);
-        this.pokemonList.addAll(basePokemonDAO.getBasePokemonList());
-        if(this.pokemonList.isEmpty()){
-            System.out.println("ARCHIVO");
-            this.pokemonList= JSONExtractor.extractBasePokemonList(context);
-            this.pokemonList.forEach(basePokemonDAO::addBasePokemon);
-        }//Si estaban en la base de datos ya se habran añadido
-
+        if(this.pokemonList.isEmpty()){ //Si la lista de Pokémon está vacía
+            BasePokemonDAO basePokemonDAO=new BasePokemonDAO(context);
+            this.pokemonList.addAll(basePokemonDAO.getBasePokemonList()); //Cogemos los Pokémon de la BD
+            if(this.pokemonList.isEmpty()){ //Si sigue estando vacia
+                this.pokemonList= JSONExtractor.extractBasePokemonList(context); //Cogemos los Pokémon del archivo
+                this.pokemonList.forEach(basePokemonDAO::addBasePokemon); //Añadimos los Pokémon a la BD
+            }//Si estaban en la base de datos ya se habran añadido
+        }
+        //Si no está vacia no los añadimos para no duplicar
     }
 
     public List<BasePokemon> getPokemonList() {

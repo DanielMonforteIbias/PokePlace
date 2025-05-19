@@ -1,5 +1,6 @@
 package dam.tfg.pokeplace.ui.detailsActivityFragments;
 
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,7 +33,6 @@ import dam.tfg.pokeplace.ui.mainActivityFragments.pokedex.TypeFilterBottomSheetF
 public class MovesFragment extends Fragment implements OnTypeSelectedListener {
     private FragmentMovesBinding binding;
     private MovesAdapter adapter;
-    private Data data;
     private Pokemon pokemon;
     private List<Type> filterTypes=new ArrayList<>();
     private List<Move>filteredList=new ArrayList<>();
@@ -41,8 +41,7 @@ public class MovesFragment extends Fragment implements OnTypeSelectedListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMovesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        data= Data.getInstance();
-        filterTypes=new ArrayList<>(data.getTypeList());
+        filterTypes=new ArrayList<>(Data.getInstance().getTypeList());
         filterTypes.add(0,new Type(getString(R.string.all_types),null)); //Añadimos el tipo para mostrar todos
         binding.movesList.setLayoutManager(new GridLayoutManager(getContext(),1));
         binding.btnTypeFilterMoves.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +95,7 @@ public class MovesFragment extends Fragment implements OnTypeSelectedListener {
         super.onDestroyView();
         binding = null;
     }
+    @SuppressLint("NotifyDataSetChanged")
     private void filterList(String typeFilter) {
         filteredList.clear();
         if(typeFilter == null || typeFilter.isEmpty() || typeFilter.equals(getString(R.string.all_types))) filteredList.addAll((pokemon.getMoves()));
@@ -116,7 +116,8 @@ public class MovesFragment extends Fragment implements OnTypeSelectedListener {
     @Override
     public void onTypeSelected(Type type) {
         currentTypeFilter=type.getName();
-        int colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
+        int colorId=0;
+        if(getContext()!=null) colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
         if (colorId != 0) {
             int color = ContextCompat.getColor(getContext(), colorId);
             binding.btnTypeFilterMoves.setBackgroundTintList(ColorStateList.valueOf(color));

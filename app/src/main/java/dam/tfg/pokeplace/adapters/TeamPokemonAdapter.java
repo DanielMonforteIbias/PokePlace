@@ -24,8 +24,8 @@ import dam.tfg.pokeplace.utils.PokemonClickHandler;
 import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class TeamPokemonAdapter extends RecyclerView.Adapter<TeamPokemonAdapter.ViewHolder>{
-    private List<TeamPokemon> pokemonList;
-    private OnTeamPokemonActionListener listener;
+    private final List<TeamPokemon> pokemonList;
+    private final OnTeamPokemonActionListener listener;
     private boolean editing=false; //Variable para saber si mostrar o no los botones de edición
 
     public TeamPokemonAdapter(List<TeamPokemon>pokemonList, OnTeamPokemonActionListener listener){

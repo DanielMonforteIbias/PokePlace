@@ -29,6 +29,7 @@
             android:id="@+id/imgAddPokemonToTeamPokemon"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:contentDescription="@string/pokemon"
             tools:srcCompat="@tools:sample/avatars" />
 
         <AutoCompleteTextView

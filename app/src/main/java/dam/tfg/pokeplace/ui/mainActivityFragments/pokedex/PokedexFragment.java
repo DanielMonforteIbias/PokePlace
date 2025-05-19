@@ -2,6 +2,7 @@ package dam.tfg.pokeplace.ui.mainActivityFragments.pokedex;
 
 import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
 
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -197,6 +198,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             }, getContext(),data.getPokemonList().size()); //Le pasamos el numero de Pokemon actual por si la carga se quedo a medias, para retomar donde estaba
         }
     }*/
+    @SuppressLint("NotifyDataSetChanged")
     private void filterList(String nameFilter, String typeFilter) {
         filteredList.clear();
         for (BasePokemon p : data.getPokemonList()) {
@@ -219,7 +221,8 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     @Override
     public void onTypeSelected(Type type) {
         currentTypeFilter=type.getName();
-        int colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
+        int colorId=0;
+        if(getContext()!=null) colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
         if (colorId != 0) {
             int color = ContextCompat.getColor(getContext(), colorId);
             binding.btnTypeFilter.setBackgroundTintList(ColorStateList.valueOf(color)); //Cambiamos el color del boton por el tipo seleccionado en el filtro

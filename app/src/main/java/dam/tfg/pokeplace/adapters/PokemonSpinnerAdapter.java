@@ -23,8 +23,8 @@ import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class PokemonSpinnerAdapter extends ArrayAdapter<BasePokemon> {
-    private Context context;
-    private List<BasePokemon> pokemonList;
+    private final Context context;
+    private final List<BasePokemon> pokemonList;
     private List<BasePokemon> suggestions;
 
     public PokemonSpinnerAdapter(List<BasePokemon> pokemonList, Context context) {

@@ -64,12 +64,18 @@
     <string name="search_name">Search by name</string>
     <string name="search_type">Search by type</string>
     <string name="all_types">All types</string>
+    <string name="pokemon" translatable="false">Pokémon</string>
     <!--Detalles-->
-    <string name="height">Height</string>
-    <string name="weight">Weight</string>
+    <string name="height">Height: %1$s%2$s</string>
+    <string name="weight">Weight: %1$s%2$s</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="version">Version</string>
+    <string name="left_arrow">Left arrow</string>
+    <string name="right_arrow">Left arrow</string>
+    <string name="pokedexNumberPlaceholder" translatable="false">000</string>
+    <string name="sound">Sound</string>
+    <string name="zero" translatable="false">0</string>
     <!--Stats-->
     <string name="stats_title">%1$s\'S STATS</string> <!--%1$s means that a parameter will be expected to be placed there-->
     <string name="stat">Stat</string>
@@ -117,22 +123,22 @@
     <string name="defender">Defender</string>
     <string name="simple">Simple</string>
     <string name="advanced">Advanced</string>
-    <string name="effective">Super effectivo</string>
+    <string name="effective">Super effective</string>
     <string name="not_effective">Not very effective</string>
     <string name="normal">Normal</string>
     <string name="no_effect">No effect</string>
-    <string name="attacker_x4">deals x4 damage to</string>
-    <string name="attacker_x2">deals x2 damage to</string>
-    <string name="attacker_x0.5">deals x0.5 damage to</string>
-    <string name="attacker_x0.25">deals x0.25 damage to</string>
-    <string name="attacker_x0">deals x0 damage to</string>
-    <string name="attacker_x1">deals x1 damage to</string>
-    <string name="defender_x4">suffers x4 damage from</string>
-    <string name="defender_x2">suffers x2 damage from</string>
-    <string name="defender_x0.5">suffers x0.5 damage from</string>
-    <string name="defender_x0.25">suffers x0.25 damage from</string>
-    <string name="defender_x0">suffers x0 damage from</string>
-    <string name="defender_x1">suffers x1 damage from</string>
+    <string name="attacker_x4">%1$s deals x4 damage to</string>
+    <string name="attacker_x2">%1$s deals x2 damage to</string>
+    <string name="attacker_x0.5">%1$s deals x0.5 damage to</string>
+    <string name="attacker_x0.25">%1$s deals x0.25 damage to</string>
+    <string name="attacker_x0">%1$s deals x0 damage to</string>
+    <string name="attacker_x1">%1$s deals x1 damage to</string>
+    <string name="defender_x4">%1$s suffers x4 damage from</string>
+    <string name="defender_x2">%1$s suffers x2 damage from</string>
+    <string name="defender_x0.5">%1$s suffers x0.5 damage from</string>
+    <string name="defender_x0.25">%1$s suffers x0.25 damage from</string>
+    <string name="defender_x0">%1$s suffers x0 damage from</string>
+    <string name="defender_x1">%1$s suffers x1 damage from</string>
     <!--Edit User-->
     <string name="change_name">Change name</string>
     <string name="change_image">Change image</string>

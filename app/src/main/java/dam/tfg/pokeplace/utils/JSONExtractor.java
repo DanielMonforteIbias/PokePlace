@@ -1,6 +1,7 @@
 package dam.tfg.pokeplace.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Pair;
 
 import org.json.JSONArray;
@@ -25,10 +26,14 @@ import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Type;
 
 public class JSONExtractor {
+    private static final String TYPES_JSON_NAME="types.json";
+    private static final String POKEMON_JSON_NAME="basepokemon.json";
+    private static final String TAG="JSONEXTRACTOR";
+
     public static List<BasePokemon> extractBasePokemonList(Context c) {
         List<BasePokemon> basePokemonList=new ArrayList<>();
         try {
-            InputStream is = c.getAssets().open("basepokemon.json");
+            InputStream is = c.getAssets().open(POKEMON_JSON_NAME);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -58,7 +63,7 @@ public class JSONExtractor {
             String type2=pokemonObject.optString("type_2",null); //opt porque puede no estar, en cuyo caso sera null
             return new BasePokemon(pokedexNumber,name,sprite,url,type1,type2);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
         }
         return null;
     }
@@ -111,7 +116,7 @@ public class JSONExtractor {
             String[] keys = {"front_default", "front_shiny", "back_default", "back_shiny"};//Los sprites que queremos
             for(String s:keys){
                 String sprite = spritesObject.getString(s);
-                if (sprite!=null && !sprite.isEmpty() && !sprite.equals("null")) { //No todos los pokemon tienen los 4 sprites, algunos son nulos, en ese caso no lo añadimos
+                if (!sprite.isEmpty() && !sprite.equals("null")) { //No todos los pokemon tienen los 4 sprites, algunos son nulos, en ese caso no lo añadimos
                     sprites.add(sprite);
                 }
             }
@@ -119,7 +124,7 @@ public class JSONExtractor {
             float height= (float) jsonObject.getDouble("height")/10; //Viene en decimetros, se pasa a metros
             float weight= (float) jsonObject.getDouble("weight")/10; //Viene en hectogramos, se pasa a kilogramos
             JSONArray typesArray=jsonObject.getJSONArray("types");
-            Type types[]=new Type[2];
+            Type[] types =new Type[2];
             for(int i=0;i<typesArray.length();i++){
                 types[i]= Data.getInstance().getTypeByName(typesArray.getJSONObject(i).getJSONObject("type").getString("name"));
             }
@@ -144,7 +149,7 @@ public class JSONExtractor {
             pokemon.setStats(stats);
             pokemon.setMoves(moves);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
         }
         return pokemon;
     }
@@ -203,7 +208,7 @@ public class JSONExtractor {
     public static List<Type> extractTypeList(Context context) {
         List<Type> typeList = new ArrayList<>();
         try {
-            InputStream is = context.getAssets().open("types.json");
+            InputStream is = context.getAssets().open(TYPES_JSON_NAME);
             byte[] buffer = new byte[is.available()];
             is.read(buffer);
             is.close();
@@ -215,7 +220,7 @@ public class JSONExtractor {
             }
 
         } catch (IOException | JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
         }
         return typeList;
     }
@@ -256,7 +261,7 @@ public class JSONExtractor {
             type.setSprite(sprite);
             return type;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
         }
         return null;
     }
@@ -292,8 +297,7 @@ public class JSONExtractor {
             move.setDescription(description);
             move.setType(type);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Move: "+move.getId());
+            Log.e(TAG,"Error: "+e.getMessage());
         }
         return move;
     }
@@ -311,7 +315,7 @@ public class JSONExtractor {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
         }
         return descriptions;
     }

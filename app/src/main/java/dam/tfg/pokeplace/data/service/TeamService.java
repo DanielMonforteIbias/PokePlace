@@ -14,9 +14,9 @@ import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 
 public class TeamService {
-    private TeamDAO teamDAO;
-    private TeamPokemonDAO teamPokemonDAO;
-    private BasePokemonDAO basePokemonDAO;
+    private final TeamDAO teamDAO;
+    private final TeamPokemonDAO teamPokemonDAO;
+    private final BasePokemonDAO basePokemonDAO;
     public int teamsLimit =0;
 
     public TeamService(Context context) {
