@@ -51,7 +51,10 @@
     <string name="error_login_credentials">Login fallido. Credenciales incorrectas</string>
     <string name="successful_register">Registro exitoso. Ya puede iniciar sesión</string>
     <string name="error_logout">Error al cerrar sesión</string>
-
+    <string name="reset_password">Restablecer mi contraseña</string>
+    <string name="enter_mail">Introduce tu dirección de correo</string>
+    <string name="mail_sent">Correo enviado para restablecer su contraseña. Compruebe su bandeja de entrada</string>
+    <string name="error_sending_mail">Error enviando el correo para restablecer contraseña</string>
     <!--Manejo respuesta PokeApi-->
     <string name="error_api_request">Error en la solicitud a la API</string>
     <string name="error_api_response">Error en la respuesta de la API</string>

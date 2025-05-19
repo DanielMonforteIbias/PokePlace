@@ -53,7 +53,10 @@
     <string name="error_login_credentials">Login failed. Incorrect credentials</string>
     <string name="successful_register">Successful registration. You can now log in</string>
     <string name="error_logout">Logout error</string>
-
+    <string name="reset_password">Reset my password</string>
+    <string name="enter_mail">Enter your mail address</string>
+    <string name="mail_sent">Mail to reset your password sent. Check your inbox</string>
+    <string name="error_sending_mail">Error sending mail to reset password</string>
     <!--Manejo respuesta PokeApi-->
     <string name="error_api_request">API request error</string>
     <string name="error_api_response">API response error</string>

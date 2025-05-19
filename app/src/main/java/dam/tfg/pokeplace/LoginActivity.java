@@ -1,9 +1,14 @@
 package dam.tfg.pokeplace;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -41,6 +46,7 @@ import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityLoginBinding;
+import dam.tfg.pokeplace.interfaces.DialogConfigurator;
 import dam.tfg.pokeplace.interfaces.OnUserFetchedListener;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
@@ -162,7 +168,12 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-
+        binding.txtResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayResetPasswordDialog();
+            }
+        });
         //Login
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,7 +291,40 @@ public class LoginActivity extends BaseActivity {
     public boolean validEmail(String email){
         return Patterns.EMAIL_ADDRESS.matcher(email).matches(); //Devolvemos el resultado de si el correo concuerda con el patrón o no
     }
-
+    private void displayResetPasswordDialog(){
+        showCustomDialog(R.layout.dialog_change_name, false, new DialogConfigurator() { //reciclamos el dialogo de cambiar nombre
+            @Override
+            public void configure(AlertDialog dialog, View dialogView) {
+                TextView txtTitle=dialogView.findViewById(R.id.txtChangeNameTitle);
+                txtTitle.setText(getString(R.string.enter_mail));
+                EditText input = dialogView.findViewById(R.id.editTextChangeName);
+                input.setHint(getString(R.string.email));
+                input.setFilters(new InputFilter[]{}); //Quitamos el maxLength que hay en otros dialogos con este layout
+                Button btnCancel = dialogView.findViewById(R.id.btnCancelChangeName);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button btnAccept=dialogView.findViewById(R.id.btnAcceptChangeName);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String emailAddress = input.getText().toString().trim();
+                        if (emailAddress.isEmpty()) showToast(getString(R.string.error_empty_email));
+                        else if (!validEmail(emailAddress)) showToast(getString(R.string.error_email));
+                        else auth.sendPasswordResetEmail(emailAddress)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) showToast(getString(R.string.mail_sent));
+                                    else showToast(getString(R.string.error_sending_mail));
+                                    dialog.dismiss();
+                                });
+                    }
+                });
+            }
+        });
+    }
     private void showToast(String s){
         ToastUtil.showToast(getApplicationContext(),s);
     }

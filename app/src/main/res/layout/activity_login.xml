@@ -50,6 +50,15 @@
                 android:inputType="textPassword"
                 android:textSize="25sp" />
 
+            <TextView
+                android:id="@+id/txtResetPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_password"
+                android:layout_marginStart="10dp"
+                android:textSize="18sp"
+                android:textColor="@color/blue_500"/>
+
             <LinearLayout
                 android:id="@+id/passwordLoginButtonsLayout"
                 android:layout_width="match_parent"
