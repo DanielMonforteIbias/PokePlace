@@ -24,7 +24,6 @@ import dam.tfg.pokeplace.api.PokemonCallback;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.databinding.FragmentMovesBinding;
 import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
-import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.models.Type;

@@ -18,11 +18,9 @@ import java.util.Map;
 
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.databinding.FragmentStatsBinding;
-import dam.tfg.pokeplace.models.Pokemon;
 
 public class StatsFragment extends Fragment {
     private FragmentStatsBinding binding;
-    private Pokemon pokemon;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentStatsBinding.inflate(inflater, container, false);

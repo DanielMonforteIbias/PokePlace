@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center|top"
         android:orientation="vertical"
-        tools:context=".LoginActivity">
+        tools:context=".ui.activities.LoginActivity">
 
         <ImageView
             android:id="@+id/imageView"

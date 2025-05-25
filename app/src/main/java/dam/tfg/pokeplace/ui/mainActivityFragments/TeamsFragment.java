@@ -1,6 +1,5 @@
 package dam.tfg.pokeplace.ui.mainActivityFragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,20 +22,16 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
-import dam.tfg.pokeplace.MainActivity;
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.TeamDetailsActivity;
+import dam.tfg.pokeplace.ui.activities.TeamDetailsActivity;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TeamDAO;
-import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.FragmentTeamsBinding;
 import dam.tfg.pokeplace.interfaces.OnTeamClickListener;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.sync.UserSync;
-import dam.tfg.pokeplace.utils.BaseActivity;
+import dam.tfg.pokeplace.ui.activities.BaseActivity;
 import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class TeamsFragment extends Fragment {

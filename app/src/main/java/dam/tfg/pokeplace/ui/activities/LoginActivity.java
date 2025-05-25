@@ -1,4 +1,4 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
@@ -53,8 +54,6 @@ import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.sync.FirestorePaths;
 import dam.tfg.pokeplace.sync.UserSync;
-import dam.tfg.pokeplace.utils.BaseActivity;
-import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class LoginActivity extends BaseActivity {
     private FirebaseAuth auth;
@@ -78,8 +77,6 @@ public class LoginActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Data.getInstance().loadTypes(getApplicationContext());
-        Data.getInstance().loadPokemon(getApplicationContext());
         userDAO=new UserDAO(this);
         teamService=new TeamService(getApplicationContext());
         userSync=new UserSync(getApplicationContext());
@@ -324,8 +321,5 @@ public class LoginActivity extends BaseActivity {
                 });
             }
         });
-    }
-    private void showToast(String s){
-        ToastUtil.showToast(getApplicationContext(),s);
     }
 }

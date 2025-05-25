@@ -99,20 +99,16 @@ public class Data {
             List<Pair<String, String>> result = new ArrayList<>();
             BiFunction<Type,Type,Double> effectivenessFunction = null; //Una funcion que recibe dos Types y devuelve un double. Nuestras funciones cumplen eso, y asi elegimos la funcion a usar en base a mode
             boolean validMode=true;
-            if (mode.equalsIgnoreCase("attacker")) {
-                effectivenessFunction = this::getTypeEffectivenessTo;
-            }else if (mode.equalsIgnoreCase("defender")) {
-                effectivenessFunction = this::getTypeEffectivenessFrom;
-            }else{
-                validMode=false;
-            }
+            if (mode.equalsIgnoreCase("attacker")) effectivenessFunction = this::getTypeEffectivenessTo;
+            else if (mode.equalsIgnoreCase("defender")) effectivenessFunction = this::getTypeEffectivenessFrom;
+            else validMode=false;
             if(validMode){
                 for (int i=0;i<typeList.size();i++) {
                     Type t1=typeList.get(i);
                     double multiplier1 = effectivenessFunction.apply(type, t1);
                     for (int j=i;j<typeList.size();j++) {
                         Type t2=typeList.get(j);
-                        if(t1.getName().equals(t2.getName())){ //Si los dos tipos son iguales, es solo un tipo
+                        if(t1.getName().equalsIgnoreCase(t2.getName())){ //Si los dos tipos son iguales, es solo un tipo
                             if(multiplier1==targetMultiplier)result.add(new Pair<>(t1.getName(), null)); //Añadimos una Pair con un solo tipo si el multiplicador es el esperado
                         }else{
                             double multiplier2=effectivenessFunction.apply(type, t2);

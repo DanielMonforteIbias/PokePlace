@@ -10,14 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.TypeAdapter;
 import dam.tfg.pokeplace.databinding.BottomSheetTypesBinding;
 import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
@@ -41,7 +38,7 @@ public class TypeFilterBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = BottomSheetTypesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

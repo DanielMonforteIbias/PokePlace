@@ -1,4 +1,4 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,13 +44,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.IconAdapter;
 import dam.tfg.pokeplace.adapters.PokemonSpinnerAdapter;
 import dam.tfg.pokeplace.adapters.TypeSpinnerAdapter;
 import dam.tfg.pokeplace.data.Data;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TeamDAO;
-import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityEditUserBinding;
@@ -61,11 +59,9 @@ import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.sync.UserSync;
-import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.DownloadUrlImage;
 import dam.tfg.pokeplace.utils.FilesUtils;
 import dam.tfg.pokeplace.utils.PermissionManager;
-import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class EditUserActivity extends BaseActivity {
     private ActivityEditUserBinding binding;
@@ -177,13 +173,13 @@ public class EditUserActivity extends BaseActivity {
                                 if (imageUri != null) {
                                     String mimeType = getContentResolver().getType(imageUri); //Obtenemos el tipo de imagen
                                     System.out.println(mimeType);
-                                    if("image/svg+xml".equalsIgnoreCase(mimeType)) ToastUtil.showToast(EditUserActivity.this,getString(R.string.not_supported)); //Los svg no se aceptan
+                                    if("image/svg+xml".equalsIgnoreCase(mimeType)) showToast(getString(R.string.not_supported)); //Los svg no se aceptan
                                     /*Los gif de galeria funcionan la primera vez, pero al reabrir la app la Uri pierde permisos y no se muestra, por lo que se ha decidido no permitirlos de galeria,
                                     pero sí de URL
                                     Para que funcionen de galeria habria que usar action open document en vez de action pick y permitir la persistencia de permisos, pero eso hace que se abra
                                     el explorador de archivos en vez de galería, y se ha tomado la decisión de que queda más claro abrir la galería y no merece la pena cambiarlo por un formato
                                     Los gif pueden ser tanto gif como webp animados, ambos darian error. Los webp normales funcionan*/
-                                    else if("image/gif".equalsIgnoreCase(mimeType) || ("image/webp".equalsIgnoreCase(mimeType) && FilesUtils.isAnimatedWebp(EditUserActivity.this,imageUri))) ToastUtil.showToast(EditUserActivity.this,getString(R.string.gif_gallery));
+                                    else if("image/gif".equalsIgnoreCase(mimeType) || ("image/webp".equalsIgnoreCase(mimeType) && FilesUtils.isAnimatedWebp(EditUserActivity.this,imageUri))) showToast(getString(R.string.gif_gallery));
                                     else user.setImage(imageUri.toString());
                                 }else{
                                     user.setImage(cameraImageUri.toString());
@@ -236,7 +232,7 @@ public class EditUserActivity extends BaseActivity {
                             updateUserUI();
                             dialog.dismiss();
                         } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
+                            showToast(getText(R.string.error_empty_name).toString());
                         }
                     }
                 });
@@ -258,7 +254,7 @@ public class EditUserActivity extends BaseActivity {
                             selectImageActivityLauncher.launch(galleryIntent);
                         }
                         else{
-                            ToastUtil.showToast(EditUserActivity.this,getString(R.string.storage_permission_denied));
+                            showToast(getString(R.string.storage_permission_denied));
                             PermissionManager.requestStoragePermissions(EditUserActivity.this);
                         }
                         dialog.dismiss();
@@ -277,7 +273,7 @@ public class EditUserActivity extends BaseActivity {
                             takePictureLauncher.launch(cameraImageUri);
                         }
                         else{
-                            ToastUtil.showToast(EditUserActivity.this,getString(R.string.camera_permission_denied));
+                            showToast(getString(R.string.camera_permission_denied));
                             PermissionManager.requestCameraPermissions(EditUserActivity.this);
                         }
                         dialog.dismiss();
@@ -421,7 +417,7 @@ public class EditUserActivity extends BaseActivity {
                             updateUserUI();
                             dialog.dismiss();
                         } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_setting_fav).toString());
+                            showToast(getText(R.string.error_setting_fav).toString());
                         }
                     }
                 });
@@ -478,7 +474,7 @@ public class EditUserActivity extends BaseActivity {
                             updateUserUI();
                             dialog.dismiss();
                         } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_setting_fav).toString());
+                            showToast(getText(R.string.error_setting_fav).toString());
                         }
                     }
                 });
@@ -575,7 +571,7 @@ public class EditUserActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             deleteUser(firebaseUser);
                         } else {
-                            ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
+                            showToast(getString(R.string.error_reauth));
                         }
                     });
                 }
@@ -609,11 +605,11 @@ public class EditUserActivity extends BaseActivity {
                                     if (task.isSuccessful()) {
                                         deleteUser(firebaseUser);
                                     } else {
-                                        ToastUtil.showToast(getApplicationContext(), getString(R.string.error_reauth));
+                                        showToast(getString(R.string.error_reauth));
                                     }
                                 });
                             } else {
-                                ToastUtil.showToast(getApplicationContext(), getString(R.string.enter_password));
+                                showToast(getString(R.string.enter_password));
                             }
                         }
                     });
@@ -634,7 +630,7 @@ public class EditUserActivity extends BaseActivity {
                     if (task.isSuccessful()) {
                         goToLogin();
                     } else { //Si falla, restauramos los datos
-                        ToastUtil.showToast(getApplicationContext(),getString(R.string.error_deleting_user));
+                        showToast(getString(R.string.error_deleting_user));
                         restoreUserData(userBackup);
                     }
                 });

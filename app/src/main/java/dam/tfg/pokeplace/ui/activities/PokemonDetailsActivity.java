@@ -1,4 +1,4 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -25,10 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.TeamsAdapter;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TeamDAO;
-import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityPokemonDetailsBinding;
@@ -40,9 +38,7 @@ import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.sync.UserSync;
 import dam.tfg.pokeplace.ui.detailsActivityFragments.PokemonViewModel;
-import dam.tfg.pokeplace.utils.BaseActivity;
 import dam.tfg.pokeplace.utils.StringFormatter;
-import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class PokemonDetailsActivity extends BaseActivity {
     private ActivityPokemonDetailsBinding binding;
@@ -105,11 +101,11 @@ public class PokemonDetailsActivity extends BaseActivity {
                     @Override
                     public void onTeamClick(Team team) {
                         if(teamService.getTeamSize(team.getTeamId())<teamSizeLimit){
-                            if(addPokemonToTeam(team)) ToastUtil.showToast(getApplicationContext(), StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.added_to)+" "+team.getName());
-                            else ToastUtil.showToast(getApplicationContext(),getString(R.string.error_add_to_team));
+                            if(addPokemonToTeam(team)) showToast(StringFormatter.formatName(pokemon.getName()) +" "+getResources().getText(R.string.added_to)+" "+team.getName());
+                            else showToast(getString(R.string.error_add_to_team));
                             dialog.dismiss();
                         }
-                        else ToastUtil.showToast(getApplicationContext(),getString(R.string.team_size_limit));
+                        else showToast(getString(R.string.team_size_limit));
                     }
                 }));
             }
@@ -153,18 +149,18 @@ public class PokemonDetailsActivity extends BaseActivity {
         if (id == R.id.action_add_to_team){
             List<Team> userTeams=teamService.getAllTeams(user.getUserId());
             if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
-            else ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.error_no_teams));
+            else showToast(getString(R.string.error_no_teams));
         }
         else if(id==R.id.action_mark_as_favorite){
             if(pokemon.getPokedexNumber().equals(user.getFavPokemon())){
                 user.setFavPokemon(null);
                 item.setIcon(R.drawable.staroff);
-                ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.removed_from_favorite,StringFormatter.formatName(pokemon.getName())));
+                showToast(getString(R.string.removed_from_favorite,StringFormatter.formatName(pokemon.getName())));
             }
             else{
                 user.setFavPokemon(pokemon.getPokedexNumber());
                 item.setIcon(R.drawable.staron);
-                ToastUtil.showToast(PokemonDetailsActivity.this,getString(R.string.marked_as_fav,StringFormatter.formatName(pokemon.getName())));
+                showToast(getString(R.string.marked_as_fav,StringFormatter.formatName(pokemon.getName())));
             }
             userDAO.updateUser(user); //Ponemos el cambio en la base de datos
             userSync.updateUser(user); //En Firestore tambien

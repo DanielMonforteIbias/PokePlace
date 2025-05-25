@@ -6,7 +6,7 @@ import android.util.Pair;
 
 import java.util.List;
 
-import dam.tfg.pokeplace.PokemonDetailsActivity;
+import dam.tfg.pokeplace.ui.activities.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
 import dam.tfg.pokeplace.api.PokemonCallback;

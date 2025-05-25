@@ -1,4 +1,4 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -22,16 +22,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.PokemonSpinnerAdapter;
 import dam.tfg.pokeplace.adapters.TeamPokemonAdapter;
 import dam.tfg.pokeplace.data.Data;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TeamDAO;
-import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
@@ -42,8 +39,6 @@ import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
 import dam.tfg.pokeplace.sync.UserSync;
-import dam.tfg.pokeplace.utils.BaseActivity;
-import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class TeamDetailsActivity extends BaseActivity {
     private Team team;
@@ -94,7 +89,7 @@ public class TeamDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if(team.getTeamMembers().size()<teamSizeLimit) displayAddToTeamDialog();
-                else ToastUtil.showToast(getApplicationContext(),getString(R.string.team_size_limit));
+                else showToast(getString(R.string.team_size_limit));
             }
         });
         updateUI();
@@ -148,9 +143,7 @@ public class TeamDetailsActivity extends BaseActivity {
                             team.setName(teamName); //Cambiamos el nombre del team actual de la actividad
                             updateUI();
                             dialog.dismiss();
-                        } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
-                        }
+                        } else showToast(getText(R.string.error_empty_name).toString());
                     }
                 });
             }
@@ -173,7 +166,7 @@ public class TeamDetailsActivity extends BaseActivity {
                     public void onClick(View v) {
                         teamService.removeTeam(team.getTeamId());
                         userSync.deleteTeam(team);
-                        ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
+                        showToast(team.getName()+" "+getString(R.string.team_removed));
                         dialog.dismiss();
                         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                         finish();
@@ -209,9 +202,7 @@ public class TeamDetailsActivity extends BaseActivity {
                             userSync.updateTeamPokemon(pokemon);
                             adapter.notifyItemChanged(position);
                             //Al cambiar el nombre no hace falta actualizar la interfaz entera, con notificar al adaptador del cambio se actualizará su nombre
-                        } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
-                        }
+                        } else showToast(getText(R.string.error_empty_name).toString());
                     }
                 });
             }
@@ -296,10 +287,8 @@ public class TeamDetailsActivity extends BaseActivity {
                                 updateUI();
                                 dialog.dismiss();
                             }
-                            else ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
-                        } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_add_to_team).toString());
-                        }
+                            else showToast(getText(R.string.error_empty_name).toString());
+                        }else showToast(getText(R.string.error_add_to_team).toString());
                     }
                 });
             }

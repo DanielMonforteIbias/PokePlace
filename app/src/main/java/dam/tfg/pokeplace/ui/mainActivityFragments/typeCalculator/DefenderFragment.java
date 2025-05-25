@@ -92,19 +92,20 @@ public class DefenderFragment extends Fragment {
 
     private void updateTypeLayouts(Type type){
         resetViews();//Reseteamos todas las vistas
+        String typeName=StringFormatter.formatName(type.getName());
         if(!advancedEnabled){
-            addTypeSpritesToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesLayout, binding.defenderEffective,getResources().getString(R.string.defender_x2,type.getName()),type.getDoubleDamageFrom());
-            addTypeSpritesToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesLayout, binding.defenderNormal,getResources().getString(R.string.defender_x1,type.getName()),data.getNormalDamageFrom(type));
-            addTypeSpritesToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesLayout, binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5,type.getName()),type.getHalfDamageFrom());
-            addTypeSpritesToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesLayout, binding.defenderNoEffect,getResources().getString(R.string.defender_x0,type.getName()),type.getNoDamageFrom());
+            addTypeSpritesToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesLayout, binding.defenderEffective,getResources().getString(R.string.defender_x2,typeName),type.getDoubleDamageFrom());
+            addTypeSpritesToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesLayout, binding.defenderNormal,getResources().getString(R.string.defender_x1,typeName),data.getNormalDamageFrom(type));
+            addTypeSpritesToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesLayout, binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5,typeName),type.getHalfDamageFrom());
+            addTypeSpritesToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesLayout, binding.defenderNoEffect,getResources().getString(R.string.defender_x0,typeName),type.getNoDamageFrom());
         }else{
             String mode = "defender";
-            addTypeCombinationRowsToLayout(binding.defenderVeryEffectiveLayout,binding.defenderVeryEffectiveTypesAdvancedLayout,binding.defenderVeryEffective,getResources().getString(R.string.defender_x4,type.getName()),data.getTypeCombinationsWithMultiplier(type, mode,4));
-            addTypeCombinationRowsToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesAdvancedLayout,binding.defenderEffective,getResources().getString(R.string.defender_x2,type.getName()),data.getTypeCombinationsWithMultiplier(type, mode,2));
-            addTypeCombinationRowsToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesAdvancedLayout,binding.defenderNormal,getResources().getString(R.string.defender_x1,type.getName()),data.getTypeCombinationsWithMultiplier(type, mode,1));
-            addTypeCombinationRowsToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesAdvancedLayout,binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5,type.getName()),data.getTypeCombinationsWithMultiplier(type, mode,0.5));
-            addTypeCombinationRowsToLayout(binding.defenderNotVeryEffectiveLayout,binding.defenderNotVeryEffectiveTypesAdvancedLayout,binding.defenderNotVeryEffective,getResources().getString(R.string.defender_x0_25,type.getName()),data.getTypeCombinationsWithMultiplier(type, mode,0.25));
-            addTypeCombinationRowsToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesAdvancedLayout,binding.defenderNoEffect,getResources().getString(R.string.defender_x0,type.getName()),data.getTypeCombinationsWithMultiplier(type, mode,0));
+            addTypeCombinationRowsToLayout(binding.defenderVeryEffectiveLayout,binding.defenderVeryEffectiveTypesAdvancedLayout,binding.defenderVeryEffective,getResources().getString(R.string.defender_x4,typeName),data.getTypeCombinationsWithMultiplier(type, mode,4));
+            addTypeCombinationRowsToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesAdvancedLayout,binding.defenderEffective,getResources().getString(R.string.defender_x2,typeName),data.getTypeCombinationsWithMultiplier(type, mode,2));
+            addTypeCombinationRowsToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesAdvancedLayout,binding.defenderNormal,getResources().getString(R.string.defender_x1,typeName),data.getTypeCombinationsWithMultiplier(type, mode,1));
+            addTypeCombinationRowsToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesAdvancedLayout,binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5,typeName),data.getTypeCombinationsWithMultiplier(type, mode,0.5));
+            addTypeCombinationRowsToLayout(binding.defenderNotVeryEffectiveLayout,binding.defenderNotVeryEffectiveTypesAdvancedLayout,binding.defenderNotVeryEffective,getResources().getString(R.string.defender_x0_25,typeName),data.getTypeCombinationsWithMultiplier(type, mode,0.25));
+            addTypeCombinationRowsToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesAdvancedLayout,binding.defenderNoEffect,getResources().getString(R.string.defender_x0,typeName),data.getTypeCombinationsWithMultiplier(type, mode,0));
         }
     }
     private void addTypeSpritesToLayout(ViewGroup layout,ViewGroup typesLayout, TextView textView, String message, List<String> typeNames) {

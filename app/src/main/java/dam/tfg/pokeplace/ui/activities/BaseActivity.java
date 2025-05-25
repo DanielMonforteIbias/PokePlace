@@ -1,20 +1,25 @@
-package dam.tfg.pokeplace.utils;
+package dam.tfg.pokeplace.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Locale;
 
 import dam.tfg.pokeplace.R;
+import dam.tfg.pokeplace.data.Data;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
+import dam.tfg.pokeplace.utils.ToastUtil;
 
 /**
  * Clase de la que heredan todas las actividades de la app para usar varios comportamientos en común sin repetirlos en cada
@@ -62,6 +67,22 @@ public abstract class BaseActivity extends AppCompatActivity {
             });
             dialog.show();
         }
+    }
+    protected void showToast(String s){
+        ToastUtil.showToast(getApplicationContext(),s);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        /*Cargamos los tipos y los Pokémon cada vez que se cree una actividad. Tener la carga en BaseActivity asegura que se pase siempre por ella, si la
+        pusiésemos en una actividad, por ejemplo LoginActivity, podría ocurrir que cerremos la app y volvamos a ella tiempo más tarde sin pasar por Login, pero
+        los datos se habrían borrado ya de la RAM, por lo que las listas quedarían vacías hasta pasar por Login de nuevo.
+        Para que esto funcione es importante que las actividades llamen al super.onCreate
+        Las comprobaciones para no llenarlas si ya estan llenas están dentro de los métodos de carga
+         */
+        Data.getInstance().loadTypes(getApplicationContext());
+        Data.getInstance().loadPokemon(getApplicationContext());
     }
 
     @Override

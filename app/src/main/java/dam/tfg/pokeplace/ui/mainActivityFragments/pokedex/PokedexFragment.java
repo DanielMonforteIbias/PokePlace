@@ -1,7 +1,5 @@
 package dam.tfg.pokeplace.ui.mainActivityFragments.pokedex;
 
-import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
-
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -25,15 +23,7 @@ import java.util.List;
 
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.PokemonAdapter;
-import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
-import dam.tfg.pokeplace.api.PokeApiTypeResponse;
-import dam.tfg.pokeplace.api.BasePokemonCallback;
-import dam.tfg.pokeplace.api.TypeCallback;
 import dam.tfg.pokeplace.data.Data;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TypeDAO;
-import dam.tfg.pokeplace.data.dao.TypeRelationDAO;
-import dam.tfg.pokeplace.data.service.TypeService;
 import dam.tfg.pokeplace.databinding.FragmentPokedexBinding;
 import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.BasePokemon;

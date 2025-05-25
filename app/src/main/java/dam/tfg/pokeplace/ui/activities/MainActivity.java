@@ -1,33 +1,25 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,15 +37,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.databinding.ActivityMainBinding;
 import dam.tfg.pokeplace.interfaces.DialogConfigurator;
-import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.User;
-import dam.tfg.pokeplace.utils.BaseActivity;
-import dam.tfg.pokeplace.utils.ToastUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -129,7 +118,7 @@ public class MainActivity extends BaseActivity {
                     case "password":
                         break;
                     default:
-                        ToastUtil.showToast(getApplicationContext(),getString(R.string.error_logout));
+                        showToast(getString(R.string.error_logout));
                         break;
                 }
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));

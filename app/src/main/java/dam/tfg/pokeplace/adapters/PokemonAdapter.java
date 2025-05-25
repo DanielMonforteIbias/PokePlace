@@ -1,8 +1,6 @@
 package dam.tfg.pokeplace.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +14,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import dam.tfg.pokeplace.PokemonDetailsActivity;
 import dam.tfg.pokeplace.R;
-import dam.tfg.pokeplace.api.PokeApiDetailsResponse;
-import dam.tfg.pokeplace.api.PokemonCallback;
-import dam.tfg.pokeplace.api.PokemonSpeciesCallback;
 import dam.tfg.pokeplace.models.BasePokemon;
-import dam.tfg.pokeplace.models.Move;
-import dam.tfg.pokeplace.models.Pokemon;
 import dam.tfg.pokeplace.utils.PokemonClickHandler;
 import dam.tfg.pokeplace.utils.ViewUtils;
 
