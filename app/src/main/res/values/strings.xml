@@ -57,6 +57,7 @@
     <string name="enter_mail">Enter your mail address</string>
     <string name="mail_sent">Mail to reset your password sent. Check your inbox</string>
     <string name="error_sending_mail">Error sending mail to reset password</string>
+    <string name="user_error">Error, user not found</string>
     <!--Manejo respuesta PokeApi-->
     <string name="error_api_request">API request error</string>
     <string name="error_api_response">API response error</string>

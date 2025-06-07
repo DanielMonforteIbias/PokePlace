@@ -275,7 +275,7 @@ public class TeamDetailsActivity extends BaseActivity {
                     public void onClick(View v) {
                         BasePokemon selectedPokemon=(BasePokemon)autoCompleteTextView.getTag(); //Obtenemos el seleccionado
                         if (selectedPokemon!=null) {
-                            String pokemonName=autoCompleteTextView.getText().toString(); //El nombre personalizado del Pokemon será lo escrito en el campo. Generalmente su nombre, pero esto da la opcion de cambiar lo escrito una vez seleccionado para personalizarlo
+                            String pokemonName=autoCompleteTextView.getText().toString().trim(); //El nombre personalizado del Pokemon será lo escrito en el campo. Generalmente su nombre, pero esto da la opcion de cambiar lo escrito una vez seleccionado para personalizarlo
                             if(!pokemonName.isEmpty()){
                                 TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),team.getTeamId(),pokemonName,selectedPokemon.getSprite());
                                 teamPokemon.setPokedexNumber(selectedPokemon.getPokedexNumber());

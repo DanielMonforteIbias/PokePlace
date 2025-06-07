@@ -55,6 +55,7 @@
     <string name="enter_mail">Introduce tu dirección de correo</string>
     <string name="mail_sent">Correo enviado para restablecer su contraseña. Compruebe su bandeja de entrada</string>
     <string name="error_sending_mail">Error enviando el correo para restablecer contraseña</string>
+    <string name="user_error">Error, usuario no encontrado</string>
     <!--Manejo respuesta PokeApi-->
     <string name="error_api_request">Error en la solicitud a la API</string>
     <string name="error_api_response">Error en la respuesta de la API</string>

@@ -144,8 +144,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE TEAM_POKEMON_TEMP RENAME TO "+TEAM_POKEMON_TABLE_NAME);
                 db.execSQL("CREATE TABLE TEAM_TEMP ("+TEAM_USER_ID_COLUMN+" TEXT NOT NULL,"+TEAM_ID_COLUMN+" TEXT, "+TEAM_NAME_COLUMN+" TEXT NOT NULL, PRIMARY KEY("+TEAM_ID_COLUMN+"), FOREIGN KEY("+TEAM_USER_ID_COLUMN+") REFERENCES "+USERS_TABLE_NAME+"("+USER_ID_COLUMN+"))");
                 db.execSQL("INSERT INTO TEAM_TEMP ("+TEAM_USER_ID_COLUMN+","+TEAM_ID_COLUMN+","+TEAM_NAME_COLUMN+")SELECT "+TEAM_USER_ID_COLUMN+","+TEAM_ID_COLUMN+","+TEAM_NAME_COLUMN+" FROM "+TEAMS_TABLE_NAME);
-                db.execSQL("DROP TABLE "+TEAM_POKEMON_TABLE_NAME);
-                db.execSQL("ALTER TABLE TEAM_POKEMON_TEMP RENAME TO "+TEAM_POKEMON_TABLE_NAME);
+                db.execSQL("DROP TABLE "+TEAMS_TABLE_NAME);
+                db.execSQL("ALTER TABLE TEAM_TEMP RENAME TO "+TEAMS_TABLE_NAME);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();

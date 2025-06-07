@@ -281,6 +281,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void openMainActivity(){
+        if (!userDAO.userExists(user.getUid())){ //Evitamos errores en caso de que el user no exista despues del proceso, en cuyo caso estará corrupto (por ejemplo si el id de firebase y el de la bd local no coincide porque se haya borrado de un lado y del otro no)
+            showToast(getString(R.string.user_error));
+            return;
+        }
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

@@ -1,5 +1,7 @@
 package dam.tfg.pokeplace.ui.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -8,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -30,6 +33,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -569,6 +574,13 @@ public class EditUserActivity extends BaseActivity {
                     AuthCredential credential = GoogleAuthProvider.getCredential(googleAccount.getIdToken(), null);
                     firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            GoogleSignInClient gClient = GoogleSignIn.getClient(this, new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build());
+                            gClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() { //Necesario cerrar sesion de forma explicita antes de borrar el user para que si volvemos a usar login de Google deje elegir cuenta y no tome esta automaticamente
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.i(TAG,"Sesion de Google cerrada");
+                                }
+                            });
                             deleteUser(firebaseUser);
                         } else {
                             showToast(getString(R.string.error_reauth));
@@ -619,20 +631,12 @@ public class EditUserActivity extends BaseActivity {
         }
     }
     private void deleteUser(FirebaseUser firebaseUser){
-        //Backup por si falla
-        User userBackup = new User(user.getUserId(), user.getEmail(), user.getName(), user.getImage());
-        userBackup.setFavType(user.getFavType());
-        userBackup.setFavPokemon(user.getFavPokemon());
         deleteUserData(new OnUserDataDeletedListener() {//Borramos primero los datos en local y firestore, pues si borramos primero el usuario de firebase fallará la eliminacion de datos de firestore porque ya no existe
             @Override
             public void onUserDataDeleted() {
                 firebaseUser.delete().addOnCompleteListener(task -> { //Por ultimo, eliminamos el usuario de Firebase
-                    if (task.isSuccessful()) {
-                        goToLogin();
-                    } else { //Si falla, restauramos los datos
-                        showToast(getString(R.string.error_deleting_user));
-                        restoreUserData(userBackup);
-                    }
+                    if (!task.isSuccessful()) showToast(getString(R.string.error_deleting_user));
+                    goToLogin();
                 });
             }
         });
@@ -645,19 +649,7 @@ public class EditUserActivity extends BaseActivity {
         userDAO.deleteUser(user.getUserId()); //Lo eliminamos de la BD
         userSync.deleteUser(user.getUserId(),listener); //De Firestore tambien
     }
-    private void restoreUserData(User userBackup) {
-        //Restauramos los datos tanto en local como en Firestore, solo si se habían borrado
-        if (!userDAO.userExists(userBackup.getUserId())) userDAO.addUser(userBackup);
-        userSync.userExists(userBackup.getUserId(), new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (!document.exists()) userSync.addUser(userBackup);
-                }
-            }
-        });
-    }
+
     private void goToLogin() {
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(EditUserActivity.this, LoginActivity.class);
