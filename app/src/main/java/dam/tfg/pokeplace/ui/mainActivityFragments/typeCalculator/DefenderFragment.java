@@ -37,7 +37,7 @@ public class DefenderFragment extends Fragment {
     private TypeSpinnerAdapter adapter;
     private boolean advancedEnabled=false;
     private Type currentType=null;
-    private String mode="defender";
+
     public DefenderFragment() {
         super(R.layout.fragment_defender);
     }
@@ -92,24 +92,26 @@ public class DefenderFragment extends Fragment {
 
     private void updateTypeLayouts(Type type){
         resetViews();//Reseteamos todas las vistas
+        String typeName=StringFormatter.formatName(type.getName());
         if(!advancedEnabled){
-            addTypeSpritesToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesLayout, binding.defenderEffective,getResources().getString(R.string.defender_x2),type.getDoubleDamageFrom(),type.getName());
-            addTypeSpritesToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesLayout, binding.defenderNormal,getResources().getString(R.string.defender_x1),data.getNormalDamageFrom(type),type.getName());
-            addTypeSpritesToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesLayout, binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5),type.getHalfDamageFrom(),type.getName());
-            addTypeSpritesToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesLayout, binding.defenderNoEffect,getResources().getString(R.string.defender_x0),type.getNoDamageFrom(),type.getName());
+            addTypeSpritesToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesLayout, binding.defenderEffective,getResources().getString(R.string.defender_x2,typeName),type.getDoubleDamageFrom());
+            addTypeSpritesToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesLayout, binding.defenderNormal,getResources().getString(R.string.defender_x1,typeName),data.getNormalDamageFrom(type));
+            addTypeSpritesToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesLayout, binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5,typeName),type.getHalfDamageFrom());
+            addTypeSpritesToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesLayout, binding.defenderNoEffect,getResources().getString(R.string.defender_x0,typeName),type.getNoDamageFrom());
         }else{
-            addTypeCombinationRowsToLayout(binding.defenderVeryEffectiveLayout,binding.defenderVeryEffectiveTypesAdvancedLayout,binding.defenderVeryEffective,getResources().getString(R.string.defender_x4),data.getTypeCombinationsWithMultiplier(type,mode,4),type.getName());
-            addTypeCombinationRowsToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesAdvancedLayout,binding.defenderEffective,getResources().getString(R.string.defender_x2),data.getTypeCombinationsWithMultiplier(type,mode,2),type.getName());
-            addTypeCombinationRowsToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesAdvancedLayout,binding.defenderNormal,getResources().getString(R.string.defender_x1),data.getTypeCombinationsWithMultiplier(type,mode,1),type.getName());
-            addTypeCombinationRowsToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesAdvancedLayout,binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5),data.getTypeCombinationsWithMultiplier(type,mode,0.5),type.getName());
-            addTypeCombinationRowsToLayout(binding.defenderNotVeryEffectiveLayout,binding.defenderNotVeryEffectiveTypesAdvancedLayout,binding.defenderNotVeryEffective,getResources().getString(R.string.defender_x0_25),data.getTypeCombinationsWithMultiplier(type,mode,0.25),type.getName());
-            addTypeCombinationRowsToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesAdvancedLayout,binding.defenderNoEffect,getResources().getString(R.string.defender_x0),data.getTypeCombinationsWithMultiplier(type,mode,0),type.getName());
+            String mode = "defender";
+            addTypeCombinationRowsToLayout(binding.defenderVeryEffectiveLayout,binding.defenderVeryEffectiveTypesAdvancedLayout,binding.defenderVeryEffective,getResources().getString(R.string.defender_x4,typeName),data.getTypeCombinationsWithMultiplier(type, mode,4));
+            addTypeCombinationRowsToLayout(binding.defenderEffectiveLayout,binding.defenderEffectiveTypesAdvancedLayout,binding.defenderEffective,getResources().getString(R.string.defender_x2,typeName),data.getTypeCombinationsWithMultiplier(type, mode,2));
+            addTypeCombinationRowsToLayout(binding.defenderNormalLayout,binding.defenderNormalTypesAdvancedLayout,binding.defenderNormal,getResources().getString(R.string.defender_x1,typeName),data.getTypeCombinationsWithMultiplier(type, mode,1));
+            addTypeCombinationRowsToLayout(binding.defenderNotEffectiveLayout,binding.defenderNotEffectiveTypesAdvancedLayout,binding.defenderNotEffective,getResources().getString(R.string.defender_x0_5,typeName),data.getTypeCombinationsWithMultiplier(type, mode,0.5));
+            addTypeCombinationRowsToLayout(binding.defenderNotVeryEffectiveLayout,binding.defenderNotVeryEffectiveTypesAdvancedLayout,binding.defenderNotVeryEffective,getResources().getString(R.string.defender_x0_25,typeName),data.getTypeCombinationsWithMultiplier(type, mode,0.25));
+            addTypeCombinationRowsToLayout(binding.defenderNoEffectLayout,binding.defenderNoEffectTypesAdvancedLayout,binding.defenderNoEffect,getResources().getString(R.string.defender_x0,typeName),data.getTypeCombinationsWithMultiplier(type, mode,0));
         }
     }
-    private void addTypeSpritesToLayout(ViewGroup layout,ViewGroup typesLayout, TextView textView, String message, List<String> typeNames, String defenderName) {
+    private void addTypeSpritesToLayout(ViewGroup layout,ViewGroup typesLayout, TextView textView, String message, List<String> typeNames) {
         if(!typeNames.isEmpty()){
             layout.setVisibility(View.VISIBLE);
-            textView.setText(StringFormatter.formatName(defenderName) +" "+message);
+            textView.setText(message);
             int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, getResources().getDisplayMetrics());
             int horizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
             int verticalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
@@ -118,16 +120,16 @@ public class DefenderFragment extends Fragment {
             for (String typeName : typeNames) {
                 ImageView img = new ImageView(getContext());
                 img.setLayoutParams(params);
-                Glide.with(getContext()).load(data.getTypeByName(typeName).getSprite()).into(img);
+                if(getContext()!=null)Glide.with(getContext()).load(data.getTypeByName(typeName).getSprite()).into(img);
                 typesLayout.addView(img);
             }
         }
     }
 
-    private void addTypeCombinationRowsToLayout(ViewGroup layout, ViewGroup typesLayout, TextView textView, String message, List<Pair<String,String>> combinations, String defender) {
+    private void addTypeCombinationRowsToLayout(ViewGroup layout, ViewGroup typesLayout, TextView textView, String message, List<Pair<String,String>> combinations) {
         if(!combinations.isEmpty()) {
             layout.setVisibility(View.VISIBLE);
-            textView.setText(StringFormatter.formatName(defender) + " " + message);int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, getResources().getDisplayMetrics());
+            textView.setText(message);int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, getResources().getDisplayMetrics());
             int horizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
             int verticalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
             for (Pair<String,String> combination:combinations) {
@@ -143,7 +145,7 @@ public class DefenderFragment extends Fragment {
                     LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(width,ViewGroup.LayoutParams.WRAP_CONTENT);
                     iconParams.setMargins(horizontalMargin,0,horizontalMargin,0);
                     typeIcon.setLayoutParams(iconParams);
-                    Glide.with(getContext()).load(data.getTypeByName(typeName).getSprite()).into(typeIcon);
+                    if(getContext()!=null)Glide.with(getContext()).load(data.getTypeByName(typeName).getSprite()).into(typeIcon);
                     row.addView(typeIcon);
                 }
                 typesLayout.addView(row);

@@ -18,16 +18,13 @@ import java.util.Map;
 
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.databinding.FragmentStatsBinding;
-import dam.tfg.pokeplace.models.Pokemon;
 
 public class StatsFragment extends Fragment {
     private FragmentStatsBinding binding;
-    private Pokemon pokemon;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentStatsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -43,21 +40,23 @@ public class StatsFragment extends Fragment {
                 View statItem = getLayoutInflater().inflate(R.layout.item_stat, binding.statsDetailsLayout, false);
                 TextView txtStatName = statItem.findViewById(R.id.txtStatDetails);
                 String resourceKey =stat.getKey().replace("-", "_"); //Los nombres de la stat estan en strings y la clave es el nombre que viene de la api y esta en el map. No se aceptan guiones en el fichero strings, se reemplazan por _
-                int resId = getContext().getResources().getIdentifier(resourceKey, "string", getContext().getPackageName());
-                txtStatName.setText(getString(resId));
-                TextView txtStatValue = statItem.findViewById(R.id.txtStatValueDetails);
-                txtStatValue.setText(String.valueOf(stat.getValue()));
-                View statBar = statItem.findViewById(R.id.statBar);
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) statBar.getLayoutParams();
-                int statValue = stat.getValue();
-                statTotalValue+=statValue;
-                float scale = getContext().getResources().getDisplayMetrics().density;
-                int color = getStatBarColor(statValue);
-                GradientDrawable drawable = (GradientDrawable) statBar.getBackground(); //Para no perder el borde redondeado al aplicar fondo
-                drawable.setColor(color);
-                layoutParams.width = (int) (statValue * scale + 0.5f);
-                statBar.setLayoutParams(layoutParams);
-                binding.statsDetailsLayout.addView(statItem);
+                if(getContext()!=null){
+                    int resId = getContext().getResources().getIdentifier(resourceKey, "string", getContext().getPackageName());
+                    txtStatName.setText(getString(resId));
+                    TextView txtStatValue = statItem.findViewById(R.id.txtStatValueDetails);
+                    txtStatValue.setText(String.valueOf(stat.getValue()));
+                    View statBar = statItem.findViewById(R.id.statBar);
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) statBar.getLayoutParams();
+                    int statValue = stat.getValue();
+                    statTotalValue+=statValue;
+                    float scale = getContext().getResources().getDisplayMetrics().density;
+                    int color = getStatBarColor(statValue);
+                    GradientDrawable drawable = (GradientDrawable) statBar.getBackground(); //Para no perder el borde redondeado al aplicar fondo
+                    drawable.setColor(color);
+                    layoutParams.width = (int) (statValue * scale + 0.5f);
+                    statBar.setLayoutParams(layoutParams);
+                    binding.statsDetailsLayout.addView(statItem);
+                }
             }
             binding.txtStatsDetailsTotal.setText(getString(R.string.total,statTotalValue));
         });

@@ -1,5 +1,6 @@
 package dam.tfg.pokeplace.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
@@ -26,13 +27,14 @@ import dam.tfg.pokeplace.models.TeamPokemon;
 
 public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.ViewHolder> {
     private List<Team> teamsList;
-    private OnTeamClickListener onClickListener;
+    private final OnTeamClickListener onClickListener;
 
     public TeamsAdapter(List<Team> teamsList, OnTeamClickListener listener) {
         this.teamsList = teamsList;
         this.onClickListener = listener;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateTeams(List<Team> newTeams) {
         this.teamsList = newTeams;
         this.notifyDataSetChanged();

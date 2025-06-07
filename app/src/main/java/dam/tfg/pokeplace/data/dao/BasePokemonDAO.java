@@ -42,9 +42,26 @@ public class BasePokemonDAO {
         cursor.close(); //Cerramos el cursor
         return exists; //Devolvemos si existe o no
     }
-    public List<BasePokemon> getBasePokemonList(int limit, int offset) {
+    public List<BasePokemon> getBasePokemonListWithOffset(int limit, int offset) {
         List<BasePokemon> basePokemonList = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.POKEMON_TABLE_NAME, null, null, null, null, null, DatabaseHelper.POKEMON_POKEDEX_NUMBER_COLUMN+" ASC", offset + "," + limit);
+        if (cursor.moveToFirst()) {
+            do {
+                String pokedexNumber=String.format(Locale.US,"%03d",cursor.getInt(0));
+                String name=cursor.getString(1);
+                String sprite=cursor.getString(2);
+                String url=cursor.getString(3);
+                String type1=cursor.getString(4);
+                String type2=cursor.getString(5);
+                basePokemonList.add(new BasePokemon(pokedexNumber,name,sprite,url,type1,type2));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return basePokemonList;
+    }
+    public List<BasePokemon> getBasePokemonList() {
+        List<BasePokemon> basePokemonList = new ArrayList<>();
+        Cursor cursor = db.query(DatabaseHelper.POKEMON_TABLE_NAME, null, null, null, null, null, DatabaseHelper.POKEMON_POKEDEX_NUMBER_COLUMN+" ASC", null);
         if (cursor.moveToFirst()) {
             do {
                 String pokedexNumber=String.format(Locale.US,"%03d",cursor.getInt(0));

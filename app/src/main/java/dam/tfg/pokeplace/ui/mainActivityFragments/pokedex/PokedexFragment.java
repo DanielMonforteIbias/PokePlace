@@ -1,8 +1,6 @@
 package dam.tfg.pokeplace.ui.mainActivityFragments.pokedex;
 
-import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
-
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,22 +17,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.PokemonAdapter;
-import dam.tfg.pokeplace.api.PokeApiBasePokemonResponse;
-import dam.tfg.pokeplace.api.PokeApiTypeResponse;
-import dam.tfg.pokeplace.api.BasePokemonCallback;
-import dam.tfg.pokeplace.api.TypeCallback;
 import dam.tfg.pokeplace.data.Data;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TypeDAO;
-import dam.tfg.pokeplace.data.dao.TypeRelationDAO;
-import dam.tfg.pokeplace.data.service.TypeService;
 import dam.tfg.pokeplace.databinding.FragmentPokedexBinding;
 import dam.tfg.pokeplace.interfaces.OnTypeSelectedListener;
 import dam.tfg.pokeplace.models.BasePokemon;
@@ -49,18 +38,18 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     private List<BasePokemon>filteredList=new ArrayList<>();
     private String currentNameFilter ="";
     private String currentTypeFilter="";
-    private BasePokemonDAO basePokemonDAO;
-    private TypeService typeService;
+    //private BasePokemonDAO basePokemonDAO;
+    //private TypeService typeService;
 
-    private int loadLimit;
-    private int totalPokemon;
+    //private int loadLimit;
+    //private int totalPokemon;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPokedexBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        basePokemonDAO=new BasePokemonDAO(getContext());
-        typeService=new TypeService(new TypeDAO(getContext()),new TypeRelationDAO(getContext()));
+        //basePokemonDAO=new BasePokemonDAO(getContext());
+        //typeService=new TypeService(new TypeDAO(getContext()),new TypeRelationDAO(getContext()));
         data=Data.getInstance();
         filterTypes=new ArrayList<>(data.getTypeList());
         filterTypes.add(0,new Type(getString(R.string.all_types),null)); //Añadimos el tipo para mostrar todos
@@ -84,8 +73,8 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             currentNameFilter=savedInstanceState.getString("currentNameFilter");
             currentTypeFilter=savedInstanceState.getString("currentTypeFilter");
         }*/
-        loadLimit = getResources().getInteger(R.integer.load_limit);
-        totalPokemon=getResources().getInteger(R.integer.total_pokemon);
+        /*loadLimit = getResources().getInteger(R.integer.load_limit);
+        totalPokemon=getResources().getInteger(R.integer.total_pokemon);*/
         requireActivity().addMenuProvider(new MenuProvider() { //Añadimos el menu con la SearchView solo a este fragment
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
@@ -114,12 +103,12 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
                 return false;
             }
         },getViewLifecycleOwner()); //Importante añadir para destruir junto al fragmento
-        if(!loadTypes()){
+        /*if(!loadTypes()){
             if(isAdded() && getActivity()!=null){
                 getActivity().runOnUiThread(()->binding.btnTypeFilter.setVisibility(View.VISIBLE));
                 loadPokemon();
             }
-        }
+        }*/
     }
 
     @Override
@@ -129,7 +118,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
         outState.putString("currenTypeFilter",currentTypeFilter);
     }
 
-    public boolean loadTypes(){
+    /*public boolean loadTypes(){
         if (data.getTypeList().isEmpty()) { //Buscamos los tipos solo si la lista está vacía
             binding.btnTypeFilter.setVisibility(View.GONE);
             data.getTypeList().addAll(typeService.getAllTypes());
@@ -177,7 +166,7 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
             }
         }
         else if(current<totalPokemon){
-            PokeApiBasePokemonResponse.getAllPokemons(new BasePokemonCallback() {
+            PokeApiBasePokemonResponse.getAllPokemon(new BasePokemonCallback() {
                 @Override
                 public void onBasePokemonListReceived(List<BasePokemon> pokemonList) {
                     data.getPokemonList().addAll(pokemonList);
@@ -198,7 +187,8 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
                 }
             }, getContext(),data.getPokemonList().size()); //Le pasamos el numero de Pokemon actual por si la carga se quedo a medias, para retomar donde estaba
         }
-    }
+    }*/
+    @SuppressLint("NotifyDataSetChanged")
     private void filterList(String nameFilter, String typeFilter) {
         filteredList.clear();
         for (BasePokemon p : data.getPokemonList()) {
@@ -221,7 +211,8 @@ public class PokedexFragment extends Fragment implements OnTypeSelectedListener 
     @Override
     public void onTypeSelected(Type type) {
         currentTypeFilter=type.getName();
-        int colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
+        int colorId=0;
+        if(getContext()!=null) colorId=getResources().getIdentifier(type.getName(), "color", getContext().getPackageName());
         if (colorId != 0) {
             int color = ContextCompat.getColor(getContext(), colorId);
             binding.btnTypeFilter.setBackgroundTintList(ColorStateList.valueOf(color)); //Cambiamos el color del boton por el tipo seleccionado en el filtro

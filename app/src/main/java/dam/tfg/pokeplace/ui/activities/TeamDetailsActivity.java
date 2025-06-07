@@ -1,5 +1,6 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,16 +22,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.adapters.PokemonSpinnerAdapter;
 import dam.tfg.pokeplace.adapters.TeamPokemonAdapter;
 import dam.tfg.pokeplace.data.Data;
-import dam.tfg.pokeplace.data.dao.BasePokemonDAO;
-import dam.tfg.pokeplace.data.dao.TeamDAO;
-import dam.tfg.pokeplace.data.dao.TeamPokemonDAO;
 import dam.tfg.pokeplace.data.dao.UserDAO;
 import dam.tfg.pokeplace.data.service.TeamService;
 import dam.tfg.pokeplace.databinding.ActivityTeamDetailsBinding;
@@ -40,8 +38,7 @@ import dam.tfg.pokeplace.models.BasePokemon;
 import dam.tfg.pokeplace.models.Team;
 import dam.tfg.pokeplace.models.TeamPokemon;
 import dam.tfg.pokeplace.models.User;
-import dam.tfg.pokeplace.utils.BaseActivity;
-import dam.tfg.pokeplace.utils.ToastUtil;
+import dam.tfg.pokeplace.sync.UserSync;
 
 public class TeamDetailsActivity extends BaseActivity {
     private Team team;
@@ -49,6 +46,7 @@ public class TeamDetailsActivity extends BaseActivity {
     private TeamPokemonAdapter adapter;
 
     private UserDAO userDAO;
+    private UserSync userSync;
     public static User user;
     private TeamService teamService;
     private int teamSizeLimit;
@@ -66,11 +64,11 @@ public class TeamDetailsActivity extends BaseActivity {
         setSupportActionBar(binding.toolbarTeamDetails);
         if(getSupportActionBar()!=null) getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostramos la flecha para volver
         userDAO=new UserDAO(this);
-        teamService=new TeamService(new TeamDAO(getApplicationContext()),new TeamPokemonDAO(getApplicationContext()),new BasePokemonDAO(getApplicationContext()));
-        user=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
+        teamService=new TeamService(getApplicationContext());
+        userSync=new UserSync(getApplicationContext());
         Intent intent=getIntent();
         team=intent.getParcelableExtra("Team");
+        if(team!=null) user=userDAO.getUser(team.getUserId()); //En vez de usar el objeto user de Firebase usamos el id de user que hay en el team
         teamSizeLimit= getResources().getInteger(R.integer.team_size_limit);
         adapter=new TeamPokemonAdapter(team.getTeamMembers(), new OnTeamPokemonActionListener() {
             @Override
@@ -91,7 +89,7 @@ public class TeamDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if(team.getTeamMembers().size()<teamSizeLimit) displayAddToTeamDialog();
-                else ToastUtil.showToast(getApplicationContext(),getString(R.string.team_size_limit));
+                else showToast(getString(R.string.team_size_limit));
             }
         });
         updateUI();
@@ -141,12 +139,11 @@ public class TeamDetailsActivity extends BaseActivity {
                         if (!teamName.isEmpty()) {
                             Team newTeam=new Team(team.getUserId(),team.getTeamId(),teamName);
                             teamService.changeTeamName(newTeam);
+                            userSync.updateTeam(newTeam);
                             team.setName(teamName); //Cambiamos el nombre del team actual de la actividad
                             updateUI();
                             dialog.dismiss();
-                        } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
-                        }
+                        } else showToast(getText(R.string.error_empty_name).toString());
                     }
                 });
             }
@@ -167,8 +164,9 @@ public class TeamDetailsActivity extends BaseActivity {
                 btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        teamService.removeTeam(user.getUserId(),team.getTeamId());
-                        ToastUtil.showToast(getApplicationContext(),team.getName()+" "+getString(R.string.team_removed));
+                        teamService.removeTeam(team.getTeamId());
+                        userSync.deleteTeam(team);
+                        showToast(team.getName()+" "+getString(R.string.team_removed));
                         dialog.dismiss();
                         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
                         finish();
@@ -201,10 +199,10 @@ public class TeamDetailsActivity extends BaseActivity {
                             dialog.dismiss();
                             pokemon.setCustomName(newName);
                             teamService.updateTeamPokemon(pokemon);
+                            userSync.updateTeamPokemon(pokemon);
                             adapter.notifyItemChanged(position);
-                        } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_empty_name).toString());
-                        }
+                            //Al cambiar el nombre no hace falta actualizar la interfaz entera, con notificar al adaptador del cambio se actualizará su nombre
+                        } else showToast(getText(R.string.error_empty_name).toString());
                     }
                 });
             }
@@ -225,12 +223,20 @@ public class TeamDetailsActivity extends BaseActivity {
                 });
                 Button btnAccept=dialogView.findViewById(R.id.btnAcceptDelete);
                 btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
                         team.getTeamMembers().remove(position);
                         teamService.removeTeamPokemon(pokemon.getId());
+                        userSync.deleteTeamPokemon(pokemon);
                         adapter.notifyItemRemoved(position);
+                        if(team.getTeamMembers().isEmpty()){
+                            binding.teamPokemonList.post(() -> {  //Sin esto, si borramos un Pokémon y desaparece la lista, y luego añadimos otro, se vería la vista restante del anterior por unos momentos
+                                adapter.notifyDataSetChanged();
+                                updateUI(); //Solo hace falta actualizarla cuando se ha borrado el último Pokémon, si no nntificar al adaptador será suficiente para aplicar los cambios
+                            });
+                        }
                     }
                 });
             }
@@ -269,22 +275,20 @@ public class TeamDetailsActivity extends BaseActivity {
                     public void onClick(View v) {
                         BasePokemon selectedPokemon=(BasePokemon)autoCompleteTextView.getTag(); //Obtenemos el seleccionado
                         if (selectedPokemon!=null) {
-                            TeamPokemon teamPokemon=new TeamPokemon();
-                            teamPokemon.setUserId(user.getUserId());
-                            teamPokemon.setTeamId(team.getTeamId());
-                            teamPokemon.setPokedexNumber(selectedPokemon.getPokedexNumber());
-                            teamPokemon.setCustomName(selectedPokemon.getName());
-                            teamPokemon.setCustomSprite(selectedPokemon.getSprite());
-                            long insertedPokemonId=teamService.addTeamPokemon(teamPokemon); //Lo añadimos en la BD y obtenemos su id generado
-                            teamPokemon.setId((int)insertedPokemonId); //Le asignamos dicho id
-                            teamPokemon.completeBaseData(selectedPokemon); //Completamos el resto de campos
-                            team.getTeamMembers().add(teamPokemon); //Lo añadimos al equipo de esta actividad
-                            adapter.notifyItemInserted(team.getTeamMembers().size()-1);
-                            updateUI();
-                            dialog.dismiss();
-                        } else {
-                            ToastUtil.showToast(getApplicationContext(), getText(R.string.error_add_to_team).toString());
-                        }
+                            String pokemonName=autoCompleteTextView.getText().toString().trim(); //El nombre personalizado del Pokemon será lo escrito en el campo. Generalmente su nombre, pero esto da la opcion de cambiar lo escrito una vez seleccionado para personalizarlo
+                            if(!pokemonName.isEmpty()){
+                                TeamPokemon teamPokemon=new TeamPokemon(teamService.generateNewPokemonId(),team.getTeamId(),pokemonName,selectedPokemon.getSprite());
+                                teamPokemon.setPokedexNumber(selectedPokemon.getPokedexNumber());
+                                teamService.addTeamPokemon(teamPokemon); //Lo añadimos en la BD
+                                teamPokemon.completeBaseData(selectedPokemon); //Completamos el resto de campos
+                                userSync.addTeamPokemon(teamPokemon);
+                                team.getTeamMembers().add(teamPokemon); //Lo añadimos al equipo de esta actividad
+                                adapter.notifyItemInserted(team.getTeamMembers().size()-1);
+                                updateUI();
+                                dialog.dismiss();
+                            }
+                            else showToast(getText(R.string.error_empty_name).toString());
+                        }else showToast(getText(R.string.error_add_to_team).toString());
                     }
                 });
             }

@@ -20,8 +20,8 @@ import dam.tfg.pokeplace.models.Type;
 import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class TypeSpinnerAdapter extends ArrayAdapter<Type> {
-    private Context context;
-    private List<Type> types;
+    private final Context context;
+    private final List<Type> types;
 
     public TypeSpinnerAdapter(List<Type> types, Context context) {
         super(context,0,types);

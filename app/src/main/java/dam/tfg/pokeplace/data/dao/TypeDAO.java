@@ -36,6 +36,7 @@ public class TypeDAO {
             type.setName(cursor.getString(0));
             type.setSprite(cursor.getString(1));
         }
+        cursor.close();
         return type;
     }
     public List<Type> getTypes() {

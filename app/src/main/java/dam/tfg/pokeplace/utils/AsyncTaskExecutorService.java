@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public abstract class AsyncTaskExecutorService < Params, Progress, Result > {
 
-    private ExecutorService executor;
+    private final ExecutorService executor;
     private Handler handler;
 
     protected AsyncTaskExecutorService() {

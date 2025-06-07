@@ -2,10 +2,12 @@ package dam.tfg.pokeplace.utils;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.InputStream;
 
 public class FilesUtils {
+    private static final String TAG="FILESUTILS";
     public static boolean isAnimatedWebp(Context context, Uri uri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
             if (inputStream == null) return false;
@@ -15,7 +17,7 @@ public class FilesUtils {
             String header = new String(buffer);
             return header.contains("ANIM");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG,"Error: "+e.getMessage());
             return false;
         }
     }

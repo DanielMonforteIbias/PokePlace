@@ -29,16 +29,18 @@
             android:id="@+id/imgAddPokemonToTeamPokemon"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:contentDescription="@string/pokemon"
             tools:srcCompat="@tools:sample/avatars" />
 
         <AutoCompleteTextView
             android:id="@+id/autocompleteAddPokemonToTeam"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:hint="@string/name"
             android:inputType="text"
+            android:maxLength="20"
             android:textSize="20sp" />
     </LinearLayout>
     <LinearLayout

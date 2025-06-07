@@ -31,9 +31,12 @@ public class PokeApiDetailsResponse {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String datos = response.body().string();
-                    Pokemon pokemon= JSONExtractor.extractPokemon(datos);
-                    callback.onPokemonReceived(pokemon);
+                    if(response.body()!=null){
+                        String datos = response.body().string();
+                        Pokemon pokemon= JSONExtractor.extractPokemon(datos);
+                        callback.onPokemonReceived(pokemon);
+                    }
+                    else callback.onPokemonReceived(null);
                 }
                 else {
                     if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
@@ -54,13 +57,16 @@ public class PokeApiDetailsResponse {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String datos = response.body().string();
-                    Move move= JSONExtractor.extractMove(datos);
-                    callback.onMoveReceived(move);
+                    if(response.body()!=null){
+                        String datos = response.body().string();
+                        Move move= JSONExtractor.extractMove(datos);
+                        callback.onMoveReceived(move);
+                    }
+                    else callback.onMoveReceived(null);
                 }
                 else {
                     if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
-                    System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
+                    System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body());
                     callback.onMoveReceived(null);
                 }
             }
@@ -77,13 +83,16 @@ public class PokeApiDetailsResponse {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String datos = response.body().string();
-                    List<Pair<String,String>> descriptions= JSONExtractor.extractDescriptions(datos);
-                    callback.onDetailsReceived(descriptions);
+                    if(response.body()!=null){
+                        String datos = response.body().string();
+                        List<Pair<String,String>> descriptions= JSONExtractor.extractDescriptions(datos);
+                        callback.onDetailsReceived(descriptions);
+                    }
+                    else callback.onDetailsReceived(null);
                 }
                 else {
                     if(context!=null) new Handler(Looper.getMainLooper()).post(() -> ToastUtil.showToast(context,context.getString(R.string.error_api_response))); //Mostramos un Toast con informacion del error. Se usa Handler para que se haga en el hilo principal
-                    System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body().toString().toString());
+                    System.out.println("Error de la API: "+response.message()+" "+response.code()+" "+response.body());
                     callback.onDetailsReceived(null);
                 }
             }

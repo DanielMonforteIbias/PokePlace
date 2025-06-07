@@ -20,7 +20,7 @@ import dam.tfg.pokeplace.models.Move;
 import dam.tfg.pokeplace.utils.StringFormatter;
 
 public class DescriptionAdapter extends RecyclerView.Adapter<DescriptionAdapter.ViewHolder>{
-    private List<Pair<String,String>> descriptions;
+    private final List<Pair<String,String>> descriptions;
     public DescriptionAdapter(List<Pair<String,String>>descriptions){
         this.descriptions =descriptions;
     }

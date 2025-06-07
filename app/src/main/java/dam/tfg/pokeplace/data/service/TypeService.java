@@ -1,5 +1,7 @@
 package dam.tfg.pokeplace.data.service;
 
+import android.content.Context;
+
 import java.util.List;
 
 import dam.tfg.pokeplace.data.dao.TypeDAO;
@@ -7,12 +9,12 @@ import dam.tfg.pokeplace.data.dao.TypeRelationDAO;
 import dam.tfg.pokeplace.models.Type;
 
 public class TypeService {
-    private TypeDAO typeDAO;
-    private TypeRelationDAO typeRelationDAO;
+    private final TypeDAO typeDAO;
+    private final TypeRelationDAO typeRelationDAO;
 
-    public TypeService(TypeDAO typeDAO, TypeRelationDAO typeRelationDAO) {
-        this.typeDAO = typeDAO;
-        this.typeRelationDAO = typeRelationDAO;
+    public TypeService(Context context) {
+        this.typeDAO = new TypeDAO(context);
+        this.typeRelationDAO = new TypeRelationDAO(context);
     }
     public void addAllTypes(List<Type> types) {
         //Primero añadimos los tipos, luego sus relaciones, para evitar problemas de FKs

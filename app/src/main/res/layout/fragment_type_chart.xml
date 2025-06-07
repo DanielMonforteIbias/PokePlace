@@ -1,118 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center|top"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-    <ScrollView
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+        <TextView
+            android:id="@+id/txtTypeChartTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/type_chart"
+            android:textAlignment="center"
+            android:textSize="50sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtTypeChartTitle"
+        <ImageView
+            android:id="@+id/imgTypeChart"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:contentDescription="@string/type_chart"
+            app:srcCompat="@drawable/typechart" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:orientation="vertical"
+            tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+            <LinearLayout
+                android:id="@+id/effectiveLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/type_chart"
-                android:textAlignment="center"
-                android:textSize="50sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imgTypeChart"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:srcCompat="@drawable/typechart" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:gravity="start"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-                <LinearLayout
-                    android:id="@+id/effectiveLayout"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/imgEffective"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@string/effective"
+                    android:src="@drawable/effective"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:id="@+id/txtTypeChartLegendEffective"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:orientation="horizontal"
-                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-                    <ImageView
-                        android:id="@+id/imgEffective"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/effective"
-                        android:layout_marginEnd="5dp"/>
-                    <TextView
-                        android:id="@+id/txtTypeChartLegendEffective"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/effective" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/normalLayout"
-                    android:layout_width="match_parent"
+                    android:text="@string/effective" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/normalLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal"
+                tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                <ImageView
+                    android:id="@+id/imgNormal"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/normal"
+                    android:contentDescription="@string/normal"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:id="@+id/txtTypeChartLegendNormal"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:orientation="horizontal"
-                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-                    <ImageView
-                        android:id="@+id/imgNormal"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/normal"
-                        android:layout_marginEnd="5dp"/>
-                    <TextView
-                        android:id="@+id/txtTypeChartLegendNormal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/normal" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/notEffectiveLayout"
-                    android:layout_width="match_parent"
+                    android:text="@string/normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/notEffectiveLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal"
+                tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                <ImageView
+                    android:id="@+id/imgNotEffective"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/not_effective"
+                    android:contentDescription="@string/not_effective"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:id="@+id/txtTypeChartLegendNotEffective"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:orientation="horizontal"
-                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-                    <ImageView
-                        android:id="@+id/imgNotEffective"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/not_effective"
-                        android:layout_marginEnd="5dp"/>
-                    <TextView
-                        android:id="@+id/txtTypeChartLegendNotEffective"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/not_effective" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/noEffectLayout"
-                    android:layout_width="match_parent"
+                    android:text="@string/not_effective" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/noEffectLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="horizontal"
+                tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
+                <ImageView
+                    android:id="@+id/imgNoEffect"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/no_effect"
+                    android:contentDescription="@string/no_effect"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:id="@+id/txtTypeChartLegendNoEffect"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:orientation="horizontal"
-                    tools:context=".ui.mainActivityFragments.typeCalculator.TypeChartFragment">
-                    <ImageView
-                        android:id="@+id/imgNoEffect"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/no_effect"
-                        android:layout_marginEnd="5dp"/>
-                    <TextView
-                        android:id="@+id/txtTypeChartLegendNoEffect"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no_effect" />
-                </LinearLayout>
+                    android:text="@string/no_effect" />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

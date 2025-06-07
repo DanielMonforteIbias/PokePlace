@@ -1,0 +1,1023 @@
+[
+  {
+    "name": "normal",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/1.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "fighting"
+        }
+      ],
+      "double_damage_to": [],
+      "half_damage_from": [],
+      "half_damage_to": [
+        {
+          "name": "rock"
+        },
+        {
+          "name": "steel"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "ghost"
+        }
+      ],
+      "no_damage_to": [
+        {
+          "name": "ghost"
+        }
+      ]
+    }
+  },
+  {
+    "name": "fighting",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/2.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "psychic"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "normal"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "ice"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "rock"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "poison"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "psychic"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": [
+        {
+          "name": "ghost"
+        }
+      ]
+    }
+  },
+  {
+    "name": "flying",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/3.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "rock"
+        },
+        {
+          "name": "electric"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "grass"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "grass"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "rock"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "ground"
+        }
+      ],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "poison",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/4.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "ground"
+        },
+        {
+          "name": "psychic"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "grass"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "poison"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "poison"
+        },
+        {
+          "name": "ground"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "ghost"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": [
+        {
+          "name": "steel"
+        }
+      ]
+    }
+  },
+  {
+    "name": "ground",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/5.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "water"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "poison"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "poison"
+        },
+        {
+          "name": "rock"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "bug"
+        },
+        {
+          "name": "grass"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "electric"
+        }
+      ],
+      "no_damage_to": [
+        {
+          "name": "flying"
+        }
+      ]
+    }
+  },
+  {
+    "name": "rock",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/6.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "ground"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "grass"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "normal"
+        },
+        {
+          "name": "flying"
+        },
+        {
+          "name": "poison"
+        },
+        {
+          "name": "fire"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "ground"
+        },
+        {
+          "name": "steel"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "bug",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/7.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "fire"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "grass"
+        },
+        {
+          "name": "psychic"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "ground"
+        },
+        {
+          "name": "grass"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "flying"
+        },
+        {
+          "name": "poison"
+        },
+        {
+          "name": "ghost"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "ghost",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/8.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "ghost"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "ghost"
+        },
+        {
+          "name": "psychic"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "poison"
+        },
+        {
+          "name": "bug"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "dark"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "normal"
+        },
+        {
+          "name": "fighting"
+        }
+      ],
+      "no_damage_to": [
+        {
+          "name": "normal"
+        }
+      ]
+    }
+  },
+  {
+    "name": "steel",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/9.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "ground"
+        },
+        {
+          "name": "fire"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "rock"
+        },
+        {
+          "name": "ice"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "normal"
+        },
+        {
+          "name": "flying"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "psychic"
+        },
+        {
+          "name": "ice"
+        },
+        {
+          "name": "dragon"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "poison"
+        }
+      ],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "fire",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/10.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "ground"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "water"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "bug"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "bug"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "ice"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "rock"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "dragon"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "water",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/11.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "grass"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "ground"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "fire"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "water"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "dragon"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "grass",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/12.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "poison"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "ground"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "water"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "ground"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "poison"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "dragon"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "electric",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/13.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "ground"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "water"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "grass"
+        },
+        {
+          "name": "electric"
+        },
+        {
+          "name": "dragon"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": [
+        {
+          "name": "ground"
+        }
+      ]
+    }
+  },
+  {
+    "name": "psychic",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/14.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "bug"
+        },
+        {
+          "name": "ghost"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "poison"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "psychic"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "steel"
+        },
+        {
+          "name": "psychic"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": [
+        {
+          "name": "dark"
+        }
+      ]
+    }
+  },
+  {
+    "name": "ice",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/15.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "rock"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "flying"
+        },
+        {
+          "name": "ground"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "dragon"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "ice"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "ice"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "dragon",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/16.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "ice"
+        },
+        {
+          "name": "dragon"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "dragon"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "fire"
+        },
+        {
+          "name": "water"
+        },
+        {
+          "name": "grass"
+        },
+        {
+          "name": "electric"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "steel"
+        }
+      ],
+      "no_damage_from": [],
+      "no_damage_to": [
+        {
+          "name": "fairy"
+        }
+      ]
+    }
+  },
+  {
+    "name": "dark",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/17.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "ghost"
+        },
+        {
+          "name": "psychic"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "ghost"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "dark"
+        },
+        {
+          "name": "fairy"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "psychic"
+        }
+      ],
+      "no_damage_to": []
+    }
+  },
+  {
+    "name": "fairy",
+    "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vi/x-y/18.png",
+    "damage_relations": {
+      "double_damage_from": [
+        {
+          "name": "poison"
+        },
+        {
+          "name": "steel"
+        }
+      ],
+      "double_damage_to": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "dragon"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "half_damage_from": [
+        {
+          "name": "fighting"
+        },
+        {
+          "name": "bug"
+        },
+        {
+          "name": "dark"
+        }
+      ],
+      "half_damage_to": [
+        {
+          "name": "poison"
+        },
+        {
+          "name": "steel"
+        },
+        {
+          "name": "fire"
+        }
+      ],
+      "no_damage_from": [
+        {
+          "name": "dragon"
+        }
+      ],
+      "no_damage_to": []
+    }
+  }
+]

@@ -5,6 +5,7 @@ import static android.view.View.GONE;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 
@@ -37,10 +37,11 @@ public class InfoFragment extends Fragment {
     private PokemonViewModel viewModel;
     private DescriptionAdapter descriptionAdapter;
 
+    private static final String TAG="INFOFRAGMENT";
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInfoBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -51,8 +52,8 @@ public class InfoFragment extends Fragment {
             this.pokemon=pokemon;
             binding.txtNameDetails.setText(StringFormatter.formatName(pokemon.getName()));
             binding.txtNumberDetails.setText(pokemon.getPokedexNumber());
-            binding.txtHeightDetails.setText(getString(R.string.height)+" "+pokemon.getHeight()+" m");
-            binding.txtWeightDetails.setText(getString(R.string.weight)+" "+pokemon.getWeight()+ "kg");
+            binding.txtHeightDetails.setText(getString(R.string.height,String.valueOf(pokemon.getHeight()),"m"));
+            binding.txtWeightDetails.setText(getString(R.string.weight,String.valueOf(pokemon.getWeight()),"kg"));
             Glide.with(this).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
             viewModel.setCurrentSpriteIndex(currentSpriteIndex);
             if(pokemon.getTypes()[0]!=null) {
@@ -68,7 +69,7 @@ public class InfoFragment extends Fragment {
                 mediaPlayer.setDataSource(pokemon.getSound());
                 mediaPlayer.prepareAsync(); //prepareAsync hace que no bloquee el hilo principal. Por ejemplo, si accedes sin wifi se quedaria mucho tiempo esperando y pareceria bloqueada la app con prepare, con prepareAsync no pasa
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG,"Error: "+e.getMessage());
             }
             if(pokemon.getDescriptions()!=null){
                 descriptionAdapter=new DescriptionAdapter(pokemon.getDescriptions());
@@ -124,7 +125,7 @@ public class InfoFragment extends Fragment {
     private void changePokemonSprite(int direction){
         if(direction==-1)currentSpriteIndex = (currentSpriteIndex - 1 + pokemon.getSprites().size()) % pokemon.getSprites().size();
         else if (direction==1)currentSpriteIndex = (currentSpriteIndex + 1 ) % pokemon.getSprites().size();
-        Glide.with(getContext()).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
+        if(getContext()!=null)Glide.with(getContext()).load(pokemon.getSprites().get(currentSpriteIndex)).into(binding.spriteDetails);
         viewModel.setCurrentSpriteIndex(currentSpriteIndex);
     }
     @Override

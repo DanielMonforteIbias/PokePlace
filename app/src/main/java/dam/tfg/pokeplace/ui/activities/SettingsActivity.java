@@ -1,24 +1,19 @@
-package dam.tfg.pokeplace;
+package dam.tfg.pokeplace.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 
 import java.util.Locale;
 
-import dam.tfg.pokeplace.databinding.ActivityPokemonDetailsBinding;
+import dam.tfg.pokeplace.R;
 import dam.tfg.pokeplace.databinding.ActivitySettingsBinding;
-import dam.tfg.pokeplace.utils.BaseActivity;
 
 public class SettingsActivity extends BaseActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private SharedPreferences preferences;

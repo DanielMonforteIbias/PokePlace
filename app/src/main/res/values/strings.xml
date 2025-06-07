@@ -36,6 +36,7 @@
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
+    <string name="delete">Borrar</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -52,20 +53,33 @@
     <string name="error_login_credentials">Login failed. Incorrect credentials</string>
     <string name="successful_register">Successful registration. You can now log in</string>
     <string name="error_logout">Logout error</string>
-
+    <string name="reset_password">Reset my password</string>
+    <string name="enter_mail">Enter your mail address</string>
+    <string name="mail_sent">Mail to reset your password sent. Check your inbox</string>
+    <string name="error_sending_mail">Error sending mail to reset password</string>
+    <string name="user_error">Error, user not found</string>
     <!--Manejo respuesta PokeApi-->
     <string name="error_api_request">API request error</string>
     <string name="error_api_response">API response error</string>
+    <!--Manejo lectura JSON-->
+    <string name="error_json_empty">No Pokémon found</string>
+    <string name="error_no_json">Pokémon file not found</string>
     <!--Pokedex-->
     <string name="search_name">Search by name</string>
     <string name="search_type">Search by type</string>
     <string name="all_types">All types</string>
+    <string name="pokemon" translatable="false">Pokémon</string>
     <!--Detalles-->
-    <string name="height">Height</string>
-    <string name="weight">Weight</string>
+    <string name="height">Height: %1$s%2$s</string>
+    <string name="weight">Weight: %1$s%2$s</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="version">Version</string>
+    <string name="left_arrow">Left arrow</string>
+    <string name="right_arrow">Left arrow</string>
+    <string name="pokedexNumberPlaceholder" translatable="false">000</string>
+    <string name="sound">Sound</string>
+    <string name="zero" translatable="false">0</string>
     <!--Stats-->
     <string name="stats_title">%1$s\'S STATS</string> <!--%1$s means that a parameter will be expected to be placed there-->
     <string name="stat">Stat</string>
@@ -104,7 +118,7 @@
     <string name="choose_pokemon">Choose a Pokémon</string>
     <string name="delete_pokemon_warning">Are you sure you want to delete %1$s?</string>
     <string name="enter_new_nam_for">Enter new name for %1$s</string>
-
+    <string name="error_pokemon_not_available">Pokémon not loaded yet</string>
     <!--Calculadora tipos-->
     <string name="type_calculator">Type Calculator</string>
     <string name="type_chart">Type Chart</string>
@@ -113,22 +127,22 @@
     <string name="defender">Defender</string>
     <string name="simple">Simple</string>
     <string name="advanced">Advanced</string>
-    <string name="effective">Super effectivo</string>
+    <string name="effective">Super effective</string>
     <string name="not_effective">Not very effective</string>
     <string name="normal">Normal</string>
     <string name="no_effect">No effect</string>
-    <string name="attacker_x4">deals x4 damage to</string>
-    <string name="attacker_x2">deals x2 damage to</string>
-    <string name="attacker_x0.5">deals x0.5 damage to</string>
-    <string name="attacker_x0.25">deals x0.25 damage to</string>
-    <string name="attacker_x0">deals x0 damage to</string>
-    <string name="attacker_x1">deals x1 damage to</string>
-    <string name="defender_x4">suffers x4 damage from</string>
-    <string name="defender_x2">suffers x2 damage from</string>
-    <string name="defender_x0.5">suffers x0.5 damage from</string>
-    <string name="defender_x0.25">suffers x0.25 damage from</string>
-    <string name="defender_x0">suffers x0 damage from</string>
-    <string name="defender_x1">suffers x1 damage from</string>
+    <string name="attacker_x4">%1$s deals x4 damage to</string>
+    <string name="attacker_x2">%1$s deals x2 damage to</string>
+    <string name="attacker_x0.5">%1$s deals x0.5 damage to</string>
+    <string name="attacker_x0.25">%1$s deals x0.25 damage to</string>
+    <string name="attacker_x0">%1$s deals x0 damage to</string>
+    <string name="attacker_x1">%1$s deals x1 damage to</string>
+    <string name="defender_x4">%1$s suffers x4 damage from</string>
+    <string name="defender_x2">%1$s suffers x2 damage from</string>
+    <string name="defender_x0.5">%1$s suffers x0.5 damage from</string>
+    <string name="defender_x0.25">%1$s suffers x0.25 damage from</string>
+    <string name="defender_x0">%1$s suffers x0 damage from</string>
+    <string name="defender_x1">%1$s suffers x1 damage from</string>
     <!--Edit User-->
     <string name="change_name">Change name</string>
     <string name="change_image">Change image</string>
@@ -182,4 +196,10 @@
     <string name="theme_header">App Theme</string>
     <string name="dark_theme_enabled">Dark theme</string>
     <string name="app_language">App language</string>
+    <!--Descriptions-->
+    <string name="sprite">Sprite</string>
+
+    <!--Firestore-->
+    <string name="error_syncing_teams_size">Error syncing %1$s, teams limit reached</string>
+    <string name="error_syncing_no_connection">Couldn\'t sync data from the cloud. Check your Internet connection</string>
 </resources>

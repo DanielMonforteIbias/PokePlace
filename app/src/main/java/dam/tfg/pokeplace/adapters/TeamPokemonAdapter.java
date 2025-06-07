@@ -1,5 +1,6 @@
 package dam.tfg.pokeplace.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,9 @@ import dam.tfg.pokeplace.utils.PokemonClickHandler;
 import dam.tfg.pokeplace.utils.ViewUtils;
 
 public class TeamPokemonAdapter extends RecyclerView.Adapter<TeamPokemonAdapter.ViewHolder>{
-    private List<TeamPokemon> pokemonList;
-    private OnTeamPokemonActionListener listener;
-    private boolean editing=false;
+    private final List<TeamPokemon> pokemonList;
+    private final OnTeamPokemonActionListener listener;
+    private boolean editing=false; //Variable para saber si mostrar o no los botones de edición
 
     public TeamPokemonAdapter(List<TeamPokemon>pokemonList, OnTeamPokemonActionListener listener){
         this.pokemonList=pokemonList;
@@ -55,9 +56,10 @@ public class TeamPokemonAdapter extends RecyclerView.Adapter<TeamPokemonAdapter.
         return editing;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setEditing(boolean editing) {
         this.editing = editing;
-        notifyDataSetChanged();
+        notifyDataSetChanged(); //Lo usamos porque cambian todos los items, mostrando u ocultando las opciones de renombrar y borrar
     }
 
     @NonNull
@@ -105,7 +107,7 @@ public class TeamPokemonAdapter extends RecyclerView.Adapter<TeamPokemonAdapter.
                 }
             });
         }
-        else{
+        else{ //Si no estamos editando, quitamos los botones
             holder.renameButton.setVisibility(View.GONE);
             holder.removeButton.setVisibility(View.GONE);
         }
