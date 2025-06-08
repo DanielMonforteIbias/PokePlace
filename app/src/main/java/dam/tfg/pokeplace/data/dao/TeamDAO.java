@@ -62,13 +62,15 @@ public class TeamDAO {
     }
     public List<Team> getAllTeams(String userId){
         List<Team>teams=new ArrayList<>();
-        Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAMS_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_USER_ID_COLUMN+"=?",new String[]{userId});
-        while (cursor.moveToNext()) { //Recorremos el cursor
-            String teamId=cursor.getString(1);
-            String teamName=cursor.getString(2);
-            teams.add(new Team(userId,teamId,teamName));
+        if(userId!=null){
+            Cursor cursor=db.rawQuery("SELECT * FROM "+DatabaseHelper.TEAMS_TABLE_NAME+" WHERE "+DatabaseHelper.TEAM_USER_ID_COLUMN+"=?",new String[]{userId});
+            while (cursor.moveToNext()) { //Recorremos el cursor
+                String teamId=cursor.getString(1);
+                String teamName=cursor.getString(2);
+                teams.add(new Team(userId,teamId,teamName));
+            }
+            cursor.close(); //Cerramos el cursor
         }
-        cursor.close(); //Cerramos el cursor
         return teams;
     }
     public String getNewTeamId(){

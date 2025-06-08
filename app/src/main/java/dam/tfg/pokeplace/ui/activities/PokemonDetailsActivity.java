@@ -149,9 +149,12 @@ public class PokemonDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_to_team){
-            List<Team> userTeams=teamService.getAllTeams(user.getUserId());
-            if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
-            else showToast(getString(R.string.error_no_teams));
+            if(user.getUserId()!=null){
+                List<Team> userTeams=teamService.getAllTeams(user.getUserId());
+                if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
+                else showToast(getString(R.string.error_no_teams));
+            }
+            else showToast(getString(R.string.user_error));
         }
         else if(id==R.id.action_mark_as_favorite){
             boolean isFavorite=false;
