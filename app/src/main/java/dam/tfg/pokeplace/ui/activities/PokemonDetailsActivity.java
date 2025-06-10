@@ -134,7 +134,9 @@ public class PokemonDetailsActivity extends BaseActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.action_mark_as_favorite);
         if(pokemon!=null  && user!=null){
-            if (pokemon.getPokedexNumber().equals(user.getFavPokemon())) item.setIcon(R.drawable.staron);
+            if(user.getFavPokemon()!=null && pokemon.getPokedexNumber()!=null){
+                if (Integer.parseInt(pokemon.getPokedexNumber())==Integer.parseInt(user.getFavPokemon())) item.setIcon(R.drawable.staron);
+            }
             else item.setIcon(R.drawable.staroff);
         }
         return super.onPrepareOptionsMenu(menu);
@@ -147,20 +149,30 @@ public class PokemonDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_to_team){
-            List<Team> userTeams=teamService.getAllTeams(user.getUserId());
-            if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
-            else showToast(getString(R.string.error_no_teams));
+            if(user.getUserId()!=null){
+                List<Team> userTeams=teamService.getAllTeams(user.getUserId());
+                if(!userTeams.isEmpty()) displayAddPokemonToTeamDialog(userTeams);
+                else showToast(getString(R.string.error_no_teams));
+            }
+            else showToast(getString(R.string.user_error));
         }
         else if(id==R.id.action_mark_as_favorite){
-            if(pokemon.getPokedexNumber().equals(user.getFavPokemon())){
+            boolean isFavorite=false;
+            if (user.getFavPokemon()!= null && pokemon.getPokedexNumber() != null) {
+                try { //Necesario un try por si hay errores en el Integer.parseInt
+                    isFavorite = Integer.parseInt(user.getFavPokemon()) == Integer.parseInt(pokemon.getPokedexNumber());
+                } catch (NumberFormatException e) {
+                    isFavorite = false;
+                }
+            }
+            if (isFavorite) {
                 user.setFavPokemon(null);
                 item.setIcon(R.drawable.staroff);
-                showToast(getString(R.string.removed_from_favorite,StringFormatter.formatName(pokemon.getName())));
-            }
-            else{
+                showToast(getString(R.string.removed_from_favorite, StringFormatter.formatName(pokemon.getName())));
+            } else {
                 user.setFavPokemon(pokemon.getPokedexNumber());
                 item.setIcon(R.drawable.staron);
-                showToast(getString(R.string.marked_as_fav,StringFormatter.formatName(pokemon.getName())));
+                showToast(getString(R.string.marked_as_fav, StringFormatter.formatName(pokemon.getName())));
             }
             userDAO.updateUser(user); //Ponemos el cambio en la base de datos
             userSync.updateUser(user); //En Firestore tambien

@@ -52,7 +52,8 @@ public class TeamsFragment extends Fragment {
         userDAO=new UserDAO(getContext());
         userSync=new UserSync(getContext());
         teamService=new TeamService(getContext());
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) userId=userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) userId = userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId() != null ? userDAO.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).getUserId() : "";
+        else userId="";
         teams=teamService.getAllTeams(userId);
         teamDetailsActivityLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -114,8 +115,10 @@ public class TeamsFragment extends Fragment {
         }
     }
     private void updateUI(){
-        if(teamService.getAllTeams(userId).isEmpty())binding.txtNoTeams.setVisibility(View.VISIBLE);
-        else binding.txtNoTeams.setVisibility(View.GONE);
+        if(userId!=null){
+            if(teamService.getAllTeams(userId).isEmpty())binding.txtNoTeams.setVisibility(View.VISIBLE);
+            else binding.txtNoTeams.setVisibility(View.GONE);
+        }
     }
     private void updateData(){
         teams=teamService.getAllTeams(userId);
